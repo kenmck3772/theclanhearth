@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏴󠁧󠁢󠁳󠁣󠁴󠁿 The Clan Hearth</title>
+    <script>
+        // Function to load HTML partials dynamically
+        async function loadPartial(elementId, filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error(`Failed to load ${filePath}`);
+                const content = await response.text();
+                document.getElementById(elementId).innerHTML = content;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Load all partials on page load
+        window.onload = () => {
+            loadPartial('header', 'header.html');
+            loadPartial('nav', 'nav.html');
+            loadPartial('home', 'home.html');
+            loadPartial('trip-planner', 'trip-planner.html');
+            loadPartial('clans', 'clans.html');
+            loadPartial('clan-finder', 'clan-finder.html');
+            loadPartial('legends', 'legends.html');
+            loadPartial('tartan-designer', 'tartan-designer.html');
+            loadPartial('recipes', 'recipes.html');
+            loadPartial('footer', 'footer.html');
+        };
+    </script>
+</head>
+<body>
+    <div id="header"></div>
+    <div id="nav"></div>
+    <div id="home"></div>
+    <div id="trip-planner"></div>
+    <div id="clans"></div>
+    <div id="clan-finder"></div>
+    <div id="legends"></div>
+    <div id="tartan-designer"></div>
+    <div id="recipes"></div>
+    <div id="footer"></div>
+</body>
+</html>
