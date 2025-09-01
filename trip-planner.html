@@ -1,0 +1,74 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><section id="trip-planner">
+    <h2>Plan Your Scottish Journey</h2>
+    <p>Interactive map to discover and plan your authentic Scottish experience</p>
+    <div>
+        <h3>Explore Scotland</h3>
+        <ul>
+            <li>🛡️ Clan Seats</li>
+            <li>🥃 Distilleries</li>
+            <li>🏰 Castles</li>
+            <li>✨ Myths & Legends</li>
+            <li>⛳ Golf Courses</li>
+            <li>🎬 Film Locations</li>
+        </ul>
+        <h3>Signature Journeys</h3>
+        <select>
+            <option>Select a Journey</option>
+            <option>The Outlander Tour (4 Days)</option>
+            <option>Highland History & Myths (3 Days)</option>
+            <option>Speyside Whisky Trail (2 Days)</option>
+        </select>
+        <h3>Add Your Hearthstone</h3>
+        <p>❤️ Mark Special Place</p>
+        <h3>My Scottish Journey (0)</h3>
+        <p>Click to Expand</p>
+        <p>Your journey is empty. Add locations from the map!</p>
+        <button>Show Route</button>
+        <button>Clear Trip</button>
+        <div>
+            <h3>Smart Suggestion</h3>
+            <button>×</button>
+        </div>
+        <button>Add to Trip</button>
+        <button>Dismiss</button>
+    </div>
+</section>
