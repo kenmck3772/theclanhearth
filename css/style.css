@@ -1,0 +1,175 @@
+/* --- Base & Font Styles --- */
+body { 
+    font-family: 'Inter', sans-serif; 
+}
+.font-title { 
+    font-family: 'Cinzel', serif; 
+}
+
+/* --- Core App Styles --- */
+.nav-link.active { 
+    color: #a16207; 
+    border-bottom: 2px solid #a16207; 
+}
+.page-section { 
+    display: none; 
+}
+.page-section.active { 
+    display: block; 
+}
+.modal { 
+    backdrop-filter: blur(4px); 
+    background-color: rgba(0,0,0,0.6); 
+}
+.content-card { 
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; 
+}
+.content-card:hover { 
+    transform: translateY(-5px); 
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); 
+}
+.animate-fade-in { 
+    animation: fadeIn 0.5s ease-in-out; 
+}
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* --- Dossier/Scroll Styles (Adapted to Theme) --- */
+.sidebar-scroll::-webkit-scrollbar { 
+    width: 4px; 
+}
+.sidebar-scroll::-webkit-scrollbar-track { 
+    background: #E8D5B7; 
+}
+.sidebar-scroll::-webkit-scrollbar-thumb { 
+    background: #a16207; 
+    border-radius: 2px; 
+}
+.active-item { 
+    background-color: #E8D5B7; 
+    color: #44403c; 
+    font-weight: 600; 
+}
+.tab-button.active { 
+    border-color: #a16207; 
+    color: #a16207; 
+    font-weight: 600; 
+}
+.tab-content { 
+    display: none; 
+}
+.tab-content.active { 
+    display: block; 
+}
+.timeline-item::before {
+    content: ''; 
+    position: absolute; 
+    left: -2.75rem; 
+    top: 0.5rem;
+    width: 1rem; 
+    height: 1rem; 
+    border-radius: 9999px;
+    background-color: #d6d3d1; 
+    border: 2px solid #FBF6E8;
+}
+
+/* --- Map Styles --- */
+#clanMap {
+    height: 100%;
+    min-height: 60vh;
+    width: 100%;
+    border-radius: 0.5rem;
+}
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    background-color: #a16207 !important;
+    color: white !important;
+    border-radius: 0.25rem !important;
+}
+.map-legend-item {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.map-legend-item.active {
+    background-color: #E8D5B7;
+}
+.chart-container {
+    position: relative;
+    width: 100%;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 300px;
+    max-height: 400px;
+}
+@media (min-width: 768px) {
+    .chart-container {
+        height: 350px;
+    }
+}
+
+/* --- Tartan Builder Styles --- */
+.color-box { 
+    transition: transform 0.2s ease-in-out; 
+}
+.color-box:hover { 
+    transform: scale(1.1); 
+}
+.color-box.selected { 
+    box-shadow: 0 0 0 3px #a16207; 
+    transform: scale(1.1); 
+}
+.tooltip { 
+    position: relative; 
+    display: inline-block; 
+}
+.tooltip .tooltiptext {
+    visibility: hidden; 
+    width: 140px; 
+    background-color: #555; 
+    color: #fff;
+    text-align: center; 
+    border-radius: 6px; 
+    padding: 5px; 
+    position: absolute;
+    z-index: 1; 
+    bottom: 150%; 
+    left: 50%; 
+    margin-left: -70px;
+    opacity: 0; 
+    transition: opacity 0.3s;
+}
+.tooltip:hover .tooltiptext { 
+    visibility: visible; 
+    opacity: 1; 
+}
+.tartan-example-card {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.tartan-example-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+/* --- Clan Finder Styles --- */
+.quiz-question { 
+    display: none; 
+}
+.quiz-question.active { 
+    display: block; 
+}
+.quiz-option {
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.quiz-option:hover {
+    background-color: #E8D5B7;
+    border-color: #a16207;
+}
