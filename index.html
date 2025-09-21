@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Clan Hearth - An Interactive Scottish Heritage App</title>
+    <meta name="description" content="Discover your Scottish heritage. Explore detailed clan histories, design tartans, and find traditional recipes.">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="font-body text-stone-800 bg-gradient-to-br from-[#FBF6E8] via-[#F5E6D3] to-[#E8D5B7]">
+    
+    <header class="bg-white/80 backdrop-blur-sm shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <h1 class="text-2xl md:text-3xl font-title font-bold text-yellow-800">
+                🏴󠁧󠁢󠁳󠁣󠁴󠁿 The Clan Hearth
+            </h1>
+            <nav id="main-nav" class="hidden md:flex items-center space-x-2 md:space-x-4">
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="home">Home</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="clans">Clans & Map</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="finder">Clan Finder</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="legends">Legends</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tartan-designer">Tartan Designer</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="recipes">Recipe Book</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="marketplace">Marketplace</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="trip-planner">Trip Planner</button>
+            </nav>
+            <div class="flex items-center gap-4">
+                <button id="cart-button" class="relative text-stone-700 hover:text-yellow-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" class="md:hidden text-stone-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95">
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="home">Home</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="clans">Clans & Map</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="finder">Clan Finder</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="legends">Legends</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">Tartan Designer</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">Recipe Book</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="marketplace">Marketplace</button>
+             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="trip-planner">Trip Planner</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <section id="home-section" class="page-section">
+            <div class="text-center mb-12 bg-white/70 rounded-2xl shadow-xl p-8">
+                <img src="https://placehold.co/192x192/FBF6E8/3D4F45?text=🏴󠁧󠁢󠁳󠁣󠁴󠁿" alt="The Clan Hearth Emblem" class="w-48 h-48 mx-auto mb-6 rounded-full shadow-lg border-4 border-white">
+                <h2 class="text-4xl md:text-5xl font-bold font-title text-stone-900 mb-4">Welcome to The Clan Hearth</h2>
+                <p class="text-lg text-stone-600 mb-8 max-w-3xl mx-auto italic">Troimh theine tha sinn aonaichte (Through fire, we are united)</p>
+                <p class="text-lg md:text-xl text-stone-700 max-w-3xl mx-auto">Your digital gateway to Scottish heritage. Explore detailed clan histories on an interactive map, design a personal tartan, or discover the recipes that fueled the Highlands. Your journey starts here.</p>
+            </div>
+            <div id="translator-container" class="bg-white/70 rounded-2xl shadow-xl p-8 max-w-2xl mx-auto">
+                <!-- Translator UI will be injected here -->
+            </div>
+        </section>
+
+        <section id="clans-section" class="page-section">
+            <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
+                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4 flex flex-col">
+                    <h2 class="text-xl font-bold text-stone-800 font-title mb-4">The Families</h2>
+                    <div id="clan-sidebar-list" class="sidebar-scroll overflow-y-auto flex-grow"></div>
+                </aside>
+                <main id="clans-main-content" class="flex-1 p-4 sm:p-6 lg:p-8">
+                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+                        <div class="lg:col-span-2 h-full">
+                            <div id="clanMap" class="w-full h-full rounded-lg shadow-lg"></div>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg shadow-inner">
+                            <h3 class="text-xl font-bold mb-4 font-title">Family Details</h3>
+                            <div id="map-info" class="space-y-4">
+                                <p class="text-stone-500">Select a family from the list to see their territory and details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+        <section id="finder-section" class="page-section">
+            <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">The Clan Finder</h2>
+                    <p class="text-lg text-stone-600 mt-2">Answer five questions to discover your spirit clan.</p>
+                </div>
+                <div id="quiz-container" class="max-w-2xl mx-auto">
+                    <!-- Questions will be injected here -->
+                </div>
+                <div id="quiz-result" class="hidden text-center max-w-2xl mx-auto">
+                    <!-- Result will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="legends-section" class="page-section">
+             <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
+                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-stone-800 font-title">The Legends</h2>
+                    </div>
+                    <div class="sidebar-scroll overflow-y-auto max-h-48 md:max-h-[calc(100vh-220px)]"></div>
+                </aside>
+                <main id="legends-main-content" class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[calc(100vh-150px)]"></main>
+            </div>
+        </section>
+        
+        <section id="tartan-designer-section" class="page-section">
+             <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">Design Your Own Tartan</h2>
+                    <p class="text-lg text-stone-600 mt-2">Create, save, and share a unique pattern that tells your story.</p>
+                </div>
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <div class="lg:w-1/3 bg-stone-50 p-6 rounded-xl border border-stone-200">
+                        <div class="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                            <h3 class="font-bold">How to Design Your Tartan</h3>
+                            <p class="text-sm mt-1">A tartan is a repeating pattern of colored stripes. You are creating the core pattern, called a "sett." We will automatically mirror it to create the full tartan.</p>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">1. Pick a Colour</h3>
+                                <div id="color-palette" class="grid grid-cols-5 sm:grid-cols-6 gap-3"></div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">2. Set Stripe Size & Add</h3>
+                                <div class="flex items-center gap-3">
+                                    <input type="number" id="thread-count" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 24" min="2">
+                                    <button id="add-stripe-btn" class="bg-yellow-800 text-white font-semibold px-5 py-2 rounded-lg hover:bg-yellow-900 transition-colors shadow">Add</button>
+                                </div>
+                                <p class="text-xs text-stone-500 mt-1">The canvas will show a live preview as you type.</p>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold mb-2">3. Build Your Pattern (The Sett)</h3>
+                                <div id="pattern-list" class="bg-white p-4 rounded-lg h-40 overflow-y-auto border"></div>
+                                <div class="flex justify-end mt-2">
+                                    <button id="clear-pattern-btn" class="bg-red-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-800 transition-colors shadow text-sm">Clear</button>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="text-lg font-semibold mb-2">4. Name & Save</h3>
+                                <input type="text" id="tartan-name" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 'Monarch of the Glen'">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lg:w-3/4 flex flex-col">
+                        <div class="bg-white p-2 rounded-xl shadow-inner border flex-grow">
+                            <canvas id="tartan-canvas" class="w-full h-full rounded-lg"></canvas>
+                        </div>
+                        <div class="mt-4 bg-white p-4 rounded-xl border flex items-center justify-center gap-4">
+                            <button id="save-btn" class="flex items-center gap-2 bg-green-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-800 transition-colors shadow">
+                                <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.5 16a3.5 3.5 0 01-3.5-3.5V5.5A3.5 3.5 0 015.5 2h9A3.5 3.5 0 0118 5.5v7a3.5 3.5 0 01-3.5 3.5h-9zM4 5.5A1.5 1.5 0 015.5 4h9A1.5 1.5 0 0116 5.5v7a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 12.5V5.5z"/><path d="M14.5 7a1 1 0 100-2 1 1 0 000 2z"/></svg>
+                                Save as Image
+                            </button>
+                            <div class="tooltip">
+                                <button id="share-btn" class="flex items-center gap-2 bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors shadow">
+                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/></svg>
+                                    Share Link
+                                </button>
+                                <span class="tooltiptext" id="share-tooltip">Copy sharable link</span>
+                            </div>
+                        </div>
+                         <div class="mt-6">
+                            <h3 class="text-lg font-semibold text-center mb-4">Or, start with a famous tartan:</h3>
+                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recipes-section" class="page-section">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold font-title text-stone-900">The Highlander's Larder</h1>
+                <p class="text-lg text-stone-600 mt-2">An interactive scroll of Scotland's most cherished recipes.</p>
+            </div>
+            <div class="bg-white/80 rounded-xl shadow-lg p-6 md:p-8 mb-10 animate-fade-in">
+                <h3 class="text-2xl font-bold font-title text-stone-800 mb-4 text-center">Recipe Glossary</h3>
+                <div id="recipe-index-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+                    </div>
+            </div>
+            <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+
+        <section id="marketplace-section" class="page-section">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold font-title text-stone-900">The Hearth Market</h1>
+                <p class="text-lg text-stone-600 mt-2">Authentic goods from the heart of Scotland.</p>
+            </div>
+            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+        </section>
+        
+        <section id="trip-planner-section" class="page-section">
+             <div id="trip-planner-container" class="flex flex-col lg:flex-row h-[80vh] gap-4">
+                <div id="planner-sidebar" class="lg:w-1/3">
+                    <div class="p-4 bg-blue-800 text-white rounded-lg shadow-md text-center mb-4">
+                        <h2 class="text-2xl font-bold">Aye, Aye!</h2>
+                        <p class="mt-1">Your AI Tour Guide</p>
+                    </div>
+                    <div id="ai-chat-area" class="flex-1 p-4 bg-gray-100 overflow-y-auto rounded-lg mb-4 h-64">
+                        <div class="flex justify-start mb-4">
+                            <div class="chat-bubble-ai rounded-lg py-2 px-4 max-w-xs">
+                                <p>Planning a trip? Ask me for ideas! Try "plan a 3-day castle tour" or "find whisky distilleries near Aberdeen".</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="text" id="ai-trip-input" placeholder="Ask me for ideas..." class="flex-1 border-gray-300 rounded-full py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+                        <button id="ai-trip-send" class="ml-2 bg-blue-600 text-white rounded-full p-2 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-transform transform hover:scale-105">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+                    <div id="ai-trip-loading" class="text-center text-gray-500 mt-2" style="display: none;">Aye, let me think...</div>
+                    
+                    <div id="itinerary-panel">
+                        <h3>My Scottish Journey (<span id="trip-count">0</span>)</h3>
+                        <ul id="trip-list">
+                            <li>Your trip is empty.</li>
+                        </ul>
+                        <button id="clear-trip-btn" class="bg-red-600 text-white py-2 px-4 rounded mt-2 w-full">Clear Trip</button>
+                    </div>
+                </div>
+                <div id="map-trip" class="flex-1"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
+        <div id="modal-content" class="bg-[#FBF6E8] rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"></div>
+    </div>
+    <div id="message-box" class="hidden fixed top-20 right-5 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 z-50">
+        <p id="message-text"></p>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <script src="data/clans.js"></script>
+    <script src="data/legends.js"></script>
+    <script src="data/marketplace.js"></script>
+    <script src="data/map-data.js"></script>
+    
+    <script src="js/api/gemini.js"></script>
+    <script src="js/components/clans-map.js"></script>
+    <script src="js/components/clan-finder.js"></script>
+    <script src="js/components/legends.js"></script>
+    <script src="js/components/tartan-designer.js"></script>
+    <script src="js/components/recipe-book.js"></script>
+    <script src="js/components/marketplace.js"></script>
+    <script src="js/components/trip-planner.js"></script>
+    <script src="js/components/translator.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
+```
+</docume
