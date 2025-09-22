@@ -3,86 +3,429 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Clan Hearth - An Interactive Scottish Heritage App</title>
-    <meta name="description" content="Discover your Scottish heritage. Explore detailed clan histories, design tartans, and find traditional recipes.">
+    <title>The Clan Hearth - Ultimate Scottish Heritage Platform</title>
+    <meta name="description" content="Discover your Scottish heritage through interactive clan exploration, premium heritage tours, spiritual clan finding, and authentic cultural experiences. From Clan MacKenzie in Scotland.">
     
-    <!-- External Libraries & Fonts -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- External Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --clan-gold: #d4af37;
+            --clan-burgundy: #800020;
+            --clan-forest: #2d5016;
+            --clan-stone: #8b7355;
+            --parchment: #f4f1e8;
+            --aged-paper: #f0ead6;
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, var(--parchment) 0%, var(--aged-paper) 100%);
+        }
+        .font-title { font-family: 'Cinzel', serif; }
+        
+        /* Skip to content link for accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--clan-gold);
+            color: var(--clan-burgundy);
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 100;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Navigation Styles */
+        .nav-link.active { 
+            color: var(--clan-gold); 
+            border-bottom: 2px solid var(--clan-gold); 
+            background: rgba(212, 175, 55, 0.1);
+        }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        
+        /* Component Styles */
+        .clan-emblem {
+            background: linear-gradient(45deg, var(--clan-burgundy), var(--clan-forest));
+            border: 3px solid var(--clan-gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .content-card { 
+            transition: all 0.3s ease-in-out; 
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        .content-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); 
+        }
+        
+        .animate-fade-in { animation: fadeIn 0.6s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Scrollbar Styles */
+        .sidebar-scroll::-webkit-scrollbar { width: 6px; }
+        .sidebar-scroll::-webkit-scrollbar-track { background: var(--aged-paper); }
+        .sidebar-scroll::-webkit-scrollbar-thumb { 
+            background: var(--clan-gold); 
+            border-radius: 3px; 
+        }
+        
+        /* Active States */
+        .active-item { 
+            background: linear-gradient(90deg, var(--clan-gold), #f4d03f);
+            color: var(--clan-burgundy); 
+            font-weight: 600; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* Map Styles */
+        #clanMap, #tripBuilderMap {
+            height: 100%;
+            min-height: 60vh;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* Quiz Styles */
+        .quiz-question { display: none; }
+        .quiz-question.active { display: block; }
+        .quiz-option {
+            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+        }
+        .quiz-option:hover {
+            background: linear-gradient(90deg, var(--clan-gold), #f4d03f);
+            border-color: var(--clan-burgundy);
+            color: var(--clan-burgundy);
+            transform: translateX(8px);
+        }
+        
+        /* Tartan Designer */
+        .color-box { 
+            transition: all 0.2s ease-in-out; 
+            border: 3px solid transparent;
+        }
+        .color-box:hover { transform: scale(1.15); }
+        .color-box.selected { 
+            border-color: var(--clan-gold); 
+            transform: scale(1.15); 
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+        
+        /* Premium Elements */
+        .premium-badge {
+            background: linear-gradient(45deg, var(--clan-gold), #f4d03f);
+            color: var(--clan-burgundy);
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--clan-burgundy), var(--clan-forest));
+            color: white;
+            border: 2px solid var(--clan-gold);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--clan-forest), var(--clan-burgundy));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        /* Chat Styles for AI Assistant */
+        .chat-container {
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(10px);
+        }
+        .chat-message {
+            margin: 10px 0;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        .chat-message.user {
+            background: linear-gradient(45deg, var(--clan-gold), #f4d03f);
+            color: var(--clan-burgundy);
+            margin-left: auto;
+        }
+        .chat-message.assistant {
+            background: linear-gradient(45deg, var(--clan-forest), var(--clan-burgundy));
+            color: white;
+        }
+        
+        /* Modal Styles */
+        .modal { 
+            backdrop-filter: blur(8px); 
+            background-color: rgba(0,0,0,0.7); 
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .clan-emblem {
+                width: 120px;
+                height: 120px;
+            }
+        }
+        
+        /* Custom Animations */
+        .pulse-gold {
+            animation: pulseGold 2s infinite;
+        }
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            50% { box-shadow: 0 0 0 20px rgba(212, 175, 55, 0); }
+        }
+        
+        /* Trip Builder Specific */
+        .trip-item {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--clan-gold);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
+        }
+        
+        .price-tag {
+            background: linear-gradient(45deg, var(--clan-burgundy), var(--clan-forest));
+            color: var(--clan-gold);
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+        }
+        
+        /* Loading spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--clan-gold);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error message styling */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #721c24;
+        }
+    </style>
 </head>
-<body class="font-body text-stone-800 bg-gradient-to-br from-[#FBF6E8] via-[#F5E6D3] to-[#E8D5B7]">
+<body class="bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 text-gray-800">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     
-    <!-- Header & Navigation -->
-    <header class="bg-white/80 backdrop-blur-sm shadow-lg sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <h1 class="text-2xl md:text-3xl font-title font-bold text-yellow-800">
-                🏴󠁧󠁢󠁳󠁣󠁴󠁿 The Clan Hearth
-            </h1>
-            <nav id="main-nav" class="hidden md:flex items-center space-x-2 md:space-x-4">
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="home">Home</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="clans">Clans & Map</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="finder">Clan Finder</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="legends">Legends</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tartan-designer">Tartan Designer</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="recipes">Recipe Book</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="marketplace">Marketplace</button>
-            </nav>
-            <div class="flex items-center gap-4">
-                <button id="cart-button" class="relative text-stone-700 hover:text-yellow-800">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-yellow-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+    <!-- Header with Navigation -->
+    <header class="bg-white/90 backdrop-blur-lg shadow-2xl sticky top-0 z-50 border-b-4 border-yellow-600">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <!-- Logo and Title -->
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-6">
+                    <div class="clan-emblem w-16 h-16 rounded-full flex items-center justify-center">
+                        <i class="fas fa-crown text-2xl text-yellow-300"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl md:text-4xl font-title font-bold text-yellow-800">The Clan Hearth</h1>
+                        <p class="text-sm text-gray-600 italic font-medium">Troimh theine tha sinn aonaichte</p>
+                        <p class="text-xs text-gray-500">Through Fire We Are United</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="hidden md:block text-right">
+                        <p class="text-sm font-semibold text-yellow-800">Ken McKenzie</p>
+                        <p class="text-xs text-gray-600">Clan MacKenzie • Montrose, Scotland</p>
+                        <div class="flex justify-end space-x-1 mt-1">
+                            <span class="premium-badge">Authentic Heritage</span>
+                        </div>
+                    </div>
+                    <button id="cart-button" class="relative text-gray-700 hover:text-yellow-800 transition-colors" aria-label="Shopping cart">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold">0</span>
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-700 text-2xl" aria-label="Toggle mobile menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav id="main-nav" class="hidden md:flex items-center justify-center space-x-1 bg-gray-50 rounded-2xl p-2" aria-label="Main navigation">
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="home" aria-current="page">
+                    <i class="fas fa-home mr-2"></i>Home
                 </button>
-                <button id="mobile-menu-btn" class="md:hidden text-stone-700">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="clans">
+                    <i class="fas fa-map mr-2"></i>Clans & Map
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="spiritual-finder">
+                    <i class="fas fa-magic mr-2"></i>Spiritual Finder
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="trip-builder">
+                    <i class="fas fa-route mr-2"></i>Trip Builder
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="ai-assistant">
+                    <i class="fas fa-robot mr-2"></i>Och-I Assistant
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="legends">
+                    <i class="fas fa-scroll mr-2"></i>Legends
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="tartan-designer">
+                    <i class="fas fa-palette mr-2"></i>Tartan Designer
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="recipes">
+                    <i class="fas fa-utensils mr-2"></i>Recipes
+                </button>
+                <button class="nav-link font-semibold text-gray-600 hover:text-yellow-800 px-4 py-2 rounded-xl transition-all" data-target="marketplace">
+                    <i class="fas fa-store mr-2"></i>Marketplace
+                </button>
+            </nav>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden bg-white/95 rounded-2xl mt-4 shadow-xl">
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="home">
+                    <i class="fas fa-home mr-2"></i>Home
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="clans">
+                    <i class="fas fa-map mr-2"></i>Clans & Map
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="spiritual-finder">
+                    <i class="fas fa-magic mr-2"></i>Spiritual Finder
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="trip-builder">
+                    <i class="fas fa-route mr-2"></i>Trip Builder
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="ai-assistant">
+                    <i class="fas fa-robot mr-2"></i>Och-I Assistant
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="legends">
+                    <i class="fas fa-scroll mr-2"></i>Legends
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">
+                    <i class="fas fa-palette mr-2"></i>Tartan Designer
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">
+                    <i class="fas fa-utensils mr-2"></i>Recipes
+                </button>
+                <button class="block w-full text-left nav-link font-semibold text-gray-600 hover:text-yellow-800 p-4 border-t" data-target="marketplace">
+                    <i class="fas fa-store mr-2"></i>Marketplace
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95">
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="home">Home</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="clans">Clans & Map</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="finder">Clan Finder</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="legends">Legends</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">Tartan Designer</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">Recipe Book</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="marketplace">Marketplace</button>
-        </div>
     </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main id="main-content" class="max-w-7xl mx-auto px-4 py-8">
         
         <!-- Home Section -->
-        <section id="home-section" class="page-section">
-            <div class="text-center mb-12 bg-white/70 rounded-2xl shadow-xl p-8">
-                <img src="https://placehold.co/192x192/FBF6E8/3D4F45?text=🏴󠁧󠁢󠁳󠁣󠁴󠁿" alt="The Clan Hearth Emblem" class="w-48 h-48 mx-auto mb-6 rounded-full shadow-lg border-4 border-white">
-                <h2 class="text-4xl md:text-5xl font-bold font-title text-stone-900 mb-4">Welcome to The Clan Hearth</h2>
-                <p class="text-lg text-stone-600 mb-8 max-w-3xl mx-auto italic">Troimh theine tha sinn aonaichte (Through fire, we are united)</p>
-                <p class="text-lg md:text-xl text-stone-700 max-w-3xl mx-auto">Your digital gateway to Scottish heritage. Explore detailed clan histories on an interactive map, design a personal tartan, or discover the recipes that fueled the Highlands. Your journey starts here.</p>
+        <section id="home-section" class="page-section active">
+            <div class="text-center mb-12 content-card rounded-3xl shadow-2xl p-8 md:p-12 animate-fade-in">
+                <div class="clan-emblem w-48 h-48 mx-auto mb-8 rounded-full flex items-center justify-center pulse-gold">
+                    <div class="text-center">
+                        <i class="fas fa-crown text-6xl text-yellow-300 mb-2"></i>
+                        <div class="text-yellow-300 font-bold text-sm">CLAN HEARTH</div>
+                    </div>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-bold font-title text-gray-900 mb-4">Welcome to The Clan Hearth</h2>
+                <p class="text-2xl text-yellow-800 mb-4 font-title italic">Troimh theine tha sinn aonaichte</p>
+                <p class="text-lg text-gray-600 mb-8 italic">(Through Fire, We Are United)</p>
+                <p class="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed mb-8">
+                    Your premier gateway to authentic Scottish heritage. Discover clan histories, plan premium Highland tours, 
+                    connect with your spiritual clan, and experience Scotland through the eyes of genuine Highland descendants.
+                </p>
+                
+                <!-- Key Features Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                    <div class="content-card p-6 rounded-2xl">
+                        <i class="fas fa-magic text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Spiritual Clan Finder</h3>
+                        <p class="text-gray-600">Discover your spiritual clan connection through our unique personality-based matching system.</p>
+                    </div>
+                    <div class="content-card p-6 rounded-2xl">
+                        <i class="fas fa-route text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Premium Heritage Tours</h3>
+                        <p class="text-gray-600">Exclusive Scottish experiences from £2,000-5,000+ including private castle access and clan chief meetings.</p>
+                    </div>
+                    <div class="content-card p-6 rounded-2xl">
+                        <i class="fas fa-crown text-4xl text-yellow-600 mb-4"></i>
+                        <h3 class="text-xl font-bold mb-2">Authentic Heritage</h3>
+                        <p class="text-gray-600">Created by Ken McKenzie, authentic Clan MacKenzie descendant living in Montrose, Scotland.</p>
+                    </div>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6 mt-12">
+                    <button class="btn-primary px-8 py-4 rounded-2xl font-bold text-lg transition-all nav-link" data-target="spiritual-finder" aria-label="Find your clan soul">
+                        <i class="fas fa-magic mr-2"></i>Find Your Clan Soul
+                    </button>
+                    <button class="btn-primary px-8 py-4 rounded-2xl font-bold text-lg transition-all nav-link" data-target="trip-builder" aria-label="Plan your heritage journey">
+                        <i class="fas fa-route mr-2"></i>Plan Your Heritage Journey
+                    </button>
+                </div>
             </div>
         </section>
 
         <!-- Clans & Map Section -->
         <section id="clans-section" class="page-section">
-            <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
-                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4 flex flex-col">
-                    <h2 class="text-xl font-bold text-stone-800 font-title mb-4">The Families</h2>
-                    <div id="clan-sidebar-list" class="sidebar-scroll overflow-y-auto flex-grow"></div>
+            <div class="flex flex-col lg:flex-row min-h-screen bg-white/80 rounded-3xl shadow-2xl overflow-hidden">
+                <aside class="w-full lg:w-80 bg-gray-50 border-r border-gray-200 p-6 flex flex-col">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 font-title">
+                            <i class="fas fa-shield-alt mr-2 text-yellow-600"></i>
+                            Scottish Clans
+                        </h2>
+                        <span class="premium-badge">50+ Clans</span>
+                    </div>
+                    <div id="clan-sidebar-list" class="sidebar-scroll overflow-y-auto flex-grow" role="list"></div>
                 </aside>
                 <main id="clans-main-content" class="flex-1 p-4 sm:p-6 lg:p-8">
-                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
-                        <div class="lg:col-span-2 h-full">
-                            <div id="clanMap" class="w-full h-full rounded-lg shadow-lg"></div>
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 h-full">
+                        <div class="xl:col-span-2 h-full">
+                            <div id="clanMap" class="w-full h-full rounded-2xl shadow-2xl" aria-label="Interactive map of Scottish clan territories"></div>
                         </div>
-                        <div class="bg-stone-50 p-4 rounded-lg shadow-inner">
-                            <h3 class="text-xl font-bold mb-4 font-title">Family Details</h3>
+                        <div class="bg-gray-50 p-6 rounded-2xl shadow-inner">
+                            <h3 class="text-xl font-bold mb-4 font-title text-yellow-800">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                Clan Details
+                            </h3>
                             <div id="map-info" class="space-y-4">
-                                <p class="text-stone-500">Select a family from the list to see their territory and details.</p>
+                                <div class="text-center py-12">
+                                    <i class="fas fa-map-marked-alt text-6xl text-gray-300 mb-4"></i>
+                                    <p class="text-gray-500">Select a clan from the list to explore their territory, history, and heritage.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -90,96 +433,312 @@
             </div>
         </section>
 
-        <!-- Clan Finder Section -->
-        <section id="finder-section" class="page-section">
-            <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+        <!-- Spiritual Clan Finder Section -->
+        <section id="spiritual-finder-section" class="page-section">
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
+                <div class="text-center mb-12">
+                    <div class="clan-emblem w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center">
+                        <i class="fas fa-magic text-3xl text-yellow-300"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-title font-bold text-gray-900 mb-4">Spiritual Clan Finder</h2>
+                    <p class="text-xl text-gray-600 mb-4">Discover your spiritual connection to Scottish clan heritage</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">Viral Marketing Tool</span>
+                        <span class="premium-badge">Global Appeal</span>
+                    </div>
+                </div>
+                
+                <div id="spiritual-quiz-container" class="max-w-3xl mx-auto">
+                    <!-- Quiz will be populated here -->
+                </div>
+                
+                <div id="spiritual-quiz-result" class="hidden text-center max-w-3xl mx-auto">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Trip Builder Section -->
+        <section id="trip-builder-section" class="page-section">
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">The Clan Finder</h2>
-                    <p class="text-lg text-stone-600 mt-2">Answer five questions to discover your spirit clan.</p>
+                    <h2 class="text-4xl md:text-5xl font-title font-bold text-gray-900 mb-4">
+                        <i class="fas fa-route mr-4 text-yellow-600"></i>
+                        Heritage Trip Builder
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-6">Plan your ultimate Scottish heritage experience</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">Premium Tours £2,000-5,000+</span>
+                        <span class="premium-badge">Exclusive Access</span>
+                    </div>
                 </div>
-                <div id="quiz-container" class="max-w-2xl mx-auto">
-                    <!-- Questions will be injected here -->
+                
+                <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                    <!-- Trip Planning Panel -->
+                    <div class="xl:col-span-1 bg-gray-50 rounded-2xl p-6">
+                        <h3 class="text-xl font-bold mb-6 font-title">
+                            <i class="fas fa-clipboard-list mr-2 text-yellow-600"></i>
+                            Plan Your Journey
+                        </h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label for="trip-type" class="block text-sm font-semibold text-gray-700 mb-2">Experience Type</label>
+                                <select id="trip-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" aria-required="true">
+                                    <option value="heritage">Heritage & Clans</option>
+                                    <option value="luxury">Luxury Highland Tour</option>
+                                    <option value="whisky">Whisky & Distilleries</option>
+                                    <option value="golf">Golf Championships</option>
+                                    <option value="corporate">Corporate Team Building</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="trip-duration" class="block text-sm font-semibold text-gray-700 mb-2">Duration</label>
+                                <select id="trip-duration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" aria-required="true">
+                                    <option value="3">3 Days - Weekend Highland</option>
+                                    <option value="5">5 Days - Highland Explorer</option>
+                                    <option value="7">7 Days - Complete Heritage</option>
+                                    <option value="10">10 Days - Clan Immersion</option>
+                                    <option value="14">14 Days - Grand Scotland Tour</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="group-size" class="block text-sm font-semibold text-gray-700 mb-2">Group Size</label>
+                                <select id="group-size" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" aria-required="true">
+                                    <option value="1">Individual (1 person)</option>
+                                    <option value="2">Couple (2 people)</option>
+                                    <option value="4">Small Group (4 people)</option>
+                                    <option value="8">Family Group (8 people)</option>
+                                    <option value="12">Corporate Group (12 people)</option>
+                                </select>
+                            </div>
+                            
+                            <button id="build-trip-btn" class="w-full btn-primary py-3 rounded-lg font-bold" aria-label="Build my heritage journey">
+                                <i class="fas fa-magic mr-2"></i>Build My Heritage Journey
+                            </button>
+                        </div>
+                        
+                        <!-- Trip Summary -->
+                        <div id="trip-summary" class="mt-8 p-4 bg-white rounded-lg border border-yellow-200 hidden">
+                            <h4 class="font-bold text-yellow-800 mb-2">
+                                <i class="fas fa-calculator mr-2"></i>Trip Summary
+                            </h4>
+                            <div id="trip-details"></div>
+                            <div class="mt-4 p-3 bg-yellow-50 rounded-lg">
+                                <div class="text-center">
+                                    <div class="price-tag inline-block">
+                                        Total: £<span id="total-price">0</span>
+                                    </div>
+                                </div>
+                                <button id="book-trip-btn" class="w-full mt-4 btn-primary py-2 rounded-lg font-bold" aria-label="Book trip now">
+                                    <i class="fas fa-calendar-check mr-2"></i>Book Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Interactive Map -->
+                    <div class="xl:col-span-3">
+                        <div id="tripBuilderMap" style="height: 600px;" class="rounded-2xl shadow-2xl" aria-label="Interactive map for trip planning"></div>
+                    </div>
                 </div>
-                <div id="quiz-result" class="hidden text-center max-w-2xl mx-auto">
-                    <!-- Result will be injected here -->
+            </div>
+        </section>
+
+        <!-- AI Assistant Section -->
+        <section id="ai-assistant-section" class="page-section">
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
+                <div class="text-center mb-8">
+                    <h2 class="text-4xl md:text-5xl font-title font-bold text-gray-900 mb-4">
+                        <i class="fas fa-robot mr-4 text-yellow-600"></i>
+                        Och-I, Your Scottish Heritage Assistant
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-6">Chat with our AI assistant for personalized heritage guidance</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">24/7 Available</span>
+                        <span class="premium-badge">Scottish Personality</span>
+                    </div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Chat Interface -->
+                        <div class="lg:col-span-2">
+                            <div class="bg-gray-50 rounded-2xl p-6 shadow-inner">
+                                <div class="chat-container p-4 rounded-xl mb-4" id="chat-messages" role="log" aria-live="polite">
+                                    <div class="chat-message assistant">
+                                        <div class="flex items-start space-x-3">
+                                            <i class="fas fa-robot text-2xl text-yellow-400 mt-1"></i>
+                                            <div>
+                                                <p class="font-bold text-sm text-yellow-300 mb-1">Och-I</p>
+                                                <p>Failte! I'm Och-I, your Scottish heritage assistant. I can help you discover clan connections, plan heritage tours, recommend whisky tastings, or answer any questions about Scottish culture. What would you like to know about bonnie Scotland?</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex space-x-2">
+                                    <input type="text" id="chat-input" placeholder="Ask me about Scottish heritage..." 
+                                           class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" aria-label="Type your message">
+                                    <button id="send-chat-btn" class="btn-primary px-6 py-3 rounded-lg" aria-label="Send message">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="space-y-4">
+                            <h3 class="text-xl font-bold font-title text-gray-800">
+                                <i class="fas fa-bolt mr-2 text-yellow-600"></i>
+                                Quick Actions
+                            </h3>
+                            
+                            <button class="w-full text-left p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all quick-chat-btn" 
+                                    data-message="What clan should I connect with based on my personality?" aria-label="Find my clan">
+                                <i class="fas fa-search mr-3 text-yellow-600"></i>
+                                <span class="font-semibold">Find My Clan</span>
+                            </button>
+                            
+                            <button class="w-full text-left p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all quick-chat-btn" 
+                                    data-message="I want to plan a premium heritage tour to Scotland. What experiences do you recommend?" aria-label="Plan heritage tour">
+                                <i class="fas fa-route mr-3 text-yellow-600"></i>
+                                <span class="font-semibold">Plan Heritage Tour</span>
+                            </button>
+                            
+                            <button class="w-full text-left p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all quick-chat-btn" 
+                                    data-message="Tell me about the best Scottish whisky experiences for visitors." aria-label="Whisky experiences">
+                                <i class="fas fa-glass-whiskey mr-3 text-yellow-600"></i>
+                                <span class="font-semibold">Whisky Experiences</span>
+                            </button>
+                            
+                            <button class="w-full text-left p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all quick-chat-btn" 
+                                    data-message="I'm interested in corporate team building programs with Scottish heritage themes." aria-label="Corporate programs">
+                                <i class="fas fa-users mr-3 text-yellow-600"></i>
+                                <span class="font-semibold">Corporate Programs</span>
+                            </button>
+                            
+                            <button class="w-full text-left p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all quick-chat-btn" 
+                                    data-message="What are the most authentic Scottish cultural experiences I can book?" aria-label="Authentic experiences">
+                                <i class="fas fa-crown mr-3 text-yellow-600"></i>
+                                <span class="font-semibold">Authentic Experiences</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Legends Section -->
         <section id="legends-section" class="page-section">
-             <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
-                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-stone-800 font-title">The Legends</h2>
+            <div class="flex flex-col lg:flex-row min-h-screen bg-white/80 rounded-3xl shadow-2xl overflow-hidden">
+                <aside class="w-full lg:w-80 bg-gray-50 border-r border-gray-200 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-800 font-title">
+                            <i class="fas fa-scroll mr-2 text-yellow-600"></i>
+                            Highland Legends
+                        </h2>
+                        <span class="premium-badge">Historical</span>
                     </div>
-                    <div class="sidebar-scroll overflow-y-auto max-h-48 md:max-h-[calc(100vh-220px)]"></div>
+                    <div class="sidebar-scroll overflow-y-auto max-h-96" id="legends-sidebar" role="list"></div>
                 </aside>
-                <main id="legends-main-content" class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[calc(100vh-150px)]"></main>
+                <main id="legends-main-content" class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+                    <div class="text-center py-20">
+                        <i class="fas fa-scroll text-8xl text-gray-300 mb-6"></i>
+                        <p class="text-xl text-gray-500">Select a legend to discover their story and heritage</p>
+                    </div>
+                </main>
             </div>
         </section>
-        
+
         <!-- Tartan Designer Section -->
         <section id="tartan-designer-section" class="page-section">
-             <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
                 <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">Design Your Own Tartan</h2>
-                    <p class="text-lg text-stone-600 mt-2">Create, save, and share a unique pattern that tells your story.</p>
+                    <h2 class="text-4xl md:text-5xl font-title font-bold text-gray-900 mb-4">
+                        <i class="fas fa-palette mr-4 text-yellow-600"></i>
+                        Tartan Designer
+                    </h2>
+                    <p class="text-xl text-gray-600 mb-6">Create and share your own unique Scottish tartan pattern</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">Interactive Design</span>
+                        <span class="premium-badge">Shareable</span>
+                    </div>
                 </div>
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <div class="lg:w-1/3 bg-stone-50 p-6 rounded-xl border border-stone-200">
-                        <div class="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
+                
+                <div class="flex flex-col xl:flex-row gap-8">
+                    <!-- Design Controls -->
+                    <div class="xl:w-1/3 bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                        <div class="mb-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
                             <h3 class="font-bold">How to Design Your Tartan</h3>
-                            <p class="text-sm mt-1">A tartan is a repeating pattern of colored stripes. You are creating the core pattern, called a "sett." We will automatically mirror it to create the full tartan.</p>
+                            <p class="text-sm mt-1">A tartan is a repeating pattern of colored stripes. Create your unique "sett" pattern that will be mirrored to form the complete tartan.</p>
                         </div>
                         
                         <div class="space-y-6">
                             <div>
-                                <h3 class="text-lg font-semibold mb-2">1. Pick a Colour</h3>
-                                <div id="color-palette" class="grid grid-cols-5 sm:grid-cols-6 gap-3"></div>
+                                <h3 class="text-lg font-semibold mb-3">
+                                    <i class="fas fa-palette mr-2 text-yellow-600"></i>
+                                    1. Pick a Colour
+                                </h3>
+                                <div id="color-palette" class="grid grid-cols-5 gap-3" role="radiogroup" aria-label="Color palette"></div>
                             </div>
+                            
                             <div>
-                                <h3 class="text-lg font-semibold mb-2">2. Set Stripe Size & Add</h3>
+                                <h3 class="text-lg font-semibold mb-3">
+                                    <i class="fas fa-ruler mr-2 text-yellow-600"></i>
+                                    2. Set Stripe Size & Add
+                                </h3>
                                 <div class="flex items-center gap-3">
-                                    <input type="number" id="thread-count" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 24" min="2">
-                                    <button id="add-stripe-btn" class="bg-yellow-800 text-white font-semibold px-5 py-2 rounded-lg hover:bg-yellow-900 transition-colors shadow">Add</button>
+                                    <input type="number" id="thread-count" class="flex-1 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" placeholder="e.g., 24" min="2" aria-label="Thread count">
+                                    <button id="add-stripe-btn" class="btn-primary px-6 py-3 rounded-lg font-semibold" aria-label="Add stripe">
+                                        <i class="fas fa-plus mr-1"></i>Add
+                                    </button>
                                 </div>
-                                <p class="text-xs text-stone-500 mt-1">The canvas will show a live preview as you type.</p>
                             </div>
+                            
                             <div>
-                                <h3 class="text-lg font-semibold mb-2">3. Build Your Pattern (The Sett)</h3>
-                                <div id="pattern-list" class="bg-white p-4 rounded-lg h-40 overflow-y-auto border"></div>
-                                <div class="flex justify-end mt-2">
-                                    <button id="clear-pattern-btn" class="bg-red-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-800 transition-colors shadow text-sm">Clear</button>
-                                </div>
+                                <h3 class="text-lg font-semibold mb-3">
+                                    <i class="fas fa-list mr-2 text-yellow-600"></i>
+                                    3. Your Pattern (Sett)
+                                </h3>
+                                <div id="pattern-list" class="bg-white p-4 rounded-lg h-40 overflow-y-auto border border-gray-200" role="list"></div>
+                                <button id="clear-pattern-btn" class="w-full mt-2 bg-red-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-700 transition-colors" aria-label="Clear pattern">
+                                    <i class="fas fa-trash mr-2"></i>Clear Pattern
+                                </button>
                             </div>
-                             <div>
-                                <h3 class="text-lg font-semibold mb-2">4. Name & Save</h3>
-                                <input type="text" id="tartan-name" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 'Monarch of the Glen'">
+                            
+                            <div>
+                                <h3 class="text-lg font-semibold mb-3">
+                                    <i class="fas fa-tag mr-2 text-yellow-600"></i>
+                                    4. Name Your Tartan
+                                </h3>
+                                <input type="text" id="tartan-name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500" placeholder="e.g., 'Highland Dream'" aria-label="Tartan name">
                             </div>
                         </div>
                     </div>
-                    <div class="lg:w-3/4 flex flex-col">
-                        <div class="bg-white p-2 rounded-xl shadow-inner border flex-grow">
-                            <canvas id="tartan-canvas" class="w-full h-full rounded-lg"></canvas>
+                    
+                    <!-- Tartan Preview -->
+                    <div class="xl:w-2/3 flex flex-col">
+                        <div class="bg-white p-4 rounded-2xl shadow-inner border flex-grow mb-6">
+                            <canvas id="tartan-canvas" class="w-full rounded-lg" style="height: 400px;" aria-label="Tartan preview"></canvas>
                         </div>
-                        <div class="mt-4 bg-white p-4 rounded-xl border flex items-center justify-center gap-4">
-                            <button id="save-btn" class="flex items-center gap-2 bg-green-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-800 transition-colors shadow">
-                                <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.5 16a3.5 3.5 0 01-3.5-3.5V5.5A3.5 3.5 0 015.5 2h9A3.5 3.5 0 0118 5.5v7a3.5 3.5 0 01-3.5 3.5h-9zM4 5.5A1.5 1.5 0 015.5 4h9A1.5 1.5 0 0116 5.5v7a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 12.5V5.5z"/><path d="M14.5 7a1 1 0 100-2 1 1 0 000 2z"/></svg>
-                                Save as Image
+                        
+                        <!-- Actions -->
+                        <div class="bg-white p-6 rounded-2xl border flex flex-wrap items-center justify-center gap-4">
+                            <button id="save-tartan-btn" class="btn-primary px-6 py-3 rounded-lg font-bold" aria-label="Save tartan as image">
+                                <i class="fas fa-download mr-2"></i>Save as Image
                             </button>
-                            <div class="tooltip">
-                                <button id="share-btn" class="flex items-center gap-2 bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors shadow">
-                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/></svg>
-                                    Share Link
-                                </button>
-                                <span class="tooltiptext" id="share-tooltip">Copy sharable link</span>
-                            </div>
+                            <button id="share-tartan-btn" class="btn-primary px-6 py-3 rounded-lg font-bold" aria-label="Share tartan">
+                                <i class="fas fa-share mr-2"></i>Share Link
+                            </button>
                         </div>
-                         <div class="mt-6">
-                            <h3 class="text-lg font-semibold text-center mb-4">Or, start with a famous tartan:</h3>
-                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                </div>
+                        
+                        <!-- Example Tartans -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-semibold text-center mb-4">Or start with a famous tartan:</h3>
+                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
                         </div>
                     </div>
                 </div>
@@ -188,38 +747,1326 @@
 
         <!-- Recipes Section -->
         <section id="recipes-section" class="page-section">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-5xl font-bold font-title text-stone-900">The Highlander's Larder</h1>
-                <p class="text-lg text-stone-600 mt-2">An interactive scroll of Scotland's most cherished recipes.</p>
-            </div>
-            <div class="bg-white/80 rounded-xl shadow-lg p-6 md:p-8 mb-10 animate-fade-in">
-                <h3 class="text-2xl font-bold font-title text-stone-800 mb-4 text-center">Recipe Glossary</h3>
-                <div id="recipe-index-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl md:text-5xl font-bold font-title text-gray-900 mb-4">
+                        <i class="fas fa-utensils mr-4 text-yellow-600"></i>
+                        The Highland Larder
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-6">Authentic Scottish recipes from clan territories across the Highlands</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">150+ Recipes</span>
+                        <span class="premium-badge">Regional Specialties</span>
                     </div>
+                </div>
+                
+                <!-- Recipe Categories -->
+                <div class="bg-white/80 rounded-2xl shadow-lg p-6 mb-10">
+                    <h3 class="text-2xl font-bold font-title text-gray-800 mb-4 text-center">
+                        <i class="fas fa-book mr-2 text-yellow-600"></i>
+                        Recipe Categories
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4" id="recipe-categories" role="list">
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="all" aria-pressed="true">
+                            <i class="fas fa-list text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">All Recipes</div>
+                        </button>
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="highlands" aria-pressed="false">
+                            <i class="fas fa-mountain text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">Highland</div>
+                        </button>
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="lowlands" aria-pressed="false">
+                            <i class="fas fa-hills text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">Lowland</div>
+                        </button>
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="islands" aria-pressed="false">
+                            <i class="fas fa-water text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">Islands</div>
+                        </button>
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="borders" aria-pressed="false">
+                            <i class="fas fa-chess-rook text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">Borders</div>
+                        </button>
+                        <button class="recipe-category-btn p-3 bg-gray-50 rounded-lg hover:bg-yellow-50 transition-colors text-center" data-category="festive" aria-pressed="false">
+                            <i class="fas fa-star text-yellow-600 text-2xl mb-2"></i>
+                            <div class="font-semibold text-sm">Festive</div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list"></div>
             </div>
-            <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
         <!-- Marketplace Section -->
         <section id="marketplace-section" class="page-section">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-5xl font-bold font-title text-stone-900">The Hearth Market</h1>
-                <p class="text-lg text-stone-600 mt-2">Authentic goods from the heart of Scotland.</p>
+            <div class="content-card rounded-3xl shadow-2xl p-6 md:p-12 animate-fade-in">
+                <div class="text-center mb-10">
+                    <h1 class="text-4xl md:text-5xl font-bold font-title text-gray-900 mb-4">
+                        <i class="fas fa-store mr-4 text-yellow-600"></i>
+                        The Highland Market
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-6">Authentic Scottish goods crafted by Highland artisans</p>
+                    <div class="flex justify-center space-x-4 mb-8">
+                        <span class="premium-badge">Authentic Goods</span>
+                        <span class="premium-badge">Highland Crafted</span>
+                    </div>
+                </div>
+                
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="list"></div>
             </div>
-            <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
     </main>
 
-    <!-- Global Modal & Message Box -->
-    <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
-        <div id="modal-content" class="bg-[#FBF6E8] rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"></div>
-    </div>
-    <div id="message-box" class="hidden fixed top-20 right-5 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 z-50">
-        <p id="message-text"></p>
+    <!-- Modal -->
+    <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-90vh overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="modal-title" class="text-2xl font-bold font-title text-gray-900"></h2>
+                    <button id="close-modal" class="text-gray-500 hover:text-gray-700 text-2xl" aria-label="Close modal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="modal-body"></div>
+            </div>
+        </div>
     </div>
 
-    <!-- Application Script -->
-    <script src="script.js" defer></script>
-</body>
-</html>
+    <!-- Message Box -->
+    <div id="message-box" class="hidden fixed top-24 right-5 text-white py-3 px-6 rounded-lg shadow-2xl transition-all duration-300 z-50" role="alert" aria-live="assertive">
+        <div class="flex items-center">
+            <i id="message-icon" class="fas fa-check-circle mr-2"></i>
+            <p id="message-text"></p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // === COMPREHENSIVE DATA ===
+        const clanData = [
+            {
+                id: "mackenzie",
+                name: "Clan MacKenzie",
+                gaelicName: "Clann Choinnich",
+                motto: "Luceo Non Uro (I shine, not burn)",
+                crest: "A mountain in flames, Proper",
+                plantBadge: "Deer's Grass",
+                warCry: "Tulach Àrd!",
+                territories: "Kintail, Ross, Cromarty, Black Isle",
+                historicSeats: "Eilean Donan Castle, Castle Leod",
+                rival: "Clan MacDonald",
+                region: "highlands",
+                lore: `Clan MacKenzie, "the Children of the Bright Fire," rose from humble beginnings to become one of the most powerful Highland clans. Founded by Coinneach (Kenneth), son of Colin of the Aird in the 12th century, they controlled vast territories from their stronghold at Eilean Donan Castle. The clan's motto "Luceo Non Uro" reflects their philosophy of enlightened leadership rather than destructive conquest. Their rise to power came through strategic marriages, loyal service to the crown, and shrewd political maneuvering. The MacKenzies were instrumental in the Jacobite risings, with their war cry "Tulach Àrd!" (The High Hill) echoing across Highland battlefields. Their territory encompassed the mystical landscapes of Kintail, where ancient Gaelic traditions flourished under their protection.`,
+                events: [
+                    { year: "c. 1200", event: "Coinneach establishes the clan in Kintail" },
+                    { year: "1463", event: "Battle of Bloody Bay - MacKenzies support the Lord of the Isles" },
+                    { year: "1609", event: "Kenneth MacKenzie becomes 1st Lord MacKenzie of Kintail" },
+                    { year: "1719", event: "Battle of Glen Shiel - Jacobite defeat ends MacKenzie military power" }
+                ],
+                mottoLore: "This Latin motto represents the MacKenzie philosophy of enlightened leadership - to illuminate and guide rather than to destroy and dominate.",
+                tartan: {
+                    description: "The MacKenzie tartan displays bold patterns of blue and green with red and yellow stripes...",
+                    colors: ["#1a4480", "#2d5016", "#cc0000", "#ffd700"]
+                },
+                famousNames: [
+                    { name: "Kenneth MacKenzie, 1st Earl of Seaforth", desc: "The clan's most powerful chief who elevated the MacKenzies to earldom status." },
+                    { name: "The Brahan Seer (Coinneach Odhar)", desc: "Legendary prophet associated with Clan MacKenzie." }
+                ],
+                recipe: {
+                    name: "Kintail Highland Stew",
+                    description: "A hearty stew from the MacKenzie heartland",
+                    ingredients: ["2 lbs Highland lamb, cubed", "4 large potatoes", "2 onions", "2 carrots", "Scots pine needles (optional)", "Highland spring water", "Sea salt", "Black pepper"],
+                    method: [
+                        "Brown the lamb in a heavy pot over high heat",
+                        "Add vegetables and cover with Highland spring water",
+                        "Season with salt, pepper, and a few Scots pine needles for authentic Highland flavor",
+                        "Simmer slowly for 2-3 hours until lamb is tender",
+                        "Serve hot with oatcakes and a dram of Highland whisky"
+                    ]
+                }
+            },
+            {
+                id: "campbell",
+                name: "Clan Campbell",
+                gaelicName: "Na Caimbeulaich",
+                motto: "Ne Obliviscaris (Forget Not)",
+                crest: "A boar's head erased fessways, Or",
+                plantBadge: "Bog Myrtle / Fir Club Moss",
+                warCry: "Cruachan!",
+                territories: "Argyll, Perthshire, Cawdor, Loudoun, Breadalbane",
+                historicSeats: "Inveraray Castle, Castle Campbell",
+                rival: "Clan MacDonald",
+                region: "highlands",
+                lore: `The Campbells rose from Norman-Gaelic origins to become Scotland's most politically astute clan. Their motto "Ne Obliviscaris" served as both a promise to friends and a warning to enemies. Through strategic alliances with the Scottish crown and shrewd marriages, they expanded their territories across Argyll and beyond. The clan's rise culminated in their elevation to the Dukedom of Argyll, making them one of the most powerful families in Scotland. Their involvement in the Massacre of Glencoe remains controversial, but their role in shaping Scottish history is undeniable.`,
+                events: [
+                    { year: "1314", event: "Campbells fight at Bannockburn for Robert the Bruce" },
+                    { year: "1457", event: "Colin Campbell becomes 1st Earl of Argyll" },
+                    { year: "1692", event: "Massacre of Glencoe - Campbell soldiers involved" },
+                    { year: "1701", event: "10th Earl elevated to Duke of Argyll" }
+                ],
+                mottoLore: "A warning to enemies and a promise to allies - the Campbells never forget either kindness or treachery.",
+                tartan: {
+                    description: "The Campbell tartan features navy blue and forest green with black stripes...",
+                    colors: ["#1a4480", "#2d5016", "#000000"]
+                },
+                famousNames: [
+                    { name: "Archibald Campbell, 1st Marquess of Argyll", desc: "Covenanter leader during the Wars of the Three Kingdoms" },
+                    { name: "John Campbell, 2nd Duke of Argyll", desc: "Military commander and politician" }
+                ],
+                recipe: {
+                    name: "Argyll Lamb with Bog Myrtle",
+                    description: "Traditional Highland lamb dish using the clan's plant badge",
+                    ingredients: ["3 lbs leg of lamb", "Fresh bog myrtle leaves", "Highland honey", "Oatmeal", "Root vegetables", "Heather ale"],
+                    method: [
+                        "Rub lamb with crushed bog myrtle and honey",
+                        "Coat with coarse oatmeal",
+                        "Roast slowly with root vegetables",
+                        "Baste with heather ale",
+                        "Serve with traditional Highland accompaniments"
+                    ]
+                }
+            },
+            {
+                id: "macdonald",
+                name: "Clan MacDonald",
+                gaelicName: "Clann Dòmhnaill",
+                motto: "Per mare per terras (By sea and by land)",
+                crest: "A hand in armour fessways holding a cross crosslet fitchée Gules",
+                plantBadge: "Heather",
+                warCry: "Fraoch Eilean! (The Heathery Isle!)",
+                territories: "Hebrides, Islay, Kintyre, Glencoe",
+                historicSeats: "Finlaggan, Dunyvaig Castle, Dunstaffnage",
+                rival: "Clan Campbell",
+                region: "highlands",
+                lore: `Clan MacDonald, descended from Somerled, Lord of the Isles, once ruled a maritime kingdom that stretched from the Hebrides to the Irish coast. As Lords of the Isles, they commanded fleets of galleys and maintained their own parliament at Finlaggan. Their power rivaled that of the Scottish crown itself, leading to centuries of conflict. The clan's motto "Per mare per terras" reflects their mastery of both sea and land warfare. Though their political power waned, their cultural influence on Gaelic Scotland remains immense.`,
+                events: [
+                    { year: "1164", event: "Somerled, ancestor of MacDonalds, killed at Battle of Renfrew" },
+                    { year: "1493", event: "Lordship of the Isles forfeited to the crown" },
+                    { year: "1692", event: "Massacre of Glencoe devastates MacDonald of Glencoe" },
+                    { year: "1745", event: "Various MacDonald branches join Jacobite cause" }
+                ],
+                mottoLore: "This motto perfectly captures the MacDonald dominion over the western seaboard and islands of Scotland.",
+                tartan: {
+                    description: "The MacDonald tartan features deep red and forest green with navy accents...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "John MacDonald, 4th Lord of the Isles", desc: "Last independent Lord of the Isles" },
+                    { name: "Flora MacDonald", desc: "Highland heroine who helped Bonnie Prince Charlie escape" }
+                ],
+                recipe: {
+                    name: "Hebridean Seafood Stew",
+                    description: "Fresh seafood from the MacDonald island territories",
+                    ingredients: ["Fresh lobster", "Scallops", "Mussels", "Dulse seaweed", "Island potatoes", "Wild garlic", "Hebridean sea salt"],
+                    method: [
+                        "Gather fresh shellfish from clean island waters",
+                        "Layer with island potatoes and wild garlic",
+                        "Season with dulse and sea salt",
+                        "Cook in large pot over driftwood fire",
+                        "Serve with oatcakes and island butter"
+                    ]
+                }
+            },
+            {
+                id: "fraser",
+                name: "Clan Fraser of Lovat",
+                gaelicName: "Na Frisealaich",
+                motto: "Je suis prest (I am ready)",
+                crest: "A buck's head erased Proper",
+                plantBadge: "Yew",
+                warCry: "Caisteal Dhuni! (Castle Dounie!)",
+                territories: "The Aird, Stratherrick, Lovat",
+                historicSeats: "Castle Dounie (Beaufort Castle)",
+                rival: "Clan MacDonald of Clanranald",
+                region: "highlands",
+                lore: `The Frasers came to Scotland from France in the 12th century, establishing themselves as one of the most formidable Highland clans. Their motto "Je suis prest" reflects their Norman origins and constant readiness for battle. The clan's history is dominated by the legendary Simon Fraser, the "Old Fox," whose cunning and political maneuvering made him one of the most feared and respected Highland chiefs. The Frasers were staunch Jacobites, fighting with distinction at Culloden, where their chief's son died leading the clan charge.`,
+                events: [
+                    { year: "1160", event: "Simon Fraser granted lands in East Lothian" },
+                    { year: "1544", event: "Battle of the Shirts fought against MacDonalds" },
+                    { year: "1746", event: "Frasers fight courageously at Culloden" },
+                    { year: "1747", event: "Simon Fraser, Lord Lovat, executed for treason" }
+                ],
+                mottoLore: "This French motto reflects both the clan's Norman origins and their perpetual state of military readiness.",
+                tartan: {
+                    description: "The Fraser tartan displays vibrant red and forest green with blue stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "Simon Fraser, 11th Lord Lovat", desc: "The Old Fox - cunning Highland chief executed after Culloden" },
+                    { name: "Simon Fraser", desc: "Explorer who mapped parts of western Canada" }
+                ],
+                recipe: {
+                    name: "Beauly Firth Salmon",
+                    description: "Fresh salmon from the Fraser homeland",
+                    ingredients: ["Fresh Beauly salmon", "Wild herbs", "Highland butter", "Juniper berries", "Heather honey", "Oatmeal"],
+                    method: [
+                        "Clean fresh-caught salmon from the Beauly Firth",
+                        "Stuff cavity with wild herbs and juniper",
+                        "Coat skin with oatmeal and heather honey",
+                        "Cook slowly over peat fire",
+                        "Serve with Highland butter and bannocks"
+                    ]
+                }
+            },
+            {
+                id: "macleod",
+                name: "Clan MacLeod",
+                gaelicName: "Clann MhicLeòid",
+                motto: "Hold Fast",
+                crest: "A bull's head caboshed Sable, horned Or, between two flags Gules",
+                plantBadge: "Red Whortleberry",
+                warCry: "Hold Fast!",
+                territories: "Skye, Harris, Lewis, Assynt",
+                historicSeats: "Dunvegan Castle, Dunscaith Castle",
+                rival: "Clan MacDonald",
+                region: "highlands",
+                lore: `Clan MacLeod traces its lineage to Leod, son of Olaf the Black, King of Man and the Isles. The clan split into two main branches: MacLeods of Harris and MacLeods of Lewis, both maintaining strongholds in the Hebrides. Dunvegan Castle, seat of the MacLeods of Harris, is one of Scotland's oldest continuously inhabited castles and houses the famous Fairy Flag. The clan's motto "Hold Fast" reflects their tenacious hold on their island territories despite centuries of warfare and political upheaval.`,
+                events: [
+                    { year: "c. 1200", event: "Leod establishes clan presence in the Hebrides" },
+                    { year: "1493", event: "MacLeods support forfeiture of MacDonald Lordship" },
+                    { year: "1580", event: "Battle of Coire Na Creiche - MacLeods vs MacDonalds" },
+                    { year: "1745", event: "MacLeods remain loyal to government during Jacobite rising" }
+                ],
+                mottoLore: "Simple yet profound, this motto encapsulates the MacLeod determination to maintain their grip on their ancestral lands.",
+                tartan: {
+                    description: "The MacLeod tartan features bold yellow and black with red accents...",
+                    colors: ["#ffd700", "#000000", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "Flora MacLeod of MacLeod", desc: "28th Chief who modernized the clan and preserved Dunvegan" },
+                    { name: "Rory Mor MacLeod", desc: "15th Chief, famous for his hospitality and the Horn of Dunvegan" }
+                ],
+                recipe: {
+                    name: "Skye Crofter's Broth",
+                    description: "Hearty soup from the MacLeod island territories",
+                    ingredients: ["Mutton or lamb bones", "Pearl barley", "Leeks", "Turnips", "Kale", "Island herbs", "Sea salt"],
+                    method: [
+                        "Simmer mutton bones for rich stock",
+                        "Add pearl barley and root vegetables",
+                        "Include fresh kale and island herbs",
+                        "Season with sea salt from Skye shores",
+                        "Serve hot with crowdie cheese and oatcakes"
+                    ]
+                }
+            },
+            {
+                id: "gordon",
+                name: "Clan Gordon",
+                gaelicName: "Clann Ghòrdain",
+                motto: "Bydand (Remaining/Abiding)",
+                crest: "Out of a crest coronet Or, a stag's head caboshed Proper, attired with ten tines Or",
+                plantBadge: "Rock Ivy",
+                warCry: "An Gordanach!",
+                territories: "Aberdeenshire, Banffshire, Moray",
+                historicSeats: "Huntly Castle, Gordon Castle",
+                rival: "Clan Forbes",
+                region: "northeast",
+                lore: `The Gordons rose from Anglo-Norman origins to become the most powerful family in northeastern Scotland. Known as the "Cock o' the North," they controlled vast territories and held the powerful Dukedom of Gordon. Their rivalry with Clan Forbes dominated northeastern politics for centuries. The Gordons were notable for their Catholic faith in Protestant Scotland and their support for the Stuart cause, earning them both persecution and respect.`,
+                events: [
+                    { year: "1449", event: "Alexander Gordon becomes 1st Earl of Huntly" },
+                    { year: "1562", event: "Battle of Corrichie - Mary Queen of Scots defeats Gordons" },
+                    { year: "1594", event: "Battle of Glenlivet - Gordons defeat royal forces" },
+                    { year: "1746", event: "Lord Lewis Gordon leads Jacobites in northeast" }
+                ],
+                mottoLore: "This motto represents the Gordon determination to remain steadfast in their beliefs and territories.",
+                tartan: {
+                    description: "The Gordon tartan displays forest green and navy blue with yellow stripes...",
+                    colors: ["#2d5016", "#1a4480", "#ffd700"]
+                },
+                famousNames: [
+                    { name: "George Gordon, 4th Earl of Huntly", desc: "The Cock o' the North - most powerful Gordon chief" },
+                    { name: "Lord Byron", desc: "Famous Romantic poet with Gordon heritage" }
+                ],
+                recipe: {
+                    name: "Huntly Haggis",
+                    description: "Rich haggis from the Gordon heartland",
+                    ingredients: ["Lamb's heart and lungs", "Oatmeal", "Suet", "Onions", "Highland spices", "Natural casing", "Neeps and tatties"],
+                    method: [
+                        "Mince heart and lungs with suet",
+                        "Mix with toasted oatmeal and spices",
+                        "Stuff into natural casing",
+                        "Boil gently for hours",
+                        "Serve with mashed neeps and tatties, accompanied by whisky"
+                    ]
+                }
+            },
+            {
+                id: "douglas",
+                name: "Clan Douglas",
+                gaelicName: "Dùbhghlas",
+                motto: "Jamais arrière (Never behind)",
+                crest: "On a chapeau Gules turned up Ermine, a salamander Vert encircled with flames of fire Proper",
+                plantBadge: "Climbing Rose",
+                warCry: "A Douglas! A Douglas!",
+                territories: "Scottish Borders, Lanarkshire, Angus",
+                historicSeats: "Douglas Castle, Tantallon Castle, Bothwell Castle",
+                rival: "House of Stewart",
+                region: "lowlands",
+                lore: `The House of Douglas was once so powerful it rivaled the Scottish crown itself. The "Good Sir James" Douglas was Robert the Bruce's most trusted commander, carrying the king's heart on crusade. The Black Douglases and Red Douglases dominated Scottish politics for centuries, with their power eventually becoming a threat to royal authority. Their motto "Jamais arrière" perfectly captures their aggressive, forward-thinking nature.`,
+                events: [
+                    { year: "1306", event: "Sir James Douglas joins Robert the Bruce" },
+                    { year: "1330", event: "Sir James dies carrying Bruce's heart to Holy Land" },
+                    { year: "1440", event: "Black Dinner - young Douglases murdered" },
+                    { year: "1455", event: "Battle of Arkinholm ends Black Douglas power" }
+                ],
+                mottoLore: "This French motto reflects the Douglas determination to always advance, never retreat in any endeavor.",
+                tartan: {
+                    description: "The Douglas tartan features forest green and navy blue with red stripes...",
+                    colors: ["#2d5016", "#1a4480", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "Sir James Douglas", desc: "The Good Sir James - Bruce's most trusted commander" },
+                    { name: "Archibald Douglas, 5th Earl of Angus", desc: "Bell the Cat - powerful Red Douglas" }
+                ],
+                recipe: {
+                    name: "Border Reiver Stew",
+                    description: "Hearty stew from the Douglas Border lands",
+                    ingredients: ["Beef from raided cattle", "Root vegetables", "Barley", "Wild herbs", "Strong ale", "Border cheese"],
+                    method: [
+                        "Brown beef from the latest raid",
+                        "Add hardy root vegetables",
+                        "Include barley for sustenance",
+                        "Cook with strong Border ale",
+                        "Serve with local cheese and dark bread"
+                    ]
+                }
+            },
+            {
+                id: "cameron",
+                name: "Clan Cameron",
+                gaelicName: "Camshron",
+                motto: "Aonaibh ri chéile (Unite)",
+                crest: "A sheaf of five arrows, points upwards, tied with a band Gules",
+                plantBadge: "Oak / Crowberry",
+                warCry: "Chlanna nan con thigibh a so's gheibh sibh feòil!",
+                territories: "Lochaber",
+                historicSeats: "Achnacarry Castle",
+                rival: "Clan Chattan",
+                region: "highlands",
+                lore: `Clan Cameron, one of the most warlike Highland clans, controlled the wild territory of Lochaber. Their Gaelic war cry "Sons of the hounds come here and get flesh!" struck terror into enemies. The clan's loyalty to the Jacobite cause was unwavering, with "Gentle Lochiel" leading them in the 1745 rising. Their motto "Unite" reflects the importance of clan unity in their harsh mountain homeland.`,
+                events: [
+                    { year: "1370", event: "Battle of Invernahavon against Clan Chattan" },
+                    { year: "1665", event: "End of feud with Mackintoshes" },
+                    { year: "1745", event: "Gentle Lochiel joins Bonnie Prince Charlie" },
+                    { year: "1746", event: "Heavy losses at Battle of Culloden" }
+                ],
+                mottoLore: "This Gaelic motto emphasizes the vital importance of clan solidarity in the harsh Highland environment.",
+                tartan: {
+                    description: "The Cameron tartan displays red and forest green with navy stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "Donald Cameron, 'Gentle Lochiel'", desc: "19th Chief who led clan in 1745 rising" },
+                    { name: "Sir Ewen Cameron", desc: "17th Chief, legendary Highland warrior" }
+                ],
+                recipe: {
+                    name: "Lochaber Venison Feast",
+                    description: "Wild venison from the Cameron highlands",
+                    ingredients: ["Highland red deer", "Wild mushrooms", "Juniper berries", "Mountain herbs", "Barley", "Highland whisky"],
+                    method: [
+                        "Hunt red deer in the Lochaber hills",
+                        "Marinate with juniper and mountain herbs",
+                        "Roast slowly over oak fire",
+                        "Serve with barley and wild mushrooms",
+                        "Toast with Highland whisky"
+                    ]
+                }
+            },
+            {
+                id: "stewart",
+                name: "Clan Stewart",
+                gaelicName: "Stiùbhart",
+                motto: "Virescit Vulnere Virtus (Courage grows strong at a wound)",
+                crest: "A pelican in her piety Proper",
+                plantBadge: "Oak",
+                warCry: "A Stewart!",
+                territories: "Renfrewshire, Ayrshire, Angus, Perthshire",
+                historicSeats: "Stirling Castle, Palace of Holyroodhouse",
+                rival: "Various as ruling house",
+                region: "lowlands",
+                lore: `The Royal House of Stewart ruled Scotland for over 300 years and later unified the crowns of Scotland and England. From their origins as High Stewards of Scotland, they rose to become one of Europe's most significant royal dynasties. The various Stewart branches spread throughout Scotland, each maintaining the royal connection while developing their own distinct identities and territories.`,
+                events: [
+                    { year: "1371", event: "Robert II becomes first Stewart king" },
+                    { year: "1603", event: "Union of Crowns - James VI becomes James I of England" },
+                    { year: "1688", event: "James VII deposed in Glorious Revolution" },
+                    { year: "1746", event: "Jacobite cause dies at Culloden" }
+                ],
+                mottoLore: "This Latin motto reflects the Stewart resilience through centuries of triumph and tragedy.",
+                tartan: {
+                    description: "The Royal Stewart tartan features red and forest green with blue and yellow stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480", "#ffd700"]
+                },
+                famousNames: [
+                    { name: "Mary Queen of Scots", desc: "Tragic queen whose reign shaped Scottish history" },
+                    { name: "Bonnie Prince Charlie", desc: "Last serious Stewart claimant to British throne" }
+                ],
+                recipe: {
+                    name: "Royal Highland Game Pie",
+                    description: "Feast fit for Stewart royalty",
+                    ingredients: ["Mixed game meats", "Rich pastry", "Court spices", "Royal wines", "Seasonal vegetables", "Gold leaf garnish"],
+                    method: [
+                        "Prepare finest game from royal hunts",
+                        "Season with imported court spices",
+                        "Wrap in rich, buttery pastry",
+                        "Bake in royal kitchens",
+                        "Serve with ceremony and fanfare"
+                    ]
+                }
+            },
+            {
+                id: "scott",
+                name: "Clan Scott",
+                gaelicName: "Clann Sgot",
+                motto: "Amo (I love)",
+                crest: "A stag trippant Proper, attired and unguled Or",
+                plantBadge: "Blaeberry",
+                warCry: "A Bellendaine!",
+                territories: "Scottish Borders, Roxburghshire",
+                historicSeats: "Branxholme Castle, Bowhill House",
+                rival: "Clan Kerr",
+                region: "borders",
+                lore: `The Scotts were one of the most powerful Border Reiver clans, controlling much of the Middle March. Their feuds with neighboring clans, particularly the Kerrs, were legendary for their intensity and duration. The clan produced many notable figures including Sir Walter Scott, whose novels romanticized Highland culture for the world. Their Border ballads and tales of reiving became central to Scottish literary tradition.`,
+                events: [
+                    { year: "1526", event: "Battle of Melrose against Clan Kerr" },
+                    { year: "1566", event: "Sir Walter Scott of Buccleuch captures Kinmont Willie" },
+                    { year: "1606", event: "Formal end of Scott-Kerr feud" },
+                    { year: "1820", event: "Sir Walter Scott publishes Ivanhoe" }
+                ],
+                mottoLore: "This simple Latin motto reflects the Scott capacity for both fierce hatred and deep loyalty.",
+                tartan: {
+                    description: "The Scott tartan features red and forest green with blue stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "Sir Walter Scott", desc: "Novelist who romanticized Scottish culture worldwide" },
+                    { name: "Michael Scott", desc: "Medieval scholar and supposed wizard" }
+                ],
+                recipe: {
+                    name: "Border Reivers' Raid Stew",
+                    description: "Quick meal for returning raiders",
+                    ingredients: ["Stolen cattle beef", "Foraged roots", "Border herbs", "Strong border ale", "Raid spoils"],
+                    method: [
+                        "Quickly prepare stolen cattle",
+                        "Add whatever vegetables were foraged",
+                        "Season with local Border herbs",
+                        "Cook fast before pursuit arrives",
+                        "Eat while planning next raid"
+                    ]
+                }
+            },
+            {
+                id: "murray",
+                name: "Clan Murray",
+                gaelicName: "Clann Moireach",
+                motto: "Tout prest (Quite ready)",
+                crest: "A demi-savage wreathed about the head and waist with laurel Proper, holding in his dexter hand a dagger, in his sinister a key all Proper",
+                plantBadge: "Butcher's Broom",
+                warCry: "Furth Fortune and fill the fetters!",
+                territories: "Perthshire, Sutherland, Moray",
+                historicSeats: "Blair Castle, Scone Palace",
+                rival: "Various",
+                region: "highlands",
+                lore: `Clan Murray, holders of the Dukedom of Atholl, command Europe's only legal private army - the Atholl Highlanders. The clan's strategic position in Perthshire made them key players in Highland politics. Their motto "Tout prest" reflects their constant readiness for action, while their unique war cry speaks to their fortune-seeking spirit. The Murrays balanced Highland traditions with Lowland politics masterfully.`,
+                events: [
+                    { year: "1296", event: "William Murray supports Robert the Bruce" },
+                    { year: "1629", event: "John Murray becomes 1st Earl of Atholl" },
+                    { year: "1703", event: "2nd Duke of Atholl leads opposition to Union" },
+                    { year: "1845", event: "Atholl Highlanders receive colors from Queen Victoria" }
+                ],
+                mottoLore: "This French motto indicates the Murray readiness to seize opportunities and face challenges.",
+                tartan: {
+                    description: "The Murray of Atholl tartan features navy blue and forest green with red stripes...",
+                    colors: ["#1a4480", "#2d5016", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "John Murray, 1st Duke of Atholl", desc: "Founded the ducal line and private army" },
+                    { name: "Lord George Murray", desc: "Brilliant Jacobite general at Culloden" }
+                ],
+                recipe: {
+                    name: "Atholl Brose",
+                    description: "Traditional Murray clan drink",
+                    ingredients: ["Highland oatmeal", "Heather honey", "Single malt whisky", "Heavy cream", "Toasted almonds"],
+                    method: [
+                        "Toast oatmeal until golden and fragrant",
+                        "Steep in whisky overnight",
+                        "Strain and mix with honey",
+                        "Fold in whipped cream",
+                        "Garnish with toasted almonds and serve"
+                    ]
+                }
+            },
+            {
+                id: "sinclair",
+                name: "Clan Sinclair",
+                gaelicName: "Clann na Ceàrdaich",
+                motto: "Commit thy work to God",
+                crest: "A cock Proper, armed and beaked Or",
+                plantBadge: "Whin/Furze",
+                warCry: "A Sinclair!",
+                territories: "Caithness, Orkney, Lothian",
+                historicSeats: "Castle Sinclair Girnigoe, Rosslyn Chapel",
+                rival: "Clan Sutherland",
+                region: "highlands",
+                lore: `The Sinclairs, of Norman origin, became Earls of Orkney and powerful Highland chiefs. They built the mysterious Rosslyn Chapel, whose stone carvings fuel endless speculation about Templar connections. The clan's Norse heritage from their Orkney earldom blended with Scottish Highland culture, creating a unique identity. Their northern territories made them key players in Scottish-Norse relations.`,
+                events: [
+                    { year: "1379", event: "Henry Sinclair becomes Earl of Orkney" },
+                    { year: "1456", event: "Construction begins on Rosslyn Chapel" },
+                    { year: "1513", event: "Sinclairs suffer heavy losses at Flodden" },
+                    { year: "1650", event: "Cromwell's forces damage Rosslyn Chapel" }
+                ],
+                mottoLore: "This religious motto reflects the Sinclair dedication to divine service and their role as Rosslyn Chapel builders.",
+                tartan: {
+                    description: "The Sinclair tartan features navy blue and forest green with red accents...",
+                    colors: ["#1a4480", "#2d5016", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "Henry Sinclair, Earl of Orkney", desc: "Possible pre-Columbian explorer of America" },
+                    { name: "William Sinclair of Rosslyn", desc: "Builder of the mysterious Rosslyn Chapel" }
+                ],
+                recipe: {
+                    name: "Orkney Bannocks",
+                    description: "Traditional oatcakes from Sinclair territories",
+                    ingredients: ["Orkney oatmeal", "Butter", "Salt", "Baking powder", "Milk", "Orkney cheese"],
+                    method: [
+                        "Mix Orkney oatmeal with salt and baking powder",
+                        "Rub in butter until mixture resembles breadcrumbs",
+                        "Add milk to form soft dough",
+                        "Roll thin and cut into rounds",
+                        "Cook on griddle and serve with Orkney cheese"
+                    ]
+                }
+            },
+            {
+                id: "graham",
+                name: "Clan Graham",
+                gaelicName: "Clann Greumach",
+                motto: "Ne Oublie (Do not forget)",
+                crest: "A falcon, wings displayed Proper, beaked and armed Or",
+                plantBadge: "Laurel",
+                warCry: "A Graham!",
+                territories: "Stirlingshire, Perthshire, Angus",
+                historicSeats: "Mugdock Castle, Montrose",
+                rival: "Various",
+                region: "highlands",
+                lore: `The Grahams produced some of Scotland's most remarkable military leaders, including the great Marquess of Montrose and Bonnie Dundee. Their motto "Ne Oublie" reflects their determination to remember both allies and enemies. The clan's ability to switch sides when necessary made them survivors in the dangerous world of Scottish politics, while their military prowess made them feared opponents.`,
+                events: [
+                    { year: "1296", event: "Sir John de Graham killed at Falkirk with Wallace" },
+                    { year: "1644", event: "Montrose wins brilliant victory at Inverlochy" },
+                    { year: "1650", event: "Montrose executed after failed rising" },
+                    { year: "1689", event: "Bonnie Dundee dies victorious at Killiecrankie" }
+                ],
+                mottoLore: "This French motto serves as both a promise to friends and a warning to enemies - Grahams remember everything.",
+                tartan: {
+                    description: "The Graham of Montrose tartan features red and forest green with blue stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "James Graham, Marquess of Montrose", desc: "Brilliant military commander and poet" },
+                    { name: "John Graham of Claverhouse", desc: "Bonnie Dundee - last Jacobite victory" }
+                ],
+                recipe: {
+                    name: "Montrose Soldier's Fare",
+                    description: "Campaign food for Graham warriors",
+                    ingredients: ["Oatmeal", "Dried meat", "Wild berries", "Stream water", "Foraged greens", "Army biscuit"],
+                    method: [
+                        "Mix oatmeal with stream water",
+                        "Add dried meat and berries",
+                        "Supplement with foraged greens",
+                        "Cook quickly over campaign fire",
+                        "Eat while marching to battle"
+                    ]
+                }
+            },
+            {
+                id: "robertson",
+                name: "Clan Robertson",
+                gaelicName: "Clann Dhònnchaidh",
+                motto: "Virtutis gloria merces (Glory is the reward of valor)",
+                crest: "A dexter hand holding an imperial crown Proper",
+                plantBadge: "Fine-leaved Heath",
+                warCry: "Garg 'n uair dhùisgear!",
+                territories: "Atholl, Rannoch, Struan",
+                historicSeats: "Dunalastair, Invervack",
+                rival: "Various",
+                region: "highlands",
+                lore: `Clan Robertson, also known as Clann Dhònnchaidh, claims descent from the Celtic Earls of Atholl. Their chief holds the ancient title "Struan Robertson," and they were among the most loyal supporters of the Stewart monarchy. The clan's Gaelic war cry "Fierce when roused!" perfectly captures their reputation as peaceful until provoked, then formidable in battle.`,
+                events: [
+                    { year: "1437", event: "Robert Riach captures assassins of James I" },
+                    { year: "1745", event: "Clan follows Prince Charlie despite chief's age" },
+                    { year: "1746", event: "Heavy losses at Culloden" },
+                    { year: "1784", event: "Clan gains government pardon" }
+                ],
+                mottoLore: "This Latin motto reflects the Robertson belief that true glory comes only through courageous action.",
+                tartan: {
+                    description: "The Robertson tartan features red and forest green with blue and yellow stripes...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480", "#ffd700"]
+                },
+                famousNames: [
+                    { name: "Alexander Robertson of Struan", desc: "Poet-chief who led clan in both 1715 and 1745" },
+                    { name: "Duncan Robertson", desc: "Captured assassins of James I, earning clan gratitude" }
+                ],
+                recipe: {
+                    name: "Rannoch Moorland Pie",
+                    description: "Hearty pie from the Robertson highlands",
+                    ingredients: ["Grouse", "Venison", "Wild mushrooms", "Rowan berries", "Pastry", "Highland herbs"],
+                    method: [
+                        "Hunt grouse and deer on Rannoch Moor",
+                        "Combine with foraged mushrooms",
+                        "Season with rowan berries and herbs",
+                        "Wrap in rich pastry",
+                        "Bake slowly in peat-fired oven"
+                    ]
+                }
+            },
+            {
+                id: "lindsay",
+                name: "Clan Lindsay",
+                gaelicName: "Clann Fhionnlaidh",
+                motto: "Endure fort (Endure with strength)",
+                crest: "A swan naiant Proper",
+                plantBadge: "Rue",
+                warCry: "Endure!",
+                territories: "Angus, Fife, Lanarkshire",
+                historicSeats: "Edzell Castle, Crawford Castle",
+                rival: "Various",
+                region: "lowlands",
+                lore: `The Lindsays were one of the most powerful noble families in medieval Scotland, holding the earldoms of Crawford and Balcarres. Their motto "Endure fort" reflects their ability to survive through centuries of political upheaval. The clan produced scholars, warriors, and courtiers who shaped Scottish culture, including Sir David Lindsay, the great satirical poet of the Renaissance.`,
+                events: [
+                    { year: "1398", event: "David Lindsay becomes 1st Earl of Crawford" },
+                    { year: "1452", event: "Battle of Brechin - Lindsay victory" },
+                    { year: "1513", event: "Heavy losses at Battle of Flodden" },
+                    { year: "1633", event: "Sir David Lindsay writes satirical plays" }
+                ],
+                mottoLore: "This Latin motto emphasizes the Lindsay determination to endure all hardships with strength and dignity.",
+                tartan: {
+                    description: "The Lindsay tartan features navy blue and forest green with red stripes...",
+                    colors: ["#1a4480", "#2d5016", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "Sir David Lindsay", desc: "Renaissance poet and satirist" },
+                    { name: "Alexander Lindsay, 4th Earl of Crawford", desc: "The Tiger Earl - fierce medieval warrior" }
+                ],
+                recipe: {
+                    name: "Angus Oat Bannocks",
+                    description: "Traditional oatcakes from Lindsay lands",
+                    ingredients: ["Angus oats", "Buttermilk", "Salt", "Baking soda", "Butter", "Local honey"],
+                    method: [
+                        "Grind finest Angus oats to meal",
+                        "Mix with buttermilk and salt",
+                        "Add baking soda for lightness",
+                        "Form into rounds and cook on griddle",
+                        "Serve warm with butter and honey"
+                    ]
+                }
+            },
+            {
+                id: "armstrong",
+                name: "Clan Armstrong",
+                gaelicName: "MacGhillielàidir",
+                motto: "Invictus maneo (I remain unvanquished)",
+                crest: "An arm from the shoulder, armed, Proper",
+                plantBadge: "Common Hawthorn",
+                warCry: "Armstrong!",
+                territories: "Liddesdale, Borders",
+                historicSeats: "Gilnockie Tower, Mangerton Tower",
+                rival: "Scottish Crown",
+                region: "borders",
+                lore: `The Armstrongs were the most feared of all Border Reiver clans, so powerful they were considered a threat to both Scottish and English crowns. Their leader Johnnie Armstrong was described as keeping "greatar court than any King in Scotland." The clan's motto "Invictus maneo" proved prophetic - though politically destroyed, they were never truly conquered, with descendants like Neil Armstrong carrying their spirit to the moon.`,
+                events: [
+                    { year: "1530", event: "Johnnie Armstrong executed by James V" },
+                    { year: "1596", event: "Kinmont Willie Armstrong rescued from Carlisle Castle" },
+                    { year: "1609", event: "Final suppression of Border Reivers" },
+                    { year: "1969", event: "Neil Armstrong walks on moon" }
+                ],
+                mottoLore: "This Latin motto perfectly captures the Armstrong spirit - though defeated, they remain unbroken in spirit.",
+                tartan: {
+                    description: "The Armstrong tartan features navy blue and forest green with red accents...",
+                    colors: ["#1a4480", "#2d5016", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "Johnnie Armstrong of Gilnockie", desc: "Most famous Border Reiver, executed by James V" },
+                    { name: "Neil Armstrong", desc: "First man on the moon, of Armstrong descent" }
+                ],
+                recipe: {
+                    name: "Reiver's Raid Rations",
+                    description: "Portable food for Border raids",
+                    ingredients: ["Dried beef", "Oatmeal", "Cheese", "Ale", "Smoked fish", "Foraged nuts"],
+                    method: [
+                        "Prepare dried beef for long keeping",
+                        "Pack oatmeal and hard cheese",
+                        "Include skin of ale for courage",
+                        "Add smoked fish for sustenance",
+                        "Eat in saddle while escaping pursuit"
+                    ]
+                }
+            },
+            {
+                id: "kerr",
+                name: "Clan Kerr",
+                gaelicName: "Clann Cearr",
+                motto: "Sero sed serio (Late but in earnest)",
+                crest: "The sun in his splendour",
+                plantBadge: "Bog Myrtle",
+                warCry: "A Kerr!",
+                territories: "Roxburghshire, Borders",
+                historicSeats: "Ferniehirst Castle, Cessford Castle",
+                rival: "Clan Scott",
+                region: "borders",
+                lore: `The Kerrs were renowned for their left-handed swordsmanship and their bitter feud with Clan Scott. Their motto "Sero sed serio" reflects their deliberate approach to conflict - slow to anger but devastating when roused. The clan split into two main branches, Kerr of Ferniehirst and Kerr of Cessford, both becoming powerful Border families with different political allegiances.`,
+                events: [
+                    { year: "1526", event: "Battle of Melrose against Clan Scott" },
+                    { year: "1584", event: "Sir Thomas Kerr murders Sir Walter Scott" },
+                    { year: "1606", event: "Formal reconciliation with Clan Scott" },
+                    { year: "1633", event: "Robert Kerr becomes Earl of Ancram" }
+                ],
+                mottoLore: "This Latin motto reflects the Kerr approach to conflict - measured in response but absolutely serious in intent.",
+                tartan: {
+                    description: "The Kerr tartan features red and forest green with navy accents...",
+                    colors: ["#cc0000", "#2d5016", "#1a4480"]
+                },
+                famousNames: [
+                    { name: "Sir Thomas Kerr of Ferniehirst", desc: "Staunch supporter of Mary Queen of Scots" },
+                    { name: "Robert Kerr, Earl of Ancram", desc: "Courtier and poet" }
+                ],
+                recipe: {
+                    name: "Border Lefthand Pie",
+                    description: "Hearty pie celebrating Kerr left-handed warriors",
+                    ingredients: ["Border mutton", "Leeks", "Barley", "Herbs", "Pastry", "Border ale"],
+                    method: [
+                        "Use finest Border mutton",
+                        "Combine with local leeks and barley",
+                        "Season with wild Border herbs",
+                        "Wrap in hearty pastry crust",
+                        "Serve with strong Border ale"
+                    ]
+                }
+            },
+            {
+                id: "elliot",
+                name: "Clan Elliot",
+                gaelicName: "Clann Ealisaid",
+                motto: "Fortiter et recte (Boldly and rightly)",
+                crest: "A dexter cubit arm, the hand grasping a broad sword",
+                plantBadge: "Hawthorn",
+                warCry: "A Elliot! A Elliot!",
+                territories: "Liddesdale, Borders",
+                historicSeats: "Redheugh Tower, Lariston Tower",
+                rival: "Clan Armstrong",
+                region: "borders",
+                lore: `The Elliots were another powerful Border Reiver clan, known for their fierce independence and skill in Border warfare. Their motto "Fortiter et recte" perfectly captures the Border mentality - act boldly but justly. The clan produced notable figures including George Augustus Eliott, defender of Gibraltar, showing that Border warrior skills translated well to conventional military service.`,
+                events: [
+                    { year: "1569", event: "Major Border feud with Clan Scott" },
+                    { year: "1596", event: "Elliots participate in Kinmont Willie rescue" },
+                    { year: "1605", event: "Border pacification reduces Elliot power" },
+                    { year: "1779", event: "Lord Heathfield begins defense of Gibraltar" }
+                ],
+                mottoLore: "This Latin motto embodies the Elliot code - be bold in action but always maintain moral righteousness.",
+                tartan: {
+                    description: "The Elliot tartan features navy blue and forest green with white stripes...",
+                    colors: ["#1a4480", "#2d5016", "#ffffff"]
+                },
+                famousNames: [
+                    { name: "George Augustus Eliott, Lord Heathfield", desc: "Defender of Gibraltar during Great Siege" },
+                    { name: "Gilbert Elliot, Earl of Minto", desc: "Governor-General of India" }
+                ],
+                recipe: {
+                    name: "Liddesdale Lamb Stew",
+                    description: "Warming stew from Elliot territory",
+                    ingredients: ["Liddesdale lamb", "Wild herbs", "Root vegetables", "Barley", "Border brook water"],
+                    method: [
+                        "Select finest Liddesdale lamb",
+                        "Season with foraged wild herbs",
+                        "Add local root vegetables",
+                        "Include pearl barley for substance",
+                        "Cook slowly with pure Border water"
+                    ]
+                }
+            },
+            {
+                id: "hamilton",
+                name: "Clan Hamilton",
+                gaelicName: "Clann Hamiltùn",
+                motto: "Through (meaning persevere)",
+                crest: "In a ducal coronet an oak tree fructed and penetrated transversely by a frame saw Proper",
+                plantBadge: "Bay Laurel",
+                warCry: "Hamilton!",
+                territories: "Lanarkshire, Arran",
+                historicSeats: "Cadzow Castle, Hamilton Palace",
+                rival: "House of Douglas",
+                region: "lowlands",
+                lore: `The Hamiltons rose to become one of Scotland's premier noble families, holding the Dukedom of Hamilton and at times standing close to the throne itself. Their proximity to royal power brought both great fortune and deadly peril, with several Hamiltons losing their heads for treason. The family's motto "Through" reflects their determination to persevere through political storms.`,
+                events: [
+                    { year: "1445", event: "James Hamilton becomes 1st Lord Hamilton" },
+                    { year: "1513", event: "Hamiltons gain power after Flodden" },
+                    { year: "1649", event: "1st Duke of Hamilton executed by Parliament" },
+                    { year: "1651", event: "2nd Duke killed at Battle of Worcester" }
+                ],
+                mottoLore: "This simple English word encapsulates the Hamilton determination to persevere through any adversity.",
+                tartan: {
+                    description: "The Hamilton tartan features red and navy blue with forest green stripes...",
+                    colors: ["#cc0000", "#1a4480", "#2d5016"]
+                },
+                famousNames: [
+                    { name: "James Hamilton, 1st Duke of Hamilton", desc: "Powerful nobleman executed during Civil War" },
+                    { name: "Patrick Hamilton", desc: "Protestant martyr burned at St Andrews" }
+                ],
+                recipe: {
+                    name: "Hamilton Palace Feast",
+                    description: "Elaborate dish from Scotland's grandest palace",
+                    ingredients: ["Finest Scottish beef", "Court spices", "French wines", "Exotic vegetables", "Rich sauces", "Gilded garnishes"],
+                    method: [
+                        "Prepare in Hamilton Palace kitchens",
+                        "Use most expensive imported ingredients",
+                        "Cook with French culinary techniques",
+                        "Present with magnificent ceremony",
+                        "Serve to visiting royalty and nobility"
+                    ]
+                }
+            },
+            {
+                id: "keith",
+                name: "Clan Keith",
+                gaelicName: "Clann Ceiteach",
+                motto: "Veritas vincit (Truth conquers)",
+                crest: "Out of a crest coronet a roebuck's head Proper attired Or",
+                plantBadge: "White Heather",
+                warCry: "A Keith!",
+                territories: "Aberdeenshire, East Lothian, Caithness",
+                historicSeats: "Dunnottar Castle, Keith Marischal",
+                rival: "Clan Irvine",
+                region: "northeast",
+                lore: `The Keiths held the hereditary position of Marischal of Scotland, making them responsible for the safety of the king and the crown jewels. Their stronghold at Dunnottar Castle famously protected the Scottish crown jewels from Cromwell's forces. The family's motto "Veritas vincit" reflects their role as guardians of royal truth and legitimate authority.`,
+                events: [
+                    { year: "1010", event: "Legendary founding after Battle of Barry" },
+                    { year: "1314", event: "Sir Robert Keith commands cavalry at Bannockburn" },
+                    { year: "1458", event: "Created Earl Marischal of Scotland" },
+                    { year: "1715", event: "10th Earl Marischal joins Jacobite rising, loses titles" }
+                ],
+                mottoLore: "This Latin motto reflects the Keith role as guardians of legitimate authority and royal truth.",
+                tartan: {
+                    description: "The Keith tartan features forest green and navy blue with red stripes...",
+                colors: ["#2d5016", "#1a4480", "#cc0000"]
+                },
+                famousNames: [
+                    { name: "George Keith, 5th Earl Marischal", desc: "Founded Marischal College, Aberdeen" },
+                    { name: "James Keith", desc: "Jacobite exile who became Prussian field marshal" }
+                ],
+                recipe: {
+                    name: "Dunnottar Castle Guard's Stew",
+                    description: "Hearty meal for castle defenders",
+                    ingredients: ["North Sea fish", "Barley", "Kale", "Turnips", "Oats", "Castle ale"],
+                    method: [
+                        "Use fresh North Sea catch",
+                        "Combine with hardy vegetables",
+                        "Add barley and oats for sustenance",
+                        "Cook in great castle kitchens",
+                        "Serve to castle guard with ale"
+                    ]
+                }
+            },
+            {
+                id: "hay",
+                name: "Clan Hay",
+                gaelicName: "Clann Garadh",
+                motto: "Serva jugum (Keep the yoke)",
+                crest: "Out of a crest coronet a falcon volant Proper, armed and beaked Or",
+                plantBadge: "Mistletoe",
+                warCry: "A Hay! A Hay!",
+                territories: "Aberdeenshire, Perthshire, East Lothian",
+                historicSeats: "Slains Castle, Erroll Castle",
+                rival: "Various",
+                region: "northeast",
+                lore: `The Hays held the hereditary position of Lord High Constable of Scotland, one of the Great Officers of State. Their motto "Serva jugum" reflects their dedication to royal service and maintaining lawful authority. The clan's loyalty to the Stewart cause led to their involvement in various Jacobite plots, including the famous Gowrie Conspiracy.`,
+                events: [
+                    { year: "1178", event: "William de Haya granted lands in Erroll" },
+                    { year: "1314", event: "Sir Gilbert Hay fights at Bannockburn" },
+                    { year: "1600", event: "9th Earl involved in Gowrie Conspiracy" },
+                    { year: "1746", event: "Jacobite involvement leads to forfeiture" }
+                ],
+                mottoLore: "This Latin motto reflects the Hay dedication to maintaining lawful authority and royal service.",
+                tartan: {
+                    description: "The Hay tartan features red and forest green with yellow stripes...",
+                    colors: ["#cc0000", "#2d5016", "#ffd700"]
+                },
+                famousNames: [
+                    { name: "Francis Hay, 9th Earl of Erroll", desc: "Involved in Gowrie Conspiracy against James VI" },
+                    { name: "George Hay, 1st Earl of Kinnoull", desc: "Lord Chancellor of Scotland" }
+                ],
+                recipe: {
+                    name: "Constable's Court Dinner",
+                    description: "Formal meal befitting the Lord High Constable",
+                    ingredients: ["Prime Scottish beef", "Court seasonings", "Finest wines", "Ceremonial breads", "Royal vegetables"],
+                    method: [
+                        "Prepare with court ceremony",
+                        "Use finest Scottish ingredients",
+                        "Season according to royal taste",
+                        "Present with appropriate pomp",
+                        "Serve at high table with dignity"
+                    ]
+                }
+            }
+        ];
+
+        const legendsData = [
+            {
+                name: "William Wallace",
+                title: "Guardian of Scotland",
+                region: "lowlands",
+                lore: `Sir William Wallace (c. 1270–1305) emerged from minor nobility to become Scotland's greatest freedom fighter. His tactical brilliance at Stirling Bridge, where he defeated a vastly superior English army, made him a legend. As Guardian of Scotland, he embodied the nation's refusal to bow to English domination. Though captured and brutally executed, his sacrifice inspired Robert the Bruce and generations of Scots. Wallace proved that determination and strategic thinking could overcome overwhelming odds.`,
+                recipe: {
+                    name: "Guardian's Battle Bannocks",
+                    description: "Hardy oat cakes that sustained Wallace's army",
+                    ingredients: ["Coarse oatmeal", "Water", "Salt", "Wild herbs", "Honey (when available)"],
+                    method: [
+                        "Mix oatmeal with water and salt",
+                        "Add foraged herbs for flavor",
+                        "Form into flat cakes",
+                        "Cook on hot stones by campfire",
+                        "Eat while planning the next battle for freedom"
+                    ]
+                }
+            },
+            {
+                name: "Robert the Bruce",
+                title: "The Warrior King",
+                region: "lowlands",
+                lore: `Robert I (1274–1329) transformed from a conflicted noble into Scotland's greatest king. His early years were marked by changing loyalties, but after seizing the throne in 1306, he became the unyielding leader Scotland needed. Through guerrilla warfare and political cunning, he systematically reclaimed Scotland from English control. His victory at Bannockburn in 1314 secured Scottish independence and established his dynasty. The legend of the spider taught him that persistence conquers all obstacles.`,
+                recipe: {
+                    name: "King's Victory Feast",
+                    description: "Celebratory meal after Bannockburn",
+                    ingredients: ["Roasted venison", "Barley bannocks", "Heather ale", "Wild berries", "Honey cakes"],
+                    method: [
+                        "Roast finest Scottish venison",
+                        "Serve with fresh barley bannocks",
+                        "Pour heather ale for all warriors",
+                        "Celebrate with honey cakes and berries",
+                        "Toast Scotland's hard-won freedom"
+                    ]
+                }
+            },
+            {
+                name: "Flora MacDonald",
+                title: "The Highland Heroine",
+                region: "highlands",
+                lore: `Flora MacDonald (1722–1790) risked everything to help Bonnie Prince Charlie escape after Culloden. Disguising the Prince as her Irish maid "Betty Burke," she transported him safely across the Minch to Skye. Her courage in the face of certain death if discovered made her a legend throughout Scotland and beyond. Though briefly imprisoned, she became a celebrated figure, embodying Highland loyalty and feminine bravery.`,
+                recipe: {
+                    name: "Skye Escape Rations",
+                    description: "Simple food for dangerous journeys",
+                    ingredients: ["Oatcakes", "Crowdie cheese", "Dried fish", "Heather honey", "Mountain water"],
+                    method: [
+                        "Pack light but nourishing food",
+                        "Include long-lasting oatcakes",
+                        "Add protein from dried fish",
+                        "Sweeten with wild heather honey",
+                        "Travel light, travel fast, travel brave"
+                    ]
+                }
+            },
+            {
+                name: "Rob Roy MacGregor",
+                title: "The Highland Outlaw",
+                region: "highlands",
+                lore: `Rob Roy MacGregor (1671–1734) became Scotland's most famous outlaw after his clan was proscribed. Operating from the wild country around Loch Katrine, he became a Highland Robin Hood, protecting the poor and defying authority with wit and courage. His cattle dealing, both legal and illegal, made him wealthy until political enemies destroyed his fortune. His story, romanticized by Sir Walter Scott, embodies the Highland spirit of independence and defiance.`,
+                recipe: {
+                    name: "Outlaw's Highland Stew",
+                    description: "Hearty meal cooked in hidden glens",
+                    ingredients: ["Liberated beef", "Wild vegetables", "Mountain herbs", "Spring water", "Stolen spices"],
+                    method: [
+                        "Use finest Highland beef (however acquired)",
+                        "Add vegetables from hidden gardens",
+                        "Season with wild mountain herbs",
+                        "Cook over concealed fire",
+                        "Share with fellow outlaws and the needy"
+                    ]
+                }
+            },
+            {
+                name: "Bonnie Prince Charlie",
+                title: "The Young Pretender",
+                region: "highlands",
+                lore: `Charles Edward Stuart (1720–1788) landed in Scotland in 1745 with just seven men, yet within months commanded a Highland army that nearly restored the Stewart dynasty. His charisma and romantic idealism inspired clans to rally to his cause, leading to stunning victories like Prestonpans. Though Culloden ended his dreams, his romantic legacy endures. The story of his escape through the Highlands, aided by loyal supporters like Flora MacDonald, became the stuff of legend.`,
+                recipe: {
+                    name: "Prince's Highland Feast",
+                    description: "Royal meal in Highland exile",
+                    ingredients: ["Highland salmon", "Venison", "Drambuie liqueur", "Raspberries", "Shortbread"],
+                    method: [
+                        "Prepare finest Highland salmon",
+                        "Serve with roasted venison",
+                        "Toast with Drambuie (the Prince's own liqueur)",
+                        "Finish with raspberries and shortbread",
+                        "Dream of restoration while dining like a king"
+                    ]
+                }
+            },
+            {
+                name: "The Brahan Seer",
+                title: "Highland Prophet",
+                region: "highlands",
+                lore: `Coinneach Odhar (c. 1600–1660s), the Brahan Seer, was the Highlands' most famous prophet. His predictions, made through a blue stone, came true with startling accuracy centuries later. He foresaw railways, oil rigs in the North Sea, and the decline of Highland culture. His prophecies about the end of Clan MacKenzie power led to his execution by being rolled down a hill in a barrel of burning tar. His final prophecy about the last of the MacKenzies is yet to be fulfilled.`,
+                recipe: {
+                    name: "Prophet's Simple Brose",
+                    description: "Humble meal of a Highland visionary",
+                    ingredients: ["Oatmeal", "Hot water", "Salt", "Wild herbs", "A dram of whisky"],
+                    method: [
+                        "Pour hot water over oatmeal",
+                        "Add pinch of salt",
+                        "Stir in foraged herbs",
+                        "Add dram to help see the future",
+                        "Eat while contemplating visions yet to come"
+                    ]
+                }
+            }
+        ];
+
+        const marketplaceData = [
+            {
+                id: 1,
+                name: "Clan MacKenzie Tartan Kilt",
+                description: "Authentic hand-woven kilt in MacKenzie clan colors",
+                price: 450,
+                category: "clothing",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 2,
+                name: "Highland Dirk with Clan Crest",
+                description: "Traditional Scottish dirk with personalized clan crest",
+                price: 280,
+                category: "weapons",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 3,
+                name: "Sterling Silver Clan Badge",
+                description: "Handcrafted silver clan badge with authentic crest",
+                price: 125,
+                category: "jewelry",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 4,
+                name: "Harris Tweed Jacket",
+                description: "Genuine Harris Tweed jacket woven in the Outer Hebrides",
+                price: 380,
+                category: "clothing",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "islands"
+            },
+            {
+                id: 5,
+                name: "Scottish Quaich Cup",
+                description: "Traditional two-handled drinking cup in pewter and wood",
+                price: 95,
+                category: "drinkware",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 6,
+                name: "Highland Single Malt Collection",
+                description: "Selection of premium Highland single malt whiskies",
+                price: 320,
+                category: "whisky",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 7,
+                name: "Clan History Manuscript",
+                description: "Personalized clan history beautifully hand-illustrated",
+                price: 180,
+                category: "books",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "lowlands"
+            },
+            {
+                id: 8,
+                name: "Scottish Shortbread Selection",
+                description: "Traditional shortbread from authentic Highland bakery",
+                price: 45,
+                category: "food",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            },
+            {
+                id: 9,
+                name: "Bagpipes Starter Set",
+                description: "Quality practice chanter with instruction book",
+                price: 150,
+                category: "instruments",
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400",
+                region: "highlands"
+            }
+        ];
+
+        const TARTAN_COLORS = [
+            { name: 'Royal Red', hex: '#cc0000' },
+            { name: 'Forest Green', hex: '#2d5016' },
+            { name: 'Highland Blue', hex: '#1a4480' },
+            { name: 'Clan Gold', hex: '#ffd700' },
+            { name: 'Highland Black', hex: '#000000' },
+            { name: 'Highland White', hex: '#ffffff' },
+            { name: 'Purple Heather', hex: '#663399' },
+            { name: 'Highland Brown', hex: '#8b4513' }
+        ];
+
+        const exampleTartans = {
+            "Royal Stewart": [
+                { color: '#cc0000', threads: 42 },
+                { color: '#2d5016', threads: 6 },
+                { color: '#1a4480', threads: 4 },
+                { color: '#2d5016', threads: 6 },
+                { color: '#000000', threads: 4 },
+                { color: '#1a4480', threads: 4 },
+                { color: '#000000', threads: 4 },
+                { color: '#ffd700', threads: 2 }
+            ],
+            "Black Watch": [
+                { color: '#1a4480', threads: 48 },
+                { color: '#2d5016', threads: 6 },
+                { color: '#000000', threads: 2 },
+                { color: '#2d5016', threads: 6 }
+            ],
+            "MacKenzie": [
+                { color: '#1a4480', threads: 32 },
+                { color: '#2d5016', threads: 8 },
+                { color: '#cc0000', threads: 4 },
+                { color: '#ffd700', threads: 2 }
+            ]
+        };
+
+        // Comprehensive recipe database by region
+        const recipeDatabase = {
+            highlands: [
+                {
+                    name: "Highland Haggis",
+                    description: "Traditional Scottish dish with oats, spices, and highland lamb",
+                    clan: "Various Highland Clans",
+                    ingredients: ["Lamb heart and lungs", "Steel-cut oats", "Suet", "Onions", "Highland spices", "Natural casing"],
+                    method: [
+                        "Mince the lamb organs with suet",
+                        "Toast oats until golden",
+                        "Mix with finely chopped onions and spices",
+                        "Stuff mixture into natural casing",
+                        "Boil gently for 3 hours",
+                        "Serve with neeps, tatties, and a dram"
+                    ]
+                },
+                {
+                    name: "Cullen Skink",
+                    description: "Smoky fish soup from the Moray coast",
+                    clan: "Gordon",
+                    ingredients: ["Smoked haddock", "Potatoes", "Onions", "Milk", "Butter", "Bay leaves"],
+                    method: [
+                        "Poach smoked haddock in milk",
+                        "Remove fish and flake, reserve milk",
+                        "Cook potatoes and onions until tender",
+                        "Blend half the potatoes for thickness",
+                        "Combine with reserved milk and flaked fish",
+                        "Season and serve hot with crusty bread"
+                    ]
+                },
+                {
+                    name: "Venison Stew with Juniper",
+                    description: "Rich Highland stew with wild venison",
+                    clan: "Cameron",
+                    ingredients: ["Highland red deer", "Juniper berries", "Root vegetables", "Red wine", "Wild mushrooms", "Herbs"],
+                    method: [
+                        "Brown venison in heavy pot",
+                        "Add crushed juniper berries",
+                        "Layer with root vegetables and mushrooms",
+                        "Pour in red wine and stock",
+                        "Simmer slowly for 2-3 hours",
+                        "Serve with bannocks and Highland whisky"
+                    ]
+                }
+            ],
+            lowlands: [
+                {
+                    name: "Border Tart",
+                    description: "Sweet custard tart from the Scottish Borders",
+                    clan: "Scott",
+                    ingredients: ["Pastry shell", "Eggs", "Sugar", "Butter", "Dried fruit", "Spices", "Cream"],
+                    method: [
+                        "Line tart tin with rich pastry",
+                        "Beat eggs with sugar and melted butter",
+                        "Add dried fruit and spices",
+                        "Pour into pastry shell",
+                        "Bake until golden and set",
+                        "Serve warm with Border cream"
+                    ]
+                },
+                {
+                    name: "Cock-a-Leekie Soup",
+                    description: "Traditional chicken and leek soup",
+                    clan: "Hamilton",
+                    ingredients: ["Whole chicken", "Leeks", "Pearl barley", "Prunes", "Thyme", "Bay leaves"],
+                    method: [
+                        "Simmer chicken with herbs for stock",
+                        "Remove chicken, shred meat",
+                        "Add sliced leeks and barley to stock",
+                        "Include prunes for sweetness",
+                        "Return shredded chicken",
+                        "Simmer until barley is tender"
+                    ]
+                },
+                {
+                    name: "Selkirk Bannock",
+                    description: "Rich fruit bread from the Borders",
+                    clan: "Douglas",
+                    ingredients: ["Strong flour", "Butter", "Sugar", "Sultanas", "Yeast", "Milk", "Eggs"],
+                    method: [
+                        "Make rich yeast dough with butter",
+                        "Knead in sultanas generously",
+                        "Shape into round loaf",
+                        "Rise until doubled",
+                        "Bake until golden brown",
+                        "Serve sliced with butter"
+                    ]
+                }
+            ],
+            islands: [
+                {
+                    name: "Hebridean Lamb with Dulse",
+                    description: "Island lamb with sea vegetables",
+                    clan: "MacLeod",
+                    ingredients: ["Island lamb", "Dulse seaweed", "Sea beans", "Wild garlic", "Island potatoes", "Sea salt"],
+                    method: [
+                        "Season lamb with sea salt and wild garlic",
+                        "Roast with island potatoes",
+                        "Prepare dulse seaweed as garnish",
+                        "Add foraged sea beans",
+                        "Serve with views of the Atlantic",
+                        "Toast with island whisky"
+                    ]
+                },
+                {
+                    name: "Arbroath Smokie Pâté",
+                    description: "Smoked haddock pâté from the east coast",
+                    clan: "Various",
+                    ingredients: ["Arbroath smokies", "Cream cheese", "Lemon juice", "Black pepper", "Chives", "Oatcakes"],
+                    method: [
+                        "Flake smokie flesh carefully",
+                        "Mix with cream cheese and lemon",
+                        "Season with pepper and chives",
+                        "Chill until firm",
+                        "Serve on warm oatcakes",
+                        "Garnish with fresh herbs"
+                    ]
+                }
+            ],
+            borders: [
+                {
+                    name: "Reiver's Hotpot",
+                    description: "Hearty one-pot meal for Border warriors",
+                    clan: "Armstrong",
+                    ingredients: ["Mutton chops", "Potatoes", "Onions", "Carrots", "Stock", "Herbs", "Border cheese"],
+                    method: [
+                        "Layer mutton chops with vegetables",
+                        "Season each layer with herbs",
+                        "Top with overlapping potato sl
