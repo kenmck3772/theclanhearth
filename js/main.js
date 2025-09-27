@@ -1,5 +1,20 @@
 // Mobile nav
-const navToggle = document.querySelector('.nav-toggle');
+const navToggle = document.querySelector('.nav-toggle');// Hero image fallback (tries images/castlehome.jpg, then images/castlehome..jpg)
+(function() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  const candidates = ['images/castlehome.jpg', 'images/castlehome..jpg'];
+  let i = 0;
+  function tryNext() {
+    if (i >= candidates.length) return;
+    const src = candidates[i++];
+    const img = new Image();
+    img.onload = () => hero.style.setProperty('--hero-image', `url('${src}')`);
+    img.onerror = tryNext;
+    img.src = src;
+  }
+  tryNext();
+})();
 const nav = document.getElementById('site-nav');
 if (navToggle && nav) {
   navToggle.addEventListener('click', () => {
