@@ -1,29 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Clan Hearth — Through Fire, We Are United</title>
-  <meta name="description" content="Discover your Scottish heritage — clans, tartans, myths & legends, and more. Through Fire, We Are United.">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="images/clan-badge-2.png" type="image/png">
-  <meta property="og:title" content="The Clan Hearth">
-  <meta property="og:description" content="Through Fire, We Are United. Explore clans, tartans, and legends.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="images/clan-hearth-emblem.jpg">
-  <meta name="theme-color" content="#0c2a1f">
+
+  <!-- Fonts & styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Favicon / social -->
+  <link rel="icon" href="images/clan-badge-2.png" type="image/png" />
+  <meta name="theme-color" content="#0c2a1f" />
+  <meta property="og:title" content="The Clan Hearth" />
+  <meta property="og:description" content="Through Fire, We Are United. Explore clans, tartans, and legends." />
+  <meta property="og:image" content="images/clan-hearth-emblem.jpg" />
 </head>
+
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header" role="banner">
     <div class="wrap header-inner">
       <a href="/" class="brand" aria-label="The Clan Hearth Home">
-        <img src="images/clan-hearth-emblem.jpg" alt="The Clan Hearth badge" class="brand-logo" onerror="this.onerror=null;this.src='images/clan-badge-2.png';">
+        <img src="images/clan-hearth-emblem.jpg"
+             alt="The Clan Hearth badge"
+             class="brand-logo"
+             onerror="this.onerror=null;this.src='images/clan-badge-2.png';" />
         <span class="brand-name">The Clan Hearth</span>
       </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">Menu</button>
+
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="Open site menu">Menu</button>
       <nav id="site-nav" class="site-nav" aria-label="Primary">
         <a href="#clans">Clans</a>
         <a href="#myths">Myths & Legends</a>
@@ -34,54 +43,91 @@
     </div>
   </header>
 
-  <!-- Hero uses CSS var for robust path handling; JS sets fallback if needed -->
-  <section class="hero" style="--hero-image: url('images/castlehome.jpg');" role="img" aria-label="Scottish castle by the loch at dusk">
+  <!-- IMPORTANT: This inline style sets the hero image path from the site root -->
+  <section class="hero"
+           style="--hero-image: url('images/castlehome.jpg');"
+           role="img"
+           aria-label="Highland castle by the loch at dusk">
     <div class="hero__inner wrap">
       <h1>Troimh theine tha sinn aonaichte</h1>
       <p class="subtitle">Through Fire, We Are United.</p>
-      <p class="lede">Discover your Scottish heritage — explore clans, design tartans, and dive into the myths that shaped Scotland.</p>
-      <a href="#clans" class="btn">Explore Clans</a>
+      <p class="lede">
+        Discover your Scottish heritage — explore clans, design tartans, and dive into the myths that shaped Scotland.
+      </p>
+      <div class="cta-row">
+        <a href="#clans" class="btn">Explore Clans</a>
+        <a href="#myths" class="btn btn-ghost">Read the Myths</a>
+      </div>
     </div>
   </section>
 
-  <main id="content" class="wrap" role="main">
+  <main id="main" class="wrap" role="main">
     <section id="clans" class="section">
-      <h2>Explore Clans</h2>
-      <p>Browse Scottish clans, their territories, mottos, and emblems.</p>
+      <header class="section__head">
+        <h2>Explore Clans</h2>
+        <p class="section__sub">Browse clans, their territories, mottos, and emblems.</p>
+      </header>
+
+      <div class="toolbar">
+        <input id="clan-search" type="search" placeholder="Search clans or mottos…" aria-label="Search clans" />
+        <select id="region-filter" aria-label="Filter by region">
+          <option value="">All regions</option>
+        </select>
+      </div>
+
       <div id="clan-list" class="grid cards"></div>
     </section>
 
     <section id="myths" class="section">
-      <h2>Myths & Legends</h2>
-      <p>From the Brahan Seer to the Loch Ness Monster — a living tapestry of Scottish lore.</p>
+      <header class="section__head">
+        <h2>Myths & Legends</h2>
+        <p class="section__sub">From the Brahan Seer to Nessie — stories woven into Scotland’s identity.</p>
+      </header>
       <div id="myths-list" class="grid cards"></div>
     </section>
 
     <section id="tartan" class="section">
-      <h2>Tartan Designer</h2>
-      <p>Design your own tartan pattern with colours and sett sizes. (Hook up your existing canvas tool here.)</p>
+      <header class="section__head">
+        <h2>Tartan Designer</h2>
+        <p class="section__sub">Design your own tartan pattern with colours and sett sizes.</p>
+      </header>
       <div class="placeholder">Interactive designer placeholder</div>
     </section>
 
     <section id="recipes" class="section">
-      <h2>Recipes</h2>
-      <p>From bannocks to cullen skink — hearty fare for the clan table.</p>
+      <header class="section__head">
+        <h2>Recipes</h2>
+        <p class="section__sub">From bannocks to cullen skink — hearty fare for the clan table.</p>
+      </header>
       <div id="recipes-list" class="grid cards"></div>
     </section>
 
     <section id="about" class="section">
-      <h2>About The Clan Hearth</h2>
-      <p><strong>Mission:</strong> Preserve and celebrate Scottish heritage with a modern, interactive experience — for families, schools, and travellers alike.</p>
-      <p><em>Brand:</em> Stag’s head, central fire, Highland scenery, claymores, thistles, and the motto “Troimh theine tha sinn aonaichte / Through Fire, We Are United.”</p>
+      <header class="section__head"><h2>About The Clan Hearth</h2></header>
+      <div class="prose">
+        <p><strong>Mission:</strong> Preserve and celebrate Scottish heritage with a modern, interactive experience — for families, schools, and travellers alike.</p>
+        <p><em>Brand:</em> Stag’s head, central fire, Highland scenery, claymores, thistles, and the motto “Troimh theine tha sinn aonaichte / Through Fire, We Are United.”</p>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="wrap">
-      <p>&copy; <span id="year"></span> The Clan Hearth — Through Fire, We Are United.</p>
+  <footer class="site-footer" role="contentinfo">
+    <div class="wrap footer-grid">
+      <div><strong>The Clan Hearth</strong><br /><small>Through Fire, We Are United.</small></div>
+      <nav aria-label="Footer">
+        <a href="#clans">Clans</a>
+        <a href="#myths">Myths & Legends</a>
+        <a href="#tartan">Tartan Designer</a>
+        <a href="#recipes">Recipes</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="foot-note">© <span id="year"></span> The Clan Hearth</div>
     </div>
   </footer>
 
+  <button class="to-top" aria-label="Back to top">↑</button>
+
+  <!-- Data & scripts -->
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>
