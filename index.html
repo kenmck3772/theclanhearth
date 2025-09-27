@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Favicon: falls back if file not present -->
   <link rel="icon" href="images/clan-badge-2.png" type="image/png">
   <meta property="og:title" content="The Clan Hearth">
   <meta property="og:description" content="Through Fire, We Are United. Explore clans, tartans, and legends.">
@@ -35,7 +34,8 @@
     </div>
   </header>
 
-  <section class="hero" role="img" aria-label="Scottish castle by the loch at dusk">
+  <!-- Hero uses CSS var for robust path handling; JS sets fallback if needed -->
+  <section class="hero" style="--hero-image: url('images/castlehome.jpg');" role="img" aria-label="Scottish castle by the loch at dusk">
     <div class="hero__inner wrap">
       <h1>Troimh theine tha sinn aonaichte</h1>
       <p class="subtitle">Through Fire, We Are United.</p>
@@ -47,53 +47,32 @@
   <main id="content" class="wrap" role="main">
     <section id="clans" class="section">
       <h2>Explore Clans</h2>
-      <p>Browse Scottish clans, their territories, mottos, and emblems. (Content coming next.)</p>
-      <div class="grid cards">
-        <article class="card">
-          <h3>Clan MacKenzie</h3>
-          <p>“Luceo Non Uro” — I shine, not burn.</p>
-        </article>
-        <article class="card">
-          <h3>Clan MacLeod</h3>
-          <p>“Hold Fast.”</p>
-        </article>
-        <article class="card">
-          <h3>Clan Campbell</h3>
-          <p>“Ne Obliviscaris” — Forget Not.</p>
-        </article>
-      </div>
+      <p>Browse Scottish clans, their territories, mottos, and emblems.</p>
+      <div id="clan-list" class="grid cards"></div>
     </section>
 
     <section id="myths" class="section">
       <h2>Myths & Legends</h2>
-      <p>From the Brahan Seer to the Loch Ness Monster — a living tapestry of Scottish lore. (Hook up your content here.)</p>
-      <div class="grid cards">
-        <article class="card"><h3>The Brahan Seer</h3><p>Prophecies that echo through the Highlands.</p></article>
-        <article class="card"><h3>Nessie</h3><p>The Loch Ness legend that won’t let go.</p></article>
-        <article class="card"><h3>Sawney Bean</h3><p>Dark tales from the Ayrshire caves.</p></article>
-      </div>
+      <p>From the Brahan Seer to the Loch Ness Monster — a living tapestry of Scottish lore.</p>
+      <div id="myths-list" class="grid cards"></div>
     </section>
 
     <section id="tartan" class="section">
       <h2>Tartan Designer</h2>
-      <p>Design your own tartan pattern with colours and sett sizes. (Wire your existing canvas tool here.)</p>
+      <p>Design your own tartan pattern with colours and sett sizes. (Hook up your existing canvas tool here.)</p>
       <div class="placeholder">Interactive designer placeholder</div>
     </section>
 
     <section id="recipes" class="section">
       <h2>Recipes</h2>
-      <p>From bannocks to cullen skink — hearty fare for the clan table. (Connect your dataset here.)</p>
-      <ul class="bullets">
-        <li>Traditional Cullen Skink</li>
-        <li>Venison Stew with Thistle Root</li>
-        <li>Oatcakes & Heather Honey</li>
-      </ul>
+      <p>From bannocks to cullen skink — hearty fare for the clan table.</p>
+      <div id="recipes-list" class="grid cards"></div>
     </section>
 
     <section id="about" class="section">
       <h2>About The Clan Hearth</h2>
       <p><strong>Mission:</strong> Preserve and celebrate Scottish heritage with a modern, interactive experience — for families, schools, and travellers alike.</p>
-      <p><em>Scroll-style emblem & brand:</em> Stag’s head, central fire, Highland scenery, claymores, thistles, and the motto “Troimh theine tha sinn aonaichte / Through Fire, We Are United.”</p>
+      <p><em>Brand:</em> Stag’s head, central fire, Highland scenery, claymores, thistles, and the motto “Troimh theine tha sinn aonaichte / Through Fire, We Are United.”</p>
     </section>
   </main>
 
@@ -103,6 +82,7 @@
     </div>
   </footer>
 
+  <script src="js/data.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
