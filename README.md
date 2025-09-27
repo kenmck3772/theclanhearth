@@ -1,1 +1,19 @@
-The Clan Hearth - An Interactive Scottish Heritage AppWelcome to The Clan Hearth, a web application dedicated to the exploration of Scottish heritage. This interactive experience allows users to dive deep into the rich history of Scottish clans, design their own tartans, discover traditional recipes, and much more.FeaturesInteractive Clan Map: Explore the historic territories of major Scottish clans on an interactive map of Scotland, powered by Leaflet.js.Clan Dossiers: View detailed information for numerous clans, including their Gaelic name, motto, lore, key historical events, and associated recipes.Tartan Designer: A powerful, canvas-based tool to design, save, and share your own unique tartan patterns. You can start from scratch or modify famous existing tartans.Clan Finder Quiz: An engaging personality quiz that suggests a "spirit clan" based on your answers.Legends of Scotland: Read about legendary figures from Scottish history like William Wallace, Robert the Bruce, and Bonnie Prince Charlie.Highlander's Larder: A browsable collection of traditional Scottish recipes associated with the clans and legends.The Hearth Market: A mock e-commerce section showcasing authentic Scottish goods, complete with a functional shopping cart.File StructureThe project is organized into three main files to separate concerns, making it easier to read and maintain:index.html: Contains the core HTML structure and layout of the application. It links to the necessary stylesheets and scripts.style.css: Holds all the custom CSS rules for the application, complementing the utility classes provided by Tailwind CSS.script.js: The heart of the application. This file contains all the JavaScript logic, including:All the application data (clans, legends, recipes, map data).Functions for page navigation.Initialization and event handling for all interactive features (Map, Tartan Designer, Quiz, etc.).Shopping cart and modal functionality.How to UseThis is a purely front-end project with no server-side dependencies. To run it:Clone or download the repository to your local machine.Open the index.html file in any modern web browser.All external libraries (Tailwind CSS, Leaflet.js) are loaded via CDN, so no additional installation steps are required.Future DevelopmentThis project provides a strong foundation. Future enhancements could include:Moving the hardcoded data from script.js to external JSON files for easier management.Developing a back-end to allow users to save their tartans, create accounts, and more.Expanding the database of clans, legends, and recipes.
+[README.md](https://github.com/user-attachments/files/22573966/README.md)
+# The Clan Hearth — Static Site
+
+This package sets the Clan Hearth badge as the logo and the castle image as the homepage background.
+
+## Expected image files (place these in `/images/`)
+- `clan-hearth-emblem.jpg` **(recommended logo)** or `clan-badge-2.png`
+- `castlehome.jpg` **(hero background image)**
+
+You already have these in your repo. If any are missing, the page will still load with fallback styles.
+
+## Deploy
+1. Upload these files to your repository root (keep existing `images/` if you already have the photos there).
+2. Ensure GitHub Pages is enabled for your repo (Settings → Pages).
+3. Visit your Pages URL and hard refresh (Ctrl/Cmd + Shift + R).
+
+## Notes
+- This build keeps your structure: `/css`, `/js`, `/images`.
+- If your castle image was saved as `castlehome..jpg`, rename it to `castlehome.jpg` for the background to appear.
