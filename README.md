@@ -1,19 +1,15 @@
-[README.md](https://github.com/user-attachments/files/22573966/README.md)
-# The Clan Hearth — Static Site
+[README.md](https://github.com/user-attachments/files/22574099/README.md)
+# The Clan Hearth — Repopulated Build
 
-This package sets the Clan Hearth badge as the logo and the castle image as the homepage background.
+- Badge is used as the logo.
+- Castle is used as the hero background (with automatic fallbacks for `castlehome.jpg` or `castlehome..jpg`).
+- Sections repopulated with sample data: Clans, Myths & Legends (11 items), and Recipes.
+- Uses `/css`, `/js`, `/images` structure to match your repo.
 
-## Expected image files (place these in `/images/`)
-- `clan-hearth-emblem.jpg` **(recommended logo)** or `clan-badge-2.png`
-- `castlehome.jpg` **(hero background image)**
-
-You already have these in your repo. If any are missing, the page will still load with fallback styles.
+## Image expectations
+Put these in `/images/`:
+- `clan-hearth-emblem.jpg` **or** `clan-badge-2.png` (logo)
+- `castlehome.jpg` (hero). If your repo already has `castlehome..jpg`, keep it — the script will fall back to it.
 
 ## Deploy
-1. Upload these files to your repository root (keep existing `images/` if you already have the photos there).
-2. Ensure GitHub Pages is enabled for your repo (Settings → Pages).
-3. Visit your Pages URL and hard refresh (Ctrl/Cmd + Shift + R).
-
-## Notes
-- This build keeps your structure: `/css`, `/js`, `/images`.
-- If your castle image was saved as `castlehome..jpg`, rename it to `castlehome.jpg` for the background to appear.
+Upload the files to your repo root. Keep your existing `/images` folder so the logo/hero show.
