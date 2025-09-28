@@ -1,5 +1,7 @@
+import { tartanPatterns } from "./data/tartanPatterns.js";
+import { tartanExamples } from "./data/tartanExamples.js";
+import { clanTerritories } from "./data/clanTerritories.js";
 import { clanData } from "./data/clanData.js";
-
 
     document.addEventListener('DOMContentLoaded', function() {
         // --- DATA ---
@@ -737,3 +739,251 @@ import { clanData } from "./data/clanData.js";
         }
     });
     
+
+// __CLAN_HEARTH_NAV_LOCK__
+(function() {
+  const CANON = ["home","clan-finder","tartan-designer","recipes","myths","map","about"];
+  const SELECTORS = {
+    "home": ["#home","#hero","section[id*='home' i]","main > section:first-of-type"],
+    "clan-finder": ["#clan-finder","#clanFinder","#clans","section[id*='clan' i]"],
+    "tartan-designer": ["#tartan-designer","#tartanDesigner","section[id*='tartan' i]"],
+    "recipes": ["#recipes","section[id*='recipe' i]"],
+    "myths": ["#myths","#legends","section[id*='legend' i]","section[id*='myth' i]"],
+    "map": ["#clan-map","#map","section[id*='map' i]"],
+    "about": ["#about","section[id*='about' i]"]
+  };
+
+  function qs(selector) { return document.querySelector(selector); }
+  function qsa(selector) { return Array.from(document.querySelectorAll(selector)); }
+
+  function findSection(id) {
+    for (const sel of (SELECTORS[id] || [])) {
+      const el = qs(sel);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  function ensureDataSection(id, el) {
+    if (!el) return null;
+    el.setAttribute("data-section", id);
+    return el;
+  }
+
+  function wireSections() {
+    for (const id of CANON) {
+      ensureDataSection(id, findSection(id));
+    }
+    if (!qsa('[data-section="home"]').length) {
+      const hero = qs("#hero") || qsa("main section, body > section")[0];
+      if (hero) ensureDataSection("home", hero);
+    }
+  }
+
+  function hideAll() { qsa("[data-section]").forEach(s => s.classList.add("hidden")); }
+  function show(id) {
+    const target = qs(`[data-section="${id}"]`);
+    if (target) target.classList.remove("hidden");
+    qsa("#topNav .nav-link, #topNav [data-nav]").forEach(a => a.classList.remove("text-amber-400","font-semibold"));
+    const act = qs(`#topNav [data-nav="${id}"]`);
+    if (act) { act.classList.add("text-amber-400","font-semibold"); }
+  }
+
+  function initialSection() {
+    const hash = location.hash.replace("#","");
+    if (CANON.includes(hash)) return hash;
+    return "home";
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    wireSections();
+    hideAll();
+    show(initialSection());
+  });
+
+  window.addEventListener("hashchange", () => {
+    const id = location.hash.replace("#","");
+    if (!id) return;
+    if (CANON.includes(id)) { hideAll(); show(id); }
+  });
+
+  document.addEventListener("click", (e) => {
+    const nav = e.target.closest("[data-nav]");
+    if (!nav) return;
+    e.preventDefault();
+    const id = nav.dataset.nav;
+    history.replaceState(null, "", "#" + id);
+    hideAll(); show(id);
+    const target = document.querySelector(`[data-section="${id}"]`);
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+})();
+
+
+// __CLAN_HEARTH_ENHANCEMENTS__
+(function() {
+  document.addEventListener("DOMContentLoaded", () => {
+    // Hero background
+    const hero = document.getElementById("hero");
+    if (hero) {
+      const hasBg = getComputedStyle(hero).backgroundImage && getComputedStyle(hero).backgroundImage !== "none";
+      if (!hasBg) {
+        hero.style.backgroundImage = "url('./assets/images/castlehome.jpg')";
+        hero.classList.add("bg-cover","bg-center","bg-no-repeat","relative");
+        const overlay = document.createElement("div");
+        overlay.className = "absolute inset-0 bg-black/40 pointer-events-none";
+        hero.prepend(overlay);
+      }
+    }
+    // Header logo
+    const logoEl = document.querySelector("#siteLogo") ||
+                   document.querySelector("header img[alt*='Clan Hearth' i]") ||
+                   document.querySelector("header img");
+    if (logoEl) {
+      logoEl.src = "./assets/images/hearth-crest.png";
+      if (!logoEl.alt) logoEl.alt = "The Clan Hearth";
+      logoEl.referrerPolicy = "no-referrer";
+    }
+  });
+})();
+
+
+// __CLAN_HEARTH_MAP__
+(function() {
+  function initMap() {
+    if (window.__clanMap) return;
+    const el = document.getElementById("clanMap");
+    if (!el || typeof L === "undefined") return;
+    const map = L.map(el).setView([56.818, -4.182], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const sites = [
+      { name: "Edinburgh Castle", coords: [55.9486, -3.1999] },
+      { name: "Stirling Castle", coords: [56.1239, -3.9469] },
+      { name: "Eilean Donan", coords: [57.2740, -5.5169] }
+    ];
+    sites.forEach(s => L.marker(s.coords).addTo(map).bindPopup(s.name));
+
+    // Draw polygons if present
+    // clanTerritories.forEach(t => L.polygon(t.coords, { color: t.color || '#92400e' }).addTo(map).bindPopup(t.name));
+
+    window.__clanMap = map;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const mapSection = document.querySelector('[data-section="map"]');
+    if (mapSection && !mapSection.classList.contains("hidden")) initMap();
+  });
+  window.addEventListener("hashchange", () => {
+    const id = location.hash.replace("#","");
+    if (id === "map") initMap();
+  });
+  document.addEventListener("click", (e) => {
+    const nav = e.target.closest("[data-nav='map']");
+    if (nav) setTimeout(initMap, 0);
+  });
+})();
+
+
+// __CLAN_HEARTH_TARTAN__
+(function() {
+  function setPreview(src) {
+    const img = document.getElementById("tartanPreview");
+    if (img) { img.src = src; }
+    const a = document.getElementById("btnDownloadTartan");
+    if (a) { a.href = src; }
+  }
+  function cycle() {
+    const img = document.getElementById("tartanPreview");
+    if (!img) return;
+    const arr = tartanExamples.map(t => t.image);
+    const ix = Math.max(0, arr.indexOf(img.src.split('/').slice(-2).join('/')));
+    const next = arr[(ix + 1) % arr.length];
+    setPreview(next);
+  }
+  function drawCanvasBasic() {
+    const c = document.getElementById("tartanCanvas");
+    if (!c) return;
+    const ctx = c.getContext("2d");
+    const w = c.width, h = c.height;
+    ctx.fillStyle = "#7a2e2e"; ctx.fillRect(0,0,w,h);
+    for (let x=0; x<w; x+=40) { ctx.fillStyle = "#eacb8a"; ctx.fillRect(x,0,10,h); ctx.fillStyle = "#1e5028"; ctx.fillRect(x+20,0,4,h); }
+    for (let y=0; y<h; y+=40) { ctx.fillStyle = "#eacb8a"; ctx.fillRect(0,y,w,10); ctx.fillStyle = "#1e5028"; ctx.fillRect(0,y+20,w,4); }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const img = document.getElementById("tartanPreview");
+    if (img && (!img.getAttribute("src") || img.getAttribute("src")==="")) {
+      setPreview("./assets/images/tartans/tartan-placeholder.png");
+    }
+    document.getElementById("btnUsePlaceholder")?.addEventListener("click", () => setPreview("./assets/images/tartans/tartan-placeholder.png"));
+    document.getElementById("btnCycleTartan")?.addEventListener("click", cycle);
+    drawCanvasBasic();
+  });
+})();
+
+
+// __CLAN_HEARTH_TARTAN_ENGINE__
+(function() {
+  function buildStripePlan(sett) {
+    const total = sett.reduce((s, seg) => s + (seg[1]||0), 0);
+    let acc = 0;
+    const plan = sett.map(([code, w]) => ({ code, start: acc, width: w, end: acc += w }));
+    return { total, plan };
+  }
+
+  function drawTartanToCanvas(canvas, patternName, scale=8) {
+    const c = canvas;
+    const ctx = c.getContext("2d");
+    const pattern = tartanPatterns[patternName];
+    if (!pattern) return;
+    const palette = pattern.palette;
+    const sett = pattern.sett;
+    const { total, plan } = buildStripePlan(sett);
+    const W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H);
+
+    for (let x=0; x<W; x++) {
+      const pos = (x/scale) % total;
+      const seg = plan.find(s => pos >= s.start && pos < s.end) || plan[plan.length-1];
+      ctx.fillStyle = palette[seg.code] || "#444";
+      ctx.fillRect(x, 0, 1, H);
+    }
+    ctx.globalAlpha = 0.5;
+    for (let y=0; y<H; y++) {
+      const pos = (y/scale) % total;
+      const seg = plan.find(s => pos >= s.start && pos < s.end) || plan[plan.length-1];
+      ctx.fillStyle = palette[seg.code] || "#444";
+      ctx.fillRect(0, y, W, 1);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function applySelectedTartan() {
+    const sel = document.getElementById("tartanSelect");
+    const name = sel?.value;
+    const canvas = document.getElementById("tartanCanvas");
+    if (!name || !canvas) return;
+    drawTartanToCanvas(canvas, name, 8);
+    const url = canvas.toDataURL("image/png");
+    const prev = document.getElementById("tartanPreview");
+    if (prev) prev.src = url;
+    const a = document.getElementById("btnDownloadTartan");
+    if (a) a.href = url;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sel = document.getElementById("tartanSelect");
+    if (sel) {
+      sel.innerHTML = Object.keys(tartanPatterns).map(n => `<option value="${n}">${n}</option>`).join("");
+    }
+    document.getElementById("btnApplyTartan")?.addEventListener("click", applySelectedTartan);
+  });
+
+  window.__drawTartan = (name, scale=8) => {
+    const c = document.getElementById("tartanCanvas");
+    drawTartanToCanvas(c, name, scale);
+  };
+})();
