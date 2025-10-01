@@ -1,100 +1,105 @@
-/* Base */
-*,*::before,*::after{box-sizing:border-box}
-html:focus-within{scroll-behavior:smooth}
-body{
-  margin:0;
-  background:#0b1f18;
-  color:#f6f5f2;
-  font-family:'Crimson Text',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  line-height:1.6;
-}
-img{max-width:100%;display:block}
-a{color:inherit}
-:root{
-  --muted:rgba(255,255,255,.75);
-  --brand:#b68c3a;
-  --border:rgba(255,255,255,.14);
-  --card:rgba(255,255,255,.06);
-  --shadow:0 8px 30px rgba(0,0,0,.35);
-  --radius:16px;
-}
-.wrap{width:min(1100px,92vw);margin-inline:auto}
-.prose{max-width:70ch}
-.skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-.skip-link:focus{left:1rem;top:1rem;z-index:999;width:auto;height:auto;padding:.5rem .75rem;background:#fff;color:#111;border-radius:.5rem}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClanHearth - Discover Your Scottish Roots</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#FBF6E8] text-stone-800">
 
-/* Header */
-.site-header{position:sticky;top:0;z-index:50;background:rgba(10,18,15,.55);backdrop-filter:blur(8px) saturate(140%);border-bottom:1px solid var(--border);transition:background .3s ease}
-.site-header.scrolled{background:rgba(10,18,15,.85)}
-.header-inner{display:flex;align-items:center;gap:1rem;padding:.6rem 0}
-.brand{display:inline-flex;align-items:center;gap:.75rem;text-decoration:none}
-.brand-logo{height:56px;width:auto;border-radius:12px;box-shadow:var(--shadow)}
-.brand-name{font-family:'Cinzel',serif;font-weight:700;letter-spacing:.02em;font-size:1.3rem}
-.nav-toggle{display:none;background:none;color:inherit;border:1px solid var(--border);padding:.45rem .7rem;border-radius:.6rem}
-.site-nav{margin-left:auto;display:flex;gap:.5rem}
-.site-nav a{padding:.5rem .75rem;border-radius:.6rem;text-decoration:none;border:1px solid transparent}
-.site-nav a:hover,.site-nav a:focus-visible{border-color:var(--border);background:rgba(255,255,255,.06)}
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="font-title text-2xl font-bold text-stone-800">Clan<span class="text-yellow-800">Hearth</span></a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#dossier" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200 active" data-page="dossier-section">Clan Dossier</a>
+                        <a href="#map" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="map-section">Clan Map</a>
+                        <a href="#tartan" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="tartan-section">Tartan Builder</a>
+                        <a href="#finder" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="finder-section">Clan Finder</a>
+                        <a href="#trip" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="trip-planner-section">Trip Planner</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-stone-600 hover:text-yellow-800 hover:bg-stone-100 focus:outline-none">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#dossier" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100 active" data-page="dossier-section">Clan Dossier</a>
+                <a href="#map" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="map-section">Clan Map</a>
+                <a href="#tartan" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="tartan-section">Tartan Builder</a>
+                <a href="#finder" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="finder-section">Clan Finder</a>
+                 <a href="#trip" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="trip-planner-section">Trip Planner</a>
+            </div>
+        </div>
+    </header>
 
-@media (max-width:720px){
-  .brand-logo{height:44px}
-  .nav-toggle{display:inline-block}
-  .site-nav{display:none;position:absolute;right:1rem;top:100%;background:rgba(10,18,15,.95);border:1px solid var(--border);border-radius:.75rem;flex-direction:column;padding:.5rem;box-shadow:var(--shadow)}
-  .site-nav.open{display:flex}
-  .site-nav a{width:100%}
-}
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Clan Dossier Section -->
+        <section id="dossier-section" class="page-section active animate-fade-in">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
 
-/* Hero */
-.hero{
-  min-height:70vh;
-  position:relative;
-  display:grid;
-  place-items:center;
-  text-align:center;
+        <!-- Clan Map Section -->
+        <section id="map-section" class="page-section">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="font-title text-3xl font-bold text-stone-800 mb-4">The Lands of the Clans</h2>
+                <p class="text-stone-600 mb-6">Explore the historic territories of the great Scottish clans. Click on a shaded region to learn more about the clan that held sway over the land.</p>
+                <div id="clanMap" class="w-full h-[60vh] rounded-lg border-2 border-stone-200"></div>
+            </div>
+        </section>
 
-  /* Fallback path is relative to this CSS file in /css → go up to /images */
-  background-image: var(--hero-image, url('../images/castlehome.jpg'));
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-}
-.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.62))}
-.hero__inner{position:relative;padding:clamp(2rem,6vw,6rem);text-shadow:0 2px 10px rgba(0,0,0,.55)}
-.subtitle{margin:0 0 .5rem;opacity:.9}
-.lede{opacity:.9;max-width:65ch;margin-inline:auto}
-.cta-row{display:flex;gap:.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
-.btn{display:inline-block;padding:.75rem 1.1rem;border-radius:.7rem;text-decoration:none;font-weight:700;color:#1b1305;background:var(--brand);border:1px solid rgba(0,0,0,.25);box-shadow:var(--shadow)}
-.btn.btn-ghost{color:#f6f5f2;background:transparent;border:1px solid var(--border)}
+        <!-- Tartan Builder Section -->
+        <section id="tartan-section" class="page-section">
+             <!-- Section Content will be generated by JavaScript -->
+        </section>
 
-/* Sections */
-.section{padding:clamp(2rem,5vw,4rem) 0;border-bottom:1px solid var(--border)}
-.section__head{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-.section__head h2{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3.2vw,2rem);margin:0}
-.section__sub{color:var(--muted);margin:0}
-.toolbar{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
-.toolbar input,.toolbar select{background:#0e2720;color:#fff;border:1px solid var(--border);border-radius:.6rem;padding:.55rem .7rem}
+        <!-- Clan Finder Section -->
+        <section id="finder-section" class="page-section">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
+        
+        <!-- Trip Planner Section -->
+        <section id="trip-planner-section" class="page-section">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
+    </main>
 
-.grid.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:1rem}
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;box-shadow:var(--shadow);transition:transform .18s ease, background .2s ease, border-color .2s ease}
-.card:hover{transform:translateY(-2px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2)}
-.card h3{margin:.25rem 0 .35rem;font-weight:700}
-.card .muted{opacity:.85;font-size:.96rem}
-.meta{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.35rem}
-.badge{display:inline-block;border:1px solid var(--border);border-radius:999px;padding:.2rem .5rem;font-size:.85rem;opacity:.9}
-.thumb{width:56px;height:56px;border-radius:12px;border:1px solid var(--border);object-fit:cover;background:#0e2720;margin-bottom:.5rem}
+    <!-- Modal Placeholder -->
+    <div id="modal-container"></div>
 
-/* Collapsible details */
-.details{margin-top:.5rem}
-.details button{display:inline-flex;align-items:center;gap:.35rem;padding:.45rem .6rem;border-radius:.5rem;border:1px solid var(--border);background:transparent;color:#f6f5f2;cursor:pointer}
-.details button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-.details-content{max-height:0;overflow:hidden;transition:max-height .25s ease;will-change:max-height}
-.details.open .details-content{max-height:260px}
+    <!-- Leaflet JS for Maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Clan Data -->
+    <script src="data/clans.js"></script>
+    
+    <!-- Main Application Logic -->
+    <script src="js/app.js"></script>
 
-/* Footer */
-.site-footer{padding:2rem 0;color:var(--muted);border-top:1px solid var(--border)}
-.footer-grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));align-items:start}
-.foot-note{text-align:right}
-@media (max-width:600px){.foot-note{text-align:left}}
-
-/* Back to top */
-.to-top{position:fixed;right:1rem;bottom:1rem;border-radius:999px;width:44px;height:44px;border:1px solid var(--border);background:rgba(10,18,15,.75);color:#f6f5f2;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .2s ease}
-.to-top.show{opacity:1;pointer-events:auto}
+</body>
+</html>
