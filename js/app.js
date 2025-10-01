@@ -1,42 +1,105 @@
-import { clanTerritories } from "./data/clanTerritories.js";
-import { tartanExamples } from "./data/tartanExamples.js";
-import { tartanPatterns } from "./data/tartanPatterns.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClanHearth - Discover Your Scottish Roots</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-[#FBF6E8] text-stone-800">
 
-(function() {
-  const CANON = ["home","clan-finder","tartan-designer","recipes","myths","map","about"];
-  const ALIAS = { clans: "clan-finder", legends: "myths" };
-  const normalize = (id) => ALIAS[id] || id;
-  const SELECTORS = {
-    "home": ["#home","#hero","section[id*='home' i]","main > section:first-of-type"],
-    "clan-finder": ["#clan-finder","#clanFinder","#clans","section[id*='clan' i]"],
-    "tartan-designer": ["#tartan-designer","#tartanDesigner","section[id*='tartan' i]"],
-    "recipes": ["#recipes","section[id*='recipe' i]"],
-    "myths": ["#myths","#legends","section[id*='legend' i]","section[id*='myth' i]"],
-    "map": ["#clan-map","#map","section[id*='map' i]"],
-    "about": ["#about","section[id*='about' i]"]
-  };
-  const qs=(s)=>document.querySelector(s), qsa=(s)=>Array.from(document.querySelectorAll(s));
-  const ensure=(id,el)=>{ if(el) el.setAttribute("data-section",id); };
-  function wire(){ CANON.forEach(id=>ensure(id, SELECTORS[id].map(qs).find(Boolean))); const hero=qs("#hero"); if(hero) ensure("home",hero); }
-  const hide=()=>qsa("[data-section]").forEach(s=>s.classList.add("hidden"));
-  const show=(id)=>{ qs(`[data-section="${id}"]`)?.classList.remove("hidden"); qsa("#topNav .nav-link, #topNav [data-nav]").forEach(a=>a.classList.remove("text-amber-400","font-semibold")); qs(`#topNav [data-nav="${id}"]`)?.classList.add("text-amber-400","font-semibold"); };
-  function initial(){ const raw=location.hash.replace("#",""); const id=normalize(raw); return CANON.includes(id)?id:"home"; }
-  document.addEventListener("DOMContentLoaded",()=>{ wire(); hide(); show(initial()); });
-  window.addEventListener("hashchange",()=>{ const id=normalize(location.hash.replace("#","")); if(CANON.includes(id)){ hide(); show(id); } });
-  document.addEventListener("click",(e)=>{ const nav=e.target.closest("[data-nav]"); if(!nav) return; e.preventDefault(); const id=normalize(nav.dataset.nav); history.replaceState(null,"","#"+id); hide(); show(id); });
-})();
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="font-title text-2xl font-bold text-stone-800">Clan<span class="text-yellow-800">Hearth</span></a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#dossier" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200 active" data-page="dossier-section">Clan Dossier</a>
+                        <a href="#map" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="map-section">Clan Map</a>
+                        <a href="#tartan" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="tartan-section">Tartan Builder</a>
+                        <a href="#finder" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="finder-section">Clan Finder</a>
+                        <a href="#trip" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-stone-600 hover:text-yellow-800 transition-colors duration-200" data-page="trip-planner-section">Trip Planner</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-stone-600 hover:text-yellow-800 hover:bg-stone-100 focus:outline-none">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="md:hidden hidden">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#dossier" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100 active" data-page="dossier-section">Clan Dossier</a>
+                <a href="#map" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="map-section">Clan Map</a>
+                <a href="#tartan" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="tartan-section">Tartan Builder</a>
+                <a href="#finder" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="finder-section">Clan Finder</a>
+                 <a href="#trip" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-yellow-800 hover:bg-stone-100" data-page="trip-planner-section">Trip Planner</a>
+            </div>
+        </div>
+    </header>
 
-(function(){ document.addEventListener("DOMContentLoaded",()=>{
-  const hero=document.getElementById("hero"); if(hero){ hero.style.backgroundImage="url('./assets/images/castlehome.jpg')"; hero.classList.add("bg-cover","bg-center","bg-no-repeat","relative"); const ov=document.createElement("div"); ov.className="absolute inset-0 bg-black/40"; hero.prepend(ov); }
-  const logo=document.getElementById("siteLogo")||document.querySelector("header img"); if(logo){ logo.src="./assets/images/hearth-crest.png"; logo.classList.add("h-8","w-auto","object-contain"); }
-}); })();
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- Clan Dossier Section -->
+        <section id="dossier-section" class="page-section active animate-fade-in">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
 
-(function(){ function init(){ if(window.__clanMap) return; const el=document.getElementById("clanMap"); if(!el||typeof L==='undefined') return; const map=L.map(el).setView([56.818,-4.182],6); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map); [{name:"Edinburgh Castle",coords:[55.9486,-3.1999]}].forEach(s=>L.marker(s.coords).addTo(map).bindPopup(s.name)); window.__clanMap=map; }
-document.addEventListener("DOMContentLoaded",()=>{ const s=document.querySelector('[data-section="map"]'); if(s&&!s.classList.contains('hidden')) init(); });
-window.addEventListener("hashchange",()=>{ if((location.hash||'').replace('#','')==='map') init(); });
-})(); 
+        <!-- Clan Map Section -->
+        <section id="map-section" class="page-section">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="font-title text-3xl font-bold text-stone-800 mb-4">The Lands of the Clans</h2>
+                <p class="text-stone-600 mb-6">Explore the historic territories of the great Scottish clans. Click on a shaded region to learn more about the clan that held sway over the land.</p>
+                <div id="clanMap" class="w-full h-[60vh] rounded-lg border-2 border-stone-200"></div>
+            </div>
+        </section>
 
-(function(){ function setPreview(src){ const img=document.getElementById("tartanPreview"); if(img) img.src=src; const a=document.getElementById("btnDownloadTartan"); if(a) a.href=src; }
-function apply(){ const sel=document.getElementById("tartanSelect"); const name=sel?.value; const c=document.getElementById("tartanCanvas"); if(!name||!c) return; const p=tartanPatterns[name]; const ctx=c.getContext('2d'); ctx.fillStyle='#7a2e2e'; ctx.fillRect(0,0,c.width,c.height); const url=c.toDataURL('image/png'); const prev=document.getElementById('tartanPreview'); if(prev) prev.src=url; const a=document.getElementById('btnDownloadTartan'); if(a) a.href=url; }
-document.addEventListener("DOMContentLoaded",()=>{ const sel=document.getElementById("tartanSelect"); if(sel) sel.innerHTML=Object.keys(tartanPatterns).map(n=>`<option value="${n}">${n}</option>`).join(""); document.getElementById("btnApplyTartan")?.addEventListener("click",apply); if(document.getElementById("tartanPreview") && !document.getElementById("tartanPreview").src) setPreview("./assets/images/tartans/tartan-placeholder.png"); });
-})();
+        <!-- Tartan Builder Section -->
+        <section id="tartan-section" class="page-section">
+             <!-- Section Content will be generated by JavaScript -->
+        </section>
+
+        <!-- Clan Finder Section -->
+        <section id="finder-section" class="page-section">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
+        
+        <!-- Trip Planner Section -->
+        <section id="trip-planner-section" class="page-section">
+            <!-- Section Content will be generated by JavaScript -->
+        </section>
+    </main>
+
+    <!-- Modal Placeholder -->
+    <div id="modal-container"></div>
+
+    <!-- Leaflet JS for Maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    
+    <!-- Clan Data -->
+    <script src="data/clans.js"></script>
+    
+    <!-- Main Application Logic -->
+    <script src="js/app.js"></script>
+
+</body>
+</html>
