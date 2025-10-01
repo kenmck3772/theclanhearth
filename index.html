@@ -1,292 +1,105 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-<head> 
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Clan Hearth - An Interactive Scottish Heritage App</title>
-    <meta name="description" content="Discover your Scottish heritage. Explore detailed clan histories, design tartans, and find traditional recipes.">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-title { font-family: 'Cinzel', serif; }
-        
-        /* --- Core App Styles --- */
-        .nav-link.active { color: #a16207; border-bottom: 2px solid #a16207; }
-        .page-section { display: none; }
-        .page-section.active { display: block; }
-        .modal { backdrop-filter: blur(4px); background-color: rgba(0,0,0,0.6); }
-        .content-card { transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; }
-        .content-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .animate-fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Dossier/Scroll Styles (Adapted to Theme) --- */
-        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
-        .sidebar-scroll::-webkit-scrollbar-track { background: #E8D5B7; }
-        .sidebar-scroll::-webkit-scrollbar-thumb { background: #a16207; border-radius: 2px; }
-        .active-item { background-color: #E8D5B7; color: #44403c; font-weight: 600; }
-        .tab-button.active { border-color: #a16207; color: #a16207; font-weight: 600; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .timeline-item::before {
-            content: ''; position: absolute; left: -2.75rem; top: 0.5rem;
-            width: 1rem; height: 1rem; border-radius: 9999px;
-            background-color: #d6d3d1; border: 2px solid #FBF6E8;
-        }
-
-        /* --- Tartan Builder Styles --- */
-        .color-box { transition: transform 0.2s ease-in-out; }
-        .color-box:hover { transform: scale(1.1); }
-        .color-box.selected { box-shadow: 0 0 0 3px #a16207; transform: scale(1.1); }
-        .tooltip { position: relative; display: inline-block; }
-        .tooltip .tooltiptext {
-            visibility: hidden; width: 140px; background-color: #555; color: #fff;
-            text-align: center; border-radius: 6px; padding: 5px; position: absolute;
-            z-index: 1; bottom: 150%; left: 50%; margin-left: -70px;
-            opacity: 0; transition: opacity 0.3s;
-        }
-        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
-        .tartan-example-card {
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-        }
-        .tartan-example-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-        }
-    </style>
-
-<link rel="icon" href="./assets/images/hearth-crest.png">
-<meta property="og:title" content="The Clan Hearth">
-<meta property="og:description" content="Troimh theine tha sinn aonaichte — Through Fire, We Are United.">
-<meta property="og:image" content="./assets/images/hearth-crest.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Clan Hearth</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <link rel="icon" href="./assets/images/hearth-crest.png">
 </head>
-<body class="font-body text-stone-800 bg-gradient-to-br from-[#FBF6E8] via-[#F5E6D3] to-[#E8D5B7]">
-<header id="topNav" class="sticky top-0 z-50 bg-stone-900/80 backdrop-blur border-b border-stone-800 text-stone-200">
-  <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
-    <a href="#home" data-nav="home" class="flex items-center gap-3">
-      <img id="siteLogo" src="./assets/images/hearth-crest.png" alt="The Clan Hearth" class="h-8 w-8 object-contain">
-      <span class="text-base font-semibold tracking-wide">The Clan Hearth</span>
-    </a>
-    <nav class="flex flex-wrap gap-4 text-sm">
-      <a href="#home" data-nav="home" class="nav-link hover:text-white">Home</a>
-      <a href="#clan-finder" data-nav="clan-finder" class="nav-link hover:text-white">Clan Finder</a>
-      <a href="#tartan-designer" data-nav="tartan-designer" class="nav-link hover:text-white">Tartan Designer</a>
-      <a href="#recipes" data-nav="recipes" class="nav-link hover:text-white">Recipes</a>
-      <a href="#myths" data-nav="myths" class="nav-link hover:text-white">Myths &amp; Legends</a>
-      <a href="#map" data-nav="map" class="nav-link hover:text-white">Map</a>
-      <a href="#about" data-nav="about" class="nav-link hover:text-white">About</a>
-    </nav>
-  </div>
-</header>
-<section id="hero" data-section="home" class="relative bg-cover bg-center bg-no-repeat">
-  <div class="absolute inset-0 bg-black/40"></div>
-  <div class="relative max-w-5xl mx-auto px-6 py-28 text-center text-white">
-    <h1 class="text-3xl md:text-5xl font-bold">The Clan Hearth</h1>
-    <p class="mt-3 text-lg md:text-xl">Troimh theine tha sinn aonaichte — Through Fire, We Are United.</p>
-    <div class="mt-6 flex gap-3 justify-center">
-      <a href="#clan-finder" data-nav="clan-finder" class="px-4 py-2 rounded bg-amber-600 text-white">Find Your Clan</a>
-      <a href="#tartan-designer" data-nav="tartan-designer" class="px-4 py-2 rounded border border-white">Design a Tartan</a>
+<body class="font-sans text-stone-800 bg-gradient-to-br from-[#FBF6E8] via-[#F5E6D3] to-[#E8D5B7]">
+  <header id="topNav" class="sticky top-0 z-50 bg-stone-900/80 backdrop-blur border-b border-stone-800 text-stone-200">
+    <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <a href="#home" data-nav="home" class="flex items-center gap-3">
+        <img id="siteLogo" src="./assets/images/hearth-crest.png" alt="The Clan Hearth" class="h-8 w-auto object-contain">
+        <span class="text-base font-semibold tracking-wide">The Clan Hearth</span>
+      </a>
+      <nav class="flex flex-wrap gap-4 text-sm">
+        <a href="#home" data-nav="home" class="nav-link hover:text-white">Home</a>
+        <a href="#clan-finder" data-nav="clan-finder" class="nav-link hover:text-white">Clan Finder</a>
+        <a href="#tartan-designer" data-nav="tartan-designer" class="nav-link hover:text-white">Tartan Designer</a>
+        <a href="#recipes" data-nav="recipes" class="nav-link hover:text-white">Recipes</a>
+        <a href="#myths" data-nav="myths" class="nav-link hover:text-white">Myths &amp; Legends</a>
+        <a href="#map" data-nav="map" class="nav-link hover:text-white">Map</a>
+        <a href="#about" data-nav="about" class="nav-link hover:text-white">About</a>
+      </nav>
     </div>
-  </div>
-</section>
+  </header>
 
-    
-    <header class="bg-white/80 backdrop-blur-sm shadow-lg sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-            <h1 class="text-2xl md:text-3xl font-title font-bold text-yellow-800">
-                🏴󠁧󠁢󠁳󠁣󠁴󠁿 The Clan Hearth
-            </h1>
-            <nav id="main-nav" class="hidden md:flex items-center space-x-2 md:space-x-4">
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="home">Home</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="clans">Clans</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="legends">Legends</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tartan-designer">Tartan Designer</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="recipes">Recipe Book</button>
-            </nav>
-            <button id="mobile-menu-btn" class="md:hidden text-stone-700">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
+  <section id="hero" data-section="home" class="relative bg-cover bg-center bg-no-repeat">
+    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="relative max-w-5xl mx-auto px-6 py-28 text-center text-white">
+      <h1 class="text-3xl md:text-5xl font-bold">The Clan Hearth</h1>
+      <p class="mt-3 text-lg md:text-xl">Troimh theine tha sinn aonaichte — Through Fire, We Are United.</p>
+      <div class="mt-6 flex gap-3 justify-center">
+        <a href="#clan-finder" data-nav="clan-finder" class="px-4 py-2 rounded bg-amber-600 text-white">Find Your Clan</a>
+        <a href="#tartan-designer" data-nav="tartan-designer" class="px-4 py-2 rounded border border-white">Design a Tartan</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="clan-map" data-section="map" class="min-h-[60vh]">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Map</h2>
+      <div id="clanMap" class="w-full" style="height: 520px;"></div>
+      <div class="mt-3 text-xs text-stone-500">Map data &copy; OpenStreetMap contributors.</div>
+    </div>
+  </section>
+
+  <section id="tartan-designer" data-section="tartan-designer" class="min-h-[60vh]">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Tartan Designer</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="md:col-span-2 flex gap-3 items-end">
+          <div class="flex-1">
+            <label class="block text-sm mb-1">Choose a tartan</label>
+            <select id="tartanSelect" class="w-full border border-stone-300 rounded px-3 py-2 bg-white"></select>
+          </div>
+          <button id="btnApplyTartan" class="px-4 py-2 rounded bg-amber-600 text-white">Apply Selected</button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95">
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="home">Home</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="clans">Clans</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="legends">Legends</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">Tartan Designer</button>
-             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">Recipe Book</button>
+        <div>
+          <img id="tartanPreview" src="" class="w-full h-64 object-cover rounded-xl shadow">
+          <div class="mt-3 flex gap-2 text-sm">
+            <a id="btnDownloadTartan" download="tartan.png" class="px-3 py-2 rounded border border-stone-300" href="#">Download</a>
+          </div>
         </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        
-        <section id="home-section" class="page-section">
-            <div class="text-center mb-12 bg-white/70 rounded-2xl shadow-xl p-8">
-                <img src="clan_hearth.jpg" alt="The Clan Hearth Emblem" class="w-48 h-48 mx-auto mb-6 rounded-full shadow-lg border-4 border-white">
-                <h2 class="text-4xl md:text-5xl font-bold font-title text-stone-900 mb-4">Welcome to The Clan Hearth</h2>
-                <p class="text-lg text-stone-600 mb-8 max-w-3xl mx-auto italic">Troimh theine tha sinn aonaichte</p>
-                <p class="text-lg md:text-xl text-stone-700 max-w-3xl mx-auto">Your digital gateway to Scottish heritage. Explore detailed clan histories, design a personal tartan, or discover the recipes that fueled the Highlands. Your journey starts here.</p>
-            </div>
-        </section>
-
-        <section id="clans-section" class="page-section">
-            <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
-                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-stone-800 font-title">The Clans</h2>
-                    </div>
-                    <div class="sidebar-scroll overflow-y-auto max-h-48 md:max-h-[calc(100vh-220px)]">
-                        </div>
-                </aside>
-                <main id="clans-main-content" class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[calc(100vh-150px)]">
-                    </main>
-            </div>
-        </section>
-
-        <section id="legends-section" class="page-section">
-             <div class="flex flex-col md:flex-row min-h-[calc(100vh-150px)] bg-white/80 rounded-2xl shadow-xl overflow-hidden">
-                <aside class="w-full md:w-64 lg:w-72 bg-stone-100 border-r border-stone-200 p-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-stone-800 font-title">The Legends</h2>
-                    </div>
-                    <div class="sidebar-scroll overflow-y-auto max-h-48 md:max-h-[calc(100vh-220px)]">
-                        </div>
-                </aside>
-                <main id="legends-main-content" class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-h-[calc(100vh-150px)]">
-                    </main>
-            </div>
-        </section>
-        
-        <section id="tartan-designer-section" class="page-section">
-             <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">Design Your Own Tartan</h2>
-                    <p class="text-lg text-stone-600 mt-2">Create, save, and share a unique pattern that tells your story.</p>
-                </div>
-                <div class="flex flex-col lg:flex-row gap-8">
-                    <div class="lg:w-1/3 bg-stone-50 p-6 rounded-xl border border-stone-200">
-                        <div class="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-r-lg">
-                            <h3 class="font-bold">How to Design Your Tartan</h3>
-                            <p class="text-sm mt-1">A tartan is a repeating pattern of colored stripes. You are creating the core pattern, called a "sett." We will automatically mirror it to create the full tartan.</p>
-                        </div>
-                        
-                        <div class="space-y-6">
-                            <div>
-                                <h3 class="text-lg font-semibold mb-2">1. Pick a Colour</h3>
-                                <div id="color-palette" class="grid grid-cols-5 sm:grid-cols-6 gap-3"></div>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold mb-2">2. Set Stripe Size & Add</h3>
-                                <div class="flex items-center gap-3">
-                                    <input type="number" id="thread-count" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 24" min="2">
-                                    <button id="add-stripe-btn" class="bg-yellow-800 text-white font-semibold px-5 py-2 rounded-lg hover:bg-yellow-900 transition-colors shadow">Add</button>
-                                </div>
-                                <p class="text-xs text-stone-500 mt-1">The canvas will show a live preview as you type.</p>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold mb-2">3. Build Your Pattern (The Sett)</h3>
-                                <div id="pattern-list" class="bg-white p-4 rounded-lg h-40 overflow-y-auto border"></div>
-                                <div class="flex justify-end mt-2">
-                                    <button id="clear-pattern-btn" class="bg-red-700 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-800 transition-colors shadow text-sm">Clear</button>
-                                </div>
-                            </div>
-                             <div>
-                                <h3 class="text-lg font-semibold mb-2">4. Name & Save</h3>
-                                <input type="text" id="tartan-name" class="w-full p-2 border border-stone-300 rounded-lg focus:ring-2 focus:ring-yellow-600" placeholder="e.g., 'Monarch of the Glen'">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="lg:w-3/4 flex flex-col">
-                        <div class="bg-white p-2 rounded-xl shadow-inner border flex-grow">
-                            <canvas id="tartan-canvas" class="w-full h-full rounded-lg"></canvas>
-                        </div>
-                        <div class="mt-4 bg-white p-4 rounded-xl border flex items-center justify-center gap-4">
-                            <button id="save-btn" class="flex items-center gap-2 bg-green-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-800 transition-colors shadow">
-                                <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path d="M5.5 16a3.5 3.5 0 01-3.5-3.5V5.5A3.5 3.5 0 015.5 2h9A3.5 3.5 0 0118 5.5v7a3.5 3.5 0 01-3.5 3.5h-9zM4 5.5A1.5 1.5 0 015.5 4h9A1.5 1.5 0 0116 5.5v7a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 014 12.5V5.5z"/><path d="M14.5 7a1 1 0 100-2 1 1 0 000 2z"/></svg>
-                                Save as Image
-                            </button>
-                            <div class="tooltip">
-                                <button id="share-btn" class="flex items-center gap-2 bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-800 transition-colors shadow">
-                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clip-rule="evenodd"/></svg>
-                                    Share Link
-                                </button>
-                                <span class="tooltiptext" id="share-tooltip">Copy sharable link</span>
-                            </div>
-                        </div>
-                         <div class="mt-6">
-                            <h3 class="text-lg font-semibold text-center mb-4">Or, start with a famous tartan:</h3>
-                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="recipes-section" class="page-section">
-            <div class="text-center mb-10">
-                <h1 class="text-4xl md:text-5xl font-bold font-title text-stone-900">The Highlander's Larder</h1>
-                <p class="text-lg text-stone-600 mt-2">An interactive scroll of Scotland's most cherished recipes.</p>
-            </div>
-            <div class="bg-white/80 rounded-xl shadow-lg p-6 md:p-8 mb-10 animate-fade-in">
-                <h3 class="text-2xl font-bold font-title text-stone-800 mb-4 text-center">Recipe Glossary</h3>
-                <div id="recipe-index-list" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-2">
-                    </div>
-            </div>
-            <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
-        </section>
-
-    </main>
-
-    <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
-        <div id="modal-content" class="bg-[#FBF6E8] rounded-lg shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"></div>
+        <div>
+          <canvas id="tartanCanvas" width="512" height="512" class="w-full h-64 rounded-xl border border-stone-300"></canvas>
+        </div>
+      </div>
     </div>
-    <div id="message-box" class="hidden fixed top-20 right-5 text-white py-2 px-4 rounded-lg shadow-lg transition-opacity duration-300 z-50">
-        <p id="message-text"></p>
-    </div>
+  </section>
 
-    
-<section id="clan-map" data-section="clan-map" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Map</h2>
-    <div id="clanMap" class="w-full" style="height:520px;"></div><div class="mt-3 text-xs text-stone-500">Map data &copy; OpenStreetMap contributors.</div>
-  </div>
-</section><section id="tartan-designer" data-section="tartan-designer" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">Tartan Designer</h2>
-    <div class="grid md:grid-cols-2 gap-6"><div class="md:col-span-2 flex gap-3 items-end"><div class="flex-1"><label class="block text-sm mb-1">Choose a tartan</label><select id="tartanSelect" class="w-full border border-stone-300 rounded px-3 py-2 bg-white"></select></div><button id="btnApplyTartan" class="px-4 py-2 rounded bg-amber-600 text-white">Apply Selected</button></div><div><img id="tartanPreview" src="" class="w-full h-64 object-cover rounded-xl shadow"><div class="mt-3 flex gap-2 text-sm"><button id="btnUsePlaceholder" class="px-3 py-2 rounded bg-stone-900 text-white">Use Placeholder</button><button id="btnCycleTartan" class="px-3 py-2 rounded border border-stone-300">Cycle Examples</button><a id="btnDownloadTartan" download="tartan.png" class="px-3 py-2 rounded border border-stone-300" href="#">Download</a></div></div><div><canvas id="tartanCanvas" width="512" height="512" class="w-full h-64 rounded-xl border border-stone-300"></canvas><p class="text-xs text-stone-500 mt-2">Canvas generator draws an approximate sett.</p></div></div>
-  </div>
-</section><section id="clan-finder" data-section="clan-finder" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Finder</h2>
-    <p class="text-stone-700">Search for your surname or clan. (Placeholder)</p><input type="text" placeholder="e.g., MacKenzie" class="mt-3 w-full max-w-md border rounded px-3 py-2">
-  </div>
-</section><section id="recipes" data-section="recipes" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">Traditional Recipes</h2>
-    <ul class="list-disc pl-6 mt-3 text-stone-700"><li>Cullen Skink</li><li>Scotch Broth</li><li>Cranachan</li></ul>
-  </div>
-</section><section id="myths" data-section="myths" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">Myths &amp; Legends</h2>
-    <p class="text-stone-700">Explore tales like the Brahan Seer and Nessie. (Placeholder)</p>
-  </div>
-</section><section id="about" data-section="about" class="min-h-[50vh]">
-  <div class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-2xl md:text-3xl font-semibold mb-4">About The Clan Hearth</h2>
-    <p class="text-stone-700">Through Fire, We Are United. (Placeholder)</p>
-  </div>
-</section>
-<script type="module" src="./js/app.js"></script>
+  <section id="clan-finder" data-section="clan-finder" class="min-h-[50vh]">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Finder</h2>
+      <input type="text" placeholder="e.g., MacKenzie" class="mt-3 w-full max-w-md border rounded px-3 py-2">
+    </div>
+  </section>
+
+  <section id="recipes" data-section="recipes" class="min-h-[50vh]">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Traditional Recipes</h2>
+      <ul class="list-disc pl-6 mt-3 text-stone-700"><li>Cullen Skink</li><li>Scotch Broth</li><li>Cranachan</li></ul>
+    </div>
+  </section>
+
+  <section id="myths" data-section="myths" class="min-h-[50vh]">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Myths &amp; Legends</h2>
+      <p class="text-stone-700">Explore tales like the Brahan Seer and Nessie. (Placeholder)</p>
+    </div>
+  </section>
+
+  <section id="about" data-section="about" class="min-h-[50vh]">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">About The Clan Hearth</h2>
+      <p class="text-stone-700">Through Fire, We Are United. (Placeholder)</p>
+    </div>
+  </section>
+
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>
