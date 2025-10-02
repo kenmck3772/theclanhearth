@@ -1,2 +1,5 @@
-# The Clan Hearth — Flat Bundle
-Drop everything in your repo root. Uses `app.js` + JSON.
+# The Clan Hearth — Fresh Build
+
+• Clan Finder wired to rich `clans.json`
+• Local CSS (no Tailwind CDN)
+• Map + Tartan Designer working from JSON

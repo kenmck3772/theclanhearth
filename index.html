@@ -4,38 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Clan Hearth</title>
-
-  <!-- SEO -->
   <meta name="description" content="The Clan Hearth — Troimh theine tha sinn aonaichte. Find your clan, explore myths, design tartans, and view the clan map.">
   <link rel="canonical" href="https://theclanhearth.com/">
   <meta name="theme-color" content="#d97706">
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://theclanhearth.com/">
-  <meta property="og:title" content="The Clan Hearth">
-  <meta property="og:description" content="Through Fire, We Are United.">
-  <meta property="og:image" content="https://theclanhearth.com/assets/images/hearth-crest.png">
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="The Clan Hearth">
-  <meta name="twitter:description" content="Through Fire, We Are United.">
-  <meta name="twitter:image" content="https://theclanhearth.com/assets/images/hearth-crest.png">
-
-  <!-- Preload hero image -->
   <link rel="preload" as="image" href="./assets/images/castlehome.jpg">
-
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin></script>
-
-  <!-- Favicon + local CSS -->
   <link rel="icon" href="./assets/images/hearth-crest.png">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body class="font-sans text-stone-800 bg-gradient-to-br from-[#FBF6E8] via-[#F5E6D3] to-[#E8D5B7]">
-
   <header id="topNav" class="sticky top-0 z-50 bg-stone-900/80 backdrop-blur border-b border-stone-800 text-stone-200" aria-label="Primary">
     <div class="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
       <a href="#home" data-nav="home" class="flex items-center gap-3">
@@ -54,8 +32,6 @@
     </div>
   </header>
 
-  <a href="#main" class="hidden">Skip to content</a>
-
   <section id="hero" data-section="home" class="relative bg-cover bg-center bg-no-repeat">
     <div class="absolute inset-0 bg-black/40"></div>
     <div class="relative max-w-5xl mx-auto px-6 py-28 text-center text-white">
@@ -68,84 +44,70 @@
     </div>
   </section>
 
-  <main id="main">
-    <section id="clan-map" data-section="map" class="min-h-[60vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-10">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Map</h2>
-        <p class="text-stone-700 mb-4">Markers from <code>locations.json</code>; polygons from <code>map-data.json</code>.</p>
-        <div id="clanMap" class="w-full" style="height: 520px;"></div>
-        <div class="mt-3 text-xs text-stone-500">Map data &copy; OpenStreetMap contributors.</div>
-      </div>
-    </section>
+  <section id="clan-map" data-section="map" class="min-h-[60vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Map</h2>
+      <p class="text-stone-700 mb-4">Markers from <code>locations.json</code>; polygons from <code>map-data.json</code>.</p>
+      <div id="clanMap" class="w-full" style="height: 520px;"></div>
+      <div class="mt-3 text-xs text-stone-500">Map data &copy; OpenStreetMap contributors.</div>
+    </div>
+  </section>
 
-    <section id="tartan-designer" data-section="tartan-designer" class="min-h-[60vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-10">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Tartan Designer</h2>
-        <p class="text-stone-700 mb-4">Choose a tartan from <code>data.json</code>, render to canvas, and download.</p>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="md:col-span-2 flex gap-3 items-end">
-            <div class="flex-1">
-              <label class="block text-sm mb-1">Choose a tartan</label>
-              <select id="tartanSelect" class="w-full border border-stone-300 rounded px-3 py-2 bg-white"></select>
-            </div>
-            <button id="btnApplyTartan" class="px-4 py-2 rounded bg-amber-600 text-white">Apply Selected</button>
+  <section id="tartan-designer" data-section="tartan-designer" class="min-h-[60vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-10">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Tartan Designer</h2>
+      <p class="text-stone-700 mb-4">Choose a tartan from <code>data.json</code>, render to canvas, and download.</p>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="md:col-span-2 flex gap-3 items-end">
+          <div class="flex-1">
+            <label class="block text-sm mb-1">Choose a tartan</label>
+            <select id="tartanSelect" class="w-full border border-stone-300 rounded px-3 py-2 bg-white"></select>
           </div>
-          <div>
-            <img id="tartanPreview" src="" alt="Tartan preview" class="w-full h-64 object-cover rounded-xl shadow">
-            <div class="mt-3 flex gap-2 text-sm">
-              <a id="btnDownloadTartan" download="tartan.png" class="px-3 py-2 rounded border border-stone-300" href="#">Download</a>
-            </div>
-          </div>
-          <div>
-            <canvas id="tartanCanvas" width="512" height="512" class="w-full h-64 rounded-xl border border-stone-300"></canvas>
-            <p class="text-xs text-stone-500 mt-2">Canvas generator draws an approximate sett.</p>
+          <button id="btnApplyTartan" class="px-4 py-2 rounded bg-amber-600 text-white">Apply Selected</button>
+        </div>
+        <div>
+          <img id="tartanPreview" src="" alt="Tartan preview" class="w-full h-64 object-cover rounded-xl shadow">
+          <div class="mt-3 flex gap-2 text-sm">
+            <a id="btnDownloadTartan" download="tartan.png" class="px-3 py-2 rounded border border-stone-300" href="#">Download</a>
           </div>
         </div>
+        <div>
+          <canvas id="tartanCanvas" width="512" height="512" class="w-full h-64 rounded-xl border border-stone-300"></canvas>
+          <p class="text-xs text-stone-500 mt-2">Canvas generator draws an approximate sett.</p>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="clan-finder" data-section="clan-finder" class="min-h-[50vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Finder</h2>
-        <p class="text-stone-700">Search for your surname or clan. (Hook to <code>clans.json</code> later.)</p>
-        <input type="text" placeholder="e.g., MacKenzie" class="mt-3 w-full max-w-md border rounded px-3 py-2">
-      </div>
-    </section>
+  <section id="clan-finder" data-section="clan-finder" class="min-h-[50vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Clan Finder</h2>
+      <p class="text-stone-700">Search for your surname or clan. (Now shows regions, seats, mottos & variants.)</p>
+      <input type="text" placeholder="e.g., MacKenzie, McDonald, Calhoun…" class="mt-3 w-full max-w-md border rounded px-3 py-2">
+    </div>
+  </section>
 
-    <section id="recipes" data-section="recipes" class="min-h-[50vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Traditional Recipes</h2>
-        <ul class="list-disc pl-6 mt-3 text-stone-700"><li>Cullen Skink</li><li>Scotch Broth</li><li>Cranachan</li></ul>
-      </div>
-    </section>
+  <section id="recipes" data-section="recipes" class="min-h-[50vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Traditional Recipes</h2>
+      <ul class="list-disc pl-6 mt-3 text-stone-700"><li>Cullen Skink</li><li>Scotch Broth</li><li>Cranachan</li></ul>
+    </div>
+  </section>
 
-    <section id="myths" data-section="myths" class="min-h-[50vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">Myths &amp; Legends</h2>
-        <p class="text-stone-700">Explore tales like the Brahan Seer and Nessie. (Data in <code>legends.json</code>.)</p>
-      </div>
-    </section>
+  <section id="myths" data-section="myths" class="min-h-[50vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">Myths &amp; Legends</h2>
+      <p class="text-stone-700">Explore tales like the Brahan Seer and Nessie. (Data in <code>legends.json</code>.)</p>
+    </div>
+  </section>
 
-    <section id="about" data-section="about" class="min-h-[50vh] section">
-      <div class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-2xl md:text-3xl font-semibold mb-4">About The Clan Hearth</h2>
-        <p class="text-stone-700">Through Fire, We Are United. (Placeholder)</p>
-      </div>
-    </section>
-  </main>
+  <section id="about" data-section="about" class="min-h-[50vh] section">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <h2 class="text-2xl md:text-3xl font-semibold mb-4">About The Clan Hearth</h2>
+      <p class="text-stone-700">Through Fire, We Are United. (Placeholder)</p>
+    </div>
+  </section>
 
   <script type="module" src="./app.js"></script>
-
-  <!-- Analytics (choose one and replace values) -->
-  <!-- Plausible: <script defer data-domain="theclanhearth.com" src="https://plausible.io/js/script.js"></script> -->
-  <!-- GA4:
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXX');
-  </script>
-  -->
 </body>
 </html>
