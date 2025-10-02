@@ -1,0 +1,111 @@
+{
+  "tartanExamples": [
+    {
+      "name": "Placeholder",
+      "image": "./assets/images/tartans/tartan-placeholder.png"
+    },
+    {
+      "name": "Modern",
+      "image": "./assets/images/tartans/tartan-modern.png"
+    },
+    {
+      "name": "Ancient",
+      "image": "./assets/images/tartans/tartan-ancient.png"
+    },
+    {
+      "name": "Hunting",
+      "image": "./assets/images/tartans/tartan-hunting.png"
+    }
+  ],
+  "tartanPatterns": {
+    "Royal Stewart": {
+      "palette": {
+        "R": "#B00000",
+        "K": "#101010",
+        "W": "#FFFFFF",
+        "Y": "#F2C94C",
+        "G": "#1E5F2A",
+        "B": "#0E2A57"
+      },
+      "sett": [
+        [
+          "R",
+          24
+        ],
+        [
+          "K",
+          4
+        ],
+        [
+          "W",
+          2
+        ],
+        [
+          "K",
+          4
+        ],
+        [
+          "Y",
+          2
+        ],
+        [
+          "R",
+          8
+        ],
+        [
+          "G",
+          8
+        ],
+        [
+          "R",
+          8
+        ],
+        [
+          "K",
+          6
+        ],
+        [
+          "B",
+          8
+        ],
+        [
+          "K",
+          6
+        ],
+        [
+          "R",
+          24
+        ]
+      ]
+    },
+    "Black Watch": {
+      "palette": {
+        "K": "#101010",
+        "G": "#0F3D2C",
+        "N": "#0A2A4A"
+      },
+      "sett": [
+        [
+          "G",
+          28
+        ],
+        [
+          "N",
+          28
+        ],
+        [
+          "K",
+          12
+        ],
+        [
+          "N",
+          28
+        ],
+        [
+          "G",
+          28
+        ]
+      ]
+    }
+  }
+}
