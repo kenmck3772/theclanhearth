@@ -1,6 +1,7 @@
-// ===== The Clan Hearth — SPA + Clan Finder + Map highlight =====
+// ===== The Clan Hearth — Enhanced SPA + Clan Finder + Map highlight =====
 
-// -------- Router (unchanged) --------
+// -------- Router (enhanced for new navigation) --------
+// Supports both original data-nav system and enhanced href-based navigation
 const CANON = ["home","clan-finder","tartan-designer","recipes","myths","map","about"];
 const ALIAS = { "clans":"clan-finder", "legends":"myths" };
 const normalize = (id) => ALIAS[id] || id;
@@ -26,8 +27,9 @@ function wireSections(){
 const hideAll = () => qsa("[data-section]").forEach(s=>s.classList.add("hidden"));
 const show = (id) => {
   qs(`[data-section="${id}"]`)?.classList.remove("hidden");
-  qsa("#topNav .nav-link, #topNav [data-nav]").forEach(a => a.classList.remove("text-amber-400","font-semibold"));
-  qs(`#topNav [data-nav="${id}"]`)?.classList.add("text-amber-400","font-semibold");
+  // Update navigation highlighting for both old and new nav systems
+  qsa("#topNav .nav-link, #topNav [data-nav], #main-nav .nav-link").forEach(a => a.classList.remove("text-amber-400","font-semibold","active"));
+  qs(`#topNav [data-nav="${id}"], #main-nav [data-nav="${id}"]`)?.classList.add("text-amber-400","font-semibold","active");
 };
 function initialSection(){
   const raw = (location.hash||"").replace("#","");
@@ -46,6 +48,12 @@ document.addEventListener("click", (e) => {
   history.replaceState(null, "", "#" + id);
   hideAll(); show(id);
   document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  
+  // Close mobile menu if open
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+    mobileMenu.classList.add('hidden');
+  }
 });
 
 // -------- Hero/logo safety (keeps preload warning harmless) --------
@@ -256,4 +264,48 @@ document.addEventListener('DOMContentLoaded', async () => {
   // If user lands on #map first, load map layers once
   const s = document.querySelector('[data-section="map"]');
   if (s && !s.classList.contains("hidden")) initMap();
+  
+  // Initialize enhanced features
+  initializeEnhancedFeatures();
 });
+
+// ===== Enhanced Features =====
+function initializeEnhancedFeatures() {
+  // Mobile menu functionality
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+  
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+      if (!mobileMenu.contains(e.target) && !mobileMenuBtn?.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+      }
+    }
+  });
+  
+  // Enhanced navigation highlighting
+  updateNavigationState();
+  
+  console.log('Enhanced Clan Hearth features initialized');
+}
+
+function updateNavigationState() {
+  const currentHash = (location.hash || '').replace('#', '');
+  const currentSection = normalize(currentHash) || 'home';
+  
+  // Update all navigation links
+  qsa('.nav-link').forEach(link => {
+    link.classList.remove('active');
+    if (link.dataset.nav === currentSection || 
+        (link.getAttribute('href') || '').replace('#', '') === currentSection) {
+      link.classList.add('active');
+    }
+  });
+}
