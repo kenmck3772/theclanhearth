@@ -1,4 +1,102 @@
-:root{--stone-900:#1c1917;--stone-800:#292524;--stone-700:#44403c;--stone-500:#78716c;--stone-300:#d6d3d1;--stone-200:#e7e5e4;--amber-600:#d97706;--amber-400:#fbbf24}
+/* Slideshow Styles */
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.slide {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background-size: cover;
+    background-position: center;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+    color: white;
+    padding: 30px;
+}
+
+.slide-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Cinzel', serif;
+}
+
+.slide-description {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.slide-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.slide-nav button {
+    background: rgba(255,255,255,0.3);
+    border: none;
+    color: white;
+    font-size: 24px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.slide-nav button:hover {
+    background: rgba(255,255,255,0.5);
+    transform: scale(1.1);
+}
+
+.slide-dots {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Auto-play toggle */
+.auto-play-toggle
+root{--stone-900:#1c1917;--stone-800:#292524;--stone-700:#44403c;--stone-500:#78716c;--stone-300:#d6d3d1;--stone-200:#e7e5e4;--amber-600:#d97706;--amber-400:#fbbf24}
 *{box-sizing:border-box}html{line-height:1.5}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
 img{max-width:100%;display:block}a{color:inherit;text-decoration:none}
 .hidden{display:none!important}.sticky{position:sticky}.relative{position:relative}.absolute{position:absolute}.top-0{top:0}.inset-0{top:0;right:0;bottom:0;left:0}.z-50{z-index:50}
