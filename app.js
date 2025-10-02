@@ -1,4 +1,4 @@
-// app content placeholder will be replaced by earlier step if available.
+
 // === The Clan Hearth SPA + Clan Finder (robust loader) ===
 const CANON = ["home","clan-finder","tartan-designer","recipes","myths","map","about"];
 const ALIAS = { "clans":"clan-finder", "legends":"myths" };
