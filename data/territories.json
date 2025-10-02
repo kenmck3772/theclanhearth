@@ -1,0 +1,705 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "mackenzie",
+        "name": "Clan MacKenzie",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.95,
+              57.24
+            ],
+            [
+              -3.95,
+              57.24
+            ],
+            [
+              -3.95,
+              57.940000000000005
+            ],
+            [
+              -4.95,
+              57.940000000000005
+            ],
+            [
+              -4.95,
+              57.24
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "campbell",
+        "name": "Clan Campbell",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -5.57,
+              55.89
+            ],
+            [
+              -4.57,
+              55.89
+            ],
+            [
+              -4.57,
+              56.59
+            ],
+            [
+              -5.57,
+              56.59
+            ],
+            [
+              -5.57,
+              55.89
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "macdonald",
+        "name": "Clan MacDonald",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -6.84,
+              57.25
+            ],
+            [
+              -5.84,
+              57.25
+            ],
+            [
+              -5.84,
+              57.95
+            ],
+            [
+              -6.84,
+              57.95
+            ],
+            [
+              -6.84,
+              57.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "fraser",
+        "name": "Clan Fraser of Lovat",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.96,
+              57.129999999999995
+            ],
+            [
+              -3.96,
+              57.129999999999995
+            ],
+            [
+              -3.96,
+              57.83
+            ],
+            [
+              -4.96,
+              57.83
+            ],
+            [
+              -4.96,
+              57.129999999999995
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "macleod",
+        "name": "Clan MacLeod",
+        "color": "#000000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -7.09,
+              57.089999999999996
+            ],
+            [
+              -6.09,
+              57.089999999999996
+            ],
+            [
+              -6.09,
+              57.79
+            ],
+            [
+              -7.09,
+              57.79
+            ],
+            [
+              -7.09,
+              57.089999999999996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "gordon",
+        "name": "Clan Gordon",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -3.28,
+              57.089999999999996
+            ],
+            [
+              -2.28,
+              57.089999999999996
+            ],
+            [
+              -2.28,
+              57.79
+            ],
+            [
+              -3.28,
+              57.79
+            ],
+            [
+              -3.28,
+              57.089999999999996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "cameron",
+        "name": "Clan Cameron",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -5.78,
+              56.54
+            ],
+            [
+              -4.78,
+              56.54
+            ],
+            [
+              -4.78,
+              57.24
+            ],
+            [
+              -5.78,
+              57.24
+            ],
+            [
+              -5.78,
+              56.54
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "stewart",
+        "name": "Clan Stewart",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.4399999999999995,
+              55.769999999999996
+            ],
+            [
+              -3.44,
+              55.769999999999996
+            ],
+            [
+              -3.44,
+              56.47
+            ],
+            [
+              -4.4399999999999995,
+              56.47
+            ],
+            [
+              -4.4399999999999995,
+              55.769999999999996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "scott",
+        "name": "Clan Scott",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -3.26,
+              55.17
+            ],
+            [
+              -2.26,
+              55.17
+            ],
+            [
+              -2.26,
+              55.870000000000005
+            ],
+            [
+              -3.26,
+              55.870000000000005
+            ],
+            [
+              -3.26,
+              55.17
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "sinclair",
+        "name": "Clan Sinclair",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.0,
+              58.25
+            ],
+            [
+              -3.0,
+              58.25
+            ],
+            [
+              -3.0,
+              58.95
+            ],
+            [
+              -4.0,
+              58.95
+            ],
+            [
+              -4.0,
+              58.25
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "douglas",
+        "name": "Clan Douglas",
+        "color": "#000000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.34,
+              55.21
+            ],
+            [
+              -3.34,
+              55.21
+            ],
+            [
+              -3.34,
+              55.910000000000004
+            ],
+            [
+              -4.34,
+              55.910000000000004
+            ],
+            [
+              -4.34,
+              55.21
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "grant",
+        "name": "Clan Grant",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.12,
+              56.98
+            ],
+            [
+              -3.12,
+              56.98
+            ],
+            [
+              -3.12,
+              57.68
+            ],
+            [
+              -4.12,
+              57.68
+            ],
+            [
+              -4.12,
+              56.98
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "macgregor",
+        "name": "Clan MacGregor",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.88,
+              56.03
+            ],
+            [
+              -3.88,
+              56.03
+            ],
+            [
+              -3.88,
+              56.730000000000004
+            ],
+            [
+              -4.88,
+              56.730000000000004
+            ],
+            [
+              -4.88,
+              56.03
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "macneil",
+        "name": "Clan MacNeil",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -7.99,
+              56.6
+            ],
+            [
+              -6.99,
+              56.6
+            ],
+            [
+              -6.99,
+              57.300000000000004
+            ],
+            [
+              -7.99,
+              57.300000000000004
+            ],
+            [
+              -7.99,
+              56.6
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "bruce",
+        "name": "Clan Bruce",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -5.32,
+              54.97
+            ],
+            [
+              -4.32,
+              54.97
+            ],
+            [
+              -4.32,
+              55.67
+            ],
+            [
+              -5.32,
+              55.67
+            ],
+            [
+              -5.32,
+              54.97
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "macintosh",
+        "name": "Clan MacIntosh",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.55,
+              57.089999999999996
+            ],
+            [
+              -3.55,
+              57.089999999999996
+            ],
+            [
+              -3.55,
+              57.79
+            ],
+            [
+              -4.55,
+              57.79
+            ],
+            [
+              -4.55,
+              57.089999999999996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "ross",
+        "name": "Clan Ross",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.67,
+              57.35
+            ],
+            [
+              -3.67,
+              57.35
+            ],
+            [
+              -3.67,
+              58.050000000000004
+            ],
+            [
+              -4.67,
+              58.050000000000004
+            ],
+            [
+              -4.67,
+              57.35
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "munro",
+        "name": "Clan Munro",
+        "color": "#990000"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -4.81,
+              57.269999999999996
+            ],
+            [
+              -3.8099999999999996,
+              57.269999999999996
+            ],
+            [
+              -3.8099999999999996,
+              57.97
+            ],
+            [
+              -4.81,
+              57.97
+            ],
+            [
+              -4.81,
+              57.269999999999996
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "forbes",
+        "name": "Clan Forbes",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -3.32,
+              56.99
+            ],
+            [
+              -2.32,
+              56.99
+            ],
+            [
+              -2.32,
+              57.690000000000005
+            ],
+            [
+              -3.32,
+              57.690000000000005
+            ],
+            [
+              -3.32,
+              56.99
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "maclean",
+        "name": "Clan MacLean",
+        "color": "#003366"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -6.15,
+              56.1
+            ],
+            [
+              -5.15,
+              56.1
+            ],
+            [
+              -5.15,
+              56.800000000000004
+            ],
+            [
+              -6.15,
+              56.800000000000004
+            ],
+            [
+              -6.15,
+              56.1
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

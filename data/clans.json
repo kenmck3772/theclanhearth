@@ -1,1 +1,348 @@
-
+[
+  {
+    "id": "mackenzie",
+    "name": "Clan MacKenzie",
+    "motto": "Luceo Non Uro",
+    "region": "Highlands",
+    "seats": [
+      "Castle Leod",
+      "Eilean Donan"
+    ],
+    "lat": 57.59,
+    "lon": -4.45,
+    "crest": "assets/images/crests/mackenzie.png",
+    "tartanColors": [
+      "#003366",
+      "#990000",
+      "#006633"
+    ]
+  },
+  {
+    "id": "campbell",
+    "name": "Clan Campbell",
+    "motto": "Ne Obliviscaris",
+    "region": "Argyll",
+    "seats": [
+      "Inveraray Castle",
+      "Castle Campbell"
+    ],
+    "lat": 56.24,
+    "lon": -5.07,
+    "crest": "assets/images/crests/campbell.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#222222"
+    ]
+  },
+  {
+    "id": "macdonald",
+    "name": "Clan MacDonald",
+    "motto": "Per mare, per terras",
+    "region": "Hebrides",
+    "seats": [
+      "Finlaggan",
+      "Duntulm"
+    ],
+    "lat": 57.6,
+    "lon": -6.34,
+    "crest": "assets/images/crests/macdonald.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#006633"
+    ]
+  },
+  {
+    "id": "fraser",
+    "name": "Clan Fraser of Lovat",
+    "motto": "Je suis prest",
+    "region": "The Aird",
+    "seats": [
+      "Beaufort Castle"
+    ],
+    "lat": 57.48,
+    "lon": -4.46,
+    "crest": "assets/images/crests/fraser.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#222222"
+    ]
+  },
+  {
+    "id": "macleod",
+    "name": "Clan MacLeod",
+    "motto": "Hold Fast",
+    "region": "Skye & Harris",
+    "seats": [
+      "Dunvegan Castle"
+    ],
+    "lat": 57.44,
+    "lon": -6.59,
+    "crest": "assets/images/crests/macleod.png",
+    "tartanColors": [
+      "#000000",
+      "#FFD200",
+      "#333333"
+    ]
+  },
+  {
+    "id": "gordon",
+    "name": "Clan Gordon",
+    "motto": "Bydand",
+    "region": "Aberdeenshire",
+    "seats": [
+      "Huntly Castle"
+    ],
+    "lat": 57.44,
+    "lon": -2.78,
+    "crest": "assets/images/crests/gordon.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#FFD200"
+    ]
+  },
+  {
+    "id": "cameron",
+    "name": "Clan Cameron",
+    "motto": "Aonaibh ri ch\u00e8ile",
+    "region": "Lochaber",
+    "seats": [
+      "Achnacarry"
+    ],
+    "lat": 56.89,
+    "lon": -5.28,
+    "crest": "assets/images/crests/cameron.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#222222"
+    ]
+  },
+  {
+    "id": "stewart",
+    "name": "Clan Stewart",
+    "motto": "Virescit vulnere virtus",
+    "region": "Lowlands & Highlands",
+    "seats": [
+      "Stirling Castle",
+      "Holyrood"
+    ],
+    "lat": 56.12,
+    "lon": -3.94,
+    "crest": "assets/images/crests/stewart.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#006633"
+    ]
+  },
+  {
+    "id": "scott",
+    "name": "Clan Scott",
+    "motto": "Amo",
+    "region": "Borders",
+    "seats": [
+      "Branxholme"
+    ],
+    "lat": 55.52,
+    "lon": -2.76,
+    "crest": "assets/images/crests/scott.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#990000"
+    ]
+  },
+  {
+    "id": "sinclair",
+    "name": "Clan Sinclair",
+    "motto": "Commit thy Work to God",
+    "region": "Caithness & Orkney",
+    "seats": [
+      "Castle of Mey",
+      "Roslin"
+    ],
+    "lat": 58.6,
+    "lon": -3.5,
+    "crest": "assets/images/crests/sinclair.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#555555"
+    ]
+  },
+  {
+    "id": "douglas",
+    "name": "Clan Douglas",
+    "motto": "Jamais arri\u00e8re",
+    "region": "Lowlands",
+    "seats": [
+      "Douglas Castle"
+    ],
+    "lat": 55.56,
+    "lon": -3.84,
+    "crest": "assets/images/crests/douglas.png",
+    "tartanColors": [
+      "#000000",
+      "#333333",
+      "#006633"
+    ]
+  },
+  {
+    "id": "grant",
+    "name": "Clan Grant",
+    "motto": "Stand Fast",
+    "region": "Strathspey",
+    "seats": [
+      "Castle Grant"
+    ],
+    "lat": 57.33,
+    "lon": -3.62,
+    "crest": "assets/images/crests/grant.png",
+    "tartanColors": [
+      "#003366",
+      "#990000",
+      "#FFD200"
+    ]
+  },
+  {
+    "id": "macgregor",
+    "name": "Clan MacGregor",
+    "motto": "S Rioghal Mo Dhream",
+    "region": "Breadalbane",
+    "seats": [
+      "Balquhidder"
+    ],
+    "lat": 56.38,
+    "lon": -4.38,
+    "crest": "assets/images/crests/macgregor.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#006633"
+    ]
+  },
+  {
+    "id": "macneil",
+    "name": "Clan MacNeil",
+    "motto": "Buaidh no bas",
+    "region": "Barra",
+    "seats": [
+      "Kisimul Castle"
+    ],
+    "lat": 56.95,
+    "lon": -7.49,
+    "crest": "assets/images/crests/macneil.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#222222"
+    ]
+  },
+  {
+    "id": "bruce",
+    "name": "Clan Bruce",
+    "motto": "Fuimus",
+    "region": "Ayrshire & Annandale",
+    "seats": [
+      "Turnberry",
+      "Lochmaben"
+    ],
+    "lat": 55.32,
+    "lon": -4.82,
+    "crest": "assets/images/crests/bruce.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#006633"
+    ]
+  },
+  {
+    "id": "macintosh",
+    "name": "Clan MacIntosh",
+    "motto": "Touch not the cat bot a glove",
+    "region": "Inverness-shire",
+    "seats": [
+      "Moy Hall"
+    ],
+    "lat": 57.44,
+    "lon": -4.05,
+    "crest": "assets/images/crests/macintosh.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#333333"
+    ]
+  },
+  {
+    "id": "ross",
+    "name": "Clan Ross",
+    "motto": "Spem successus alit",
+    "region": "Easter Ross",
+    "seats": [
+      "Balnagown"
+    ],
+    "lat": 57.7,
+    "lon": -4.17,
+    "crest": "assets/images/crests/ross.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#FFD200"
+    ]
+  },
+  {
+    "id": "munro",
+    "name": "Clan Munro",
+    "motto": "Dread God",
+    "region": "Easter Ross",
+    "seats": [
+      "Foulis Castle"
+    ],
+    "lat": 57.62,
+    "lon": -4.31,
+    "crest": "assets/images/crests/munro.png",
+    "tartanColors": [
+      "#990000",
+      "#003366",
+      "#006633"
+    ]
+  },
+  {
+    "id": "forbes",
+    "name": "Clan Forbes",
+    "motto": "Grace me guide",
+    "region": "Aberdeenshire",
+    "seats": [
+      "Druminnor"
+    ],
+    "lat": 57.34,
+    "lon": -2.82,
+    "crest": "assets/images/crests/forbes.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#222222"
+    ]
+  },
+  {
+    "id": "maclean",
+    "name": "Clan MacLean",
+    "motto": "Virtue Mine Honour",
+    "region": "Mull",
+    "seats": [
+      "Duart Castle"
+    ],
+    "lat": 56.45,
+    "lon": -5.65,
+    "crest": "assets/images/crests/maclean.png",
+    "tartanColors": [
+      "#003366",
+      "#006633",
+      "#990000"
+    ]
+  }
+]
