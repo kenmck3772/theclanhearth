@@ -1,1 +1,2 @@
-Full website bundle for GitHub Pages. Replace assets/images/*.png|jpg with your real images.
+# The Clan Hearth — Flat Bundle
+Drop everything in your repo root. Uses `app.js` + JSON.
