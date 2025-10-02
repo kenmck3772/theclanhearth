@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://theclanhearth.com/sitemap.xml
+# Last-Modified: 2025-10-02
