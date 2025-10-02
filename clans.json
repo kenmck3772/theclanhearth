@@ -1,155 +1,89 @@
 [
   {
     "name": "MacDonald",
+    "gaelic_name": "D\u00f2mhnall",
     "surnames": [
       "MacDonald",
       "McDonald",
       "MacDonell",
       "McDonnell",
       "MacDonnell",
-      "Donaldson",
-      "Macdonal",
-      "MacDonal"
-    ]
+      "Donaldson"
+    ],
+    "region": "Isles & West Highlands",
+    "motto": "Per mare per terras",
+    "war_cry": "Fraoch Eilean",
+    "chief": "The Lord Macdonald of Sleat (modern branch)",
+    "plant_badge": "Heather",
+    "animal": "Eagle",
+    "tartans": [
+      "Modern",
+      "Ancient",
+      "Hunting",
+      "Dress"
+    ],
+    "septs": [
+      "Donald",
+      "Clanranald",
+      "MacIain",
+      "MacAlister"
+    ],
+    "seats": [
+      {
+        "name": "Armadale Castle, Skye",
+        "coords": [
+          57.051,
+          -5.911
+        ]
+      }
+    ],
+    "territories": [
+      "macdonald_isles"
+    ],
+    "crest": "./assets/images/emblems/clan-hearth-emblem.jpg",
+    "source": "https://en.wikipedia.org/wiki/Clan_Donald"
   },
   {
     "name": "Campbell",
+    "gaelic_name": "Caimbeul",
     "surnames": [
       "Campbell",
       "Caimbeul",
-      "Cambell",
-      "Campbel",
-      "MacCaimbeul"
-    ]
-  },
-  {
-    "name": "Fraser",
-    "surnames": [
-      "Fraser",
-      "Frazer",
-      "Frasier",
-      "Frazier"
-    ]
-  },
-  {
-    "name": "Grant",
-    "surnames": [
-      "Grant",
-      "Grannt",
-      "Grannd"
-    ]
-  },
-  {
-    "name": "Gordon",
-    "surnames": [
-      "Gordon",
-      "Gourdon",
-      "Gorden"
-    ]
-  },
-  {
-    "name": "MacLeod",
-    "surnames": [
-      "MacLeod",
-      "McLeod",
-      "MacCloud",
-      "MacLe\u00f2id"
-    ]
-  },
-  {
-    "name": "MacKenzie",
-    "surnames": [
-      "MacKenzie",
-      "Mackenzie",
-      "McKenzie",
-      "MacKenzy"
-    ]
-  },
-  {
-    "name": "MacGregor",
-    "surnames": [
-      "MacGregor",
-      "McGregor",
-      "Gregor",
-      "Gregorson"
-    ]
-  },
-  {
-    "name": "MacLean",
-    "surnames": [
-      "MacLean",
-      "McLean",
-      "MacLaine",
-      "McLaine"
-    ]
-  },
-  {
-    "name": "MacIntosh",
-    "surnames": [
-      "MacIntosh",
-      "McIntosh",
-      "MacKintosh",
-      "Mackintosh"
-    ]
-  },
-  {
-    "name": "Cameron",
-    "surnames": [
-      "Cameron",
-      "Camron",
-      "Camoran"
-    ]
-  },
-  {
-    "name": "Sinclair",
-    "surnames": [
-      "Sinclair",
-      "St Clair",
-      "Sinkler"
-    ]
-  },
-  {
-    "name": "Stewart",
-    "surnames": [
-      "Stewart",
-      "Stuart",
-      "Steuart"
-    ]
-  },
-  {
-    "name": "Sutherland",
-    "surnames": [
-      "Sutherland",
-      "Southerland",
-      "Sutherlin"
-    ]
-  },
-  {
-    "name": "Douglas",
-    "surnames": [
-      "Douglas",
-      "Douglass",
-      "Dowglas"
-    ]
-  },
-  {
-    "name": "Buchanan",
-    "surnames": [
-      "Buchanan",
-      "Buchannan",
-      "Buchanon",
-      "MacAuslan"
-    ]
-  },
-  {
-    "name": "Chisholm",
-    "surnames": [
-      "Chisholm",
-      "Chisolm",
-      "Chisholme",
-      "Chism",
-      "Chisum"
-    ]
+      "Cambell"
+    ],
+    "region": "Argyll",
+    "motto": "Ne Obliviscaris",
+    "war_cry": "Cruachan!",
+    "chief": "The Duke of Argyll",
+    "plant_badge": "Bog Myrtle",
+    "animal": "Boar",
+    "tartans": [
+      "Modern",
+      "Ancient",
+      "Hunting",
+      "Dress"
+    ],
+    "septs": [
+      "MacArthur",
+      "MacIver",
+      "MacIsaac",
+      "Burns",
+      "Ivory"
+    ],
+    "seats": [
+      {
+        "name": "Inveraray Castle",
+        "coords": [
+          56.232,
+          -5.073
+        ]
+      }
+    ],
+    "territories": [
+      "campbell_argyll"
+    ],
+    "crest": "./assets/images/emblems/clan-hearth-emblem.jpg",
+    "source": "https://en.wikipedia.org/wiki/Clan_Campbell"
   },
   {
     "name": "Colquhoun",
@@ -158,105 +92,35 @@
       "Calhoun",
       "Colhoun",
       "Colquoun"
-    ]
-  },
-  {
-    "name": "Drummond",
-    "surnames": [
-      "Drummond",
-      "Drummonds",
-      "Drumond"
-    ]
-  },
-  {
-    "name": "Farquharson",
-    "surnames": [
-      "Farquharson",
-      "Farquhar",
-      "Farquarson",
-      "Farquar"
-    ]
-  },
-  {
-    "name": "Forbes",
-    "surnames": [
-      "Forbes",
-      "Forbis",
-      "Forbess"
-    ]
-  },
-  {
-    "name": "Hay",
-    "surnames": [
-      "Hay",
-      "Haye",
-      "de la Haye",
-      "Hayes"
-    ]
-  },
-  {
-    "name": "Keith",
-    "surnames": [
-      "Keith",
-      "Keeth",
-      "Keth"
-    ]
-  },
-  {
-    "name": "Kerr",
-    "surnames": [
-      "Kerr",
-      "Ker",
-      "Carr"
-    ]
-  },
-  {
-    "name": "Lamont",
-    "surnames": [
-      "Lamont",
-      "Lamonte",
-      "MacLamont",
-      "MacLaomainn"
-    ]
-  },
-  {
-    "name": "Lennox",
-    "surnames": [
-      "Lennox",
-      "Lenox",
-      "Levenax"
-    ]
-  },
-  {
-    "name": "Leslie",
-    "surnames": [
-      "Leslie",
-      "Lesley",
-      "Lesslie"
-    ]
-  },
-  {
-    "name": "Lindsay",
-    "surnames": [
-      "Lindsay",
-      "Lindsey"
-    ]
-  },
-  {
-    "name": "Lyon",
-    "surnames": [
-      "Lyon",
-      "Lyons"
-    ]
-  },
-  {
-    "name": "MacFarlane",
-    "surnames": [
-      "MacFarlane",
-      "McFarlane",
-      "MacFarlan",
-      "McFarland"
-    ]
+    ],
+    "region": "Loch Lomond (Dunbartonshire)",
+    "motto": "Si Je Puis",
+    "tartans": [
+      "Modern",
+      "Ancient",
+      "Hunting",
+      "Dress"
+    ],
+    "septs": [
+      "Cowan",
+      "Kilpatrick",
+      "King",
+      "McLintock"
+    ],
+    "seats": [
+      {
+        "name": "Rossdhu House",
+        "coords": [
+          56.005,
+          -4.638
+        ]
+      }
+    ],
+    "territories": [
+      "colquhoun_lomond"
+    ],
+    "crest": "./assets/images/emblems/clan-hearth-emblem.jpg",
+    "source": "https://en.wikipedia.org/wiki/Clan_Colquhoun"
   },
   {
     "name": "MacInnes",
@@ -265,348 +129,53 @@
       "McInnes",
       "MacInnis",
       "McInnis"
-    ]
-  },
-  {
-    "name": "MacKinnon",
-    "surnames": [
-      "MacKinnon",
-      "McKinnon",
-      "MacKinnen",
-      "McKinnen"
-    ]
-  },
-  {
-    "name": "MacLachlan",
-    "surnames": [
-      "MacLachlan",
-      "McLachlan",
-      "MacLaughlin"
-    ]
-  },
-  {
-    "name": "MacLaren",
-    "surnames": [
-      "MacLaren",
-      "McLaren",
-      "MacLaurin",
-      "McLaurin"
-    ]
-  },
-  {
-    "name": "MacNab",
-    "surnames": [
-      "MacNab",
-      "McNab",
-      "MacNabb",
-      "McNabb"
-    ]
-  },
-  {
-    "name": "MacNaughton",
-    "surnames": [
-      "MacNaughton",
-      "McNaughton",
-      "MacNaghten"
-    ]
-  },
-  {
-    "name": "MacNeil",
-    "surnames": [
-      "MacNeil",
-      "McNeil",
-      "MacNeill",
-      "McNeill"
-    ]
-  },
-  {
-    "name": "MacPherson",
-    "surnames": [
-      "MacPherson",
-      "McPherson",
-      "MacPhearson"
-    ]
-  },
-  {
-    "name": "MacIntyre",
-    "surnames": [
-      "MacIntyre",
-      "McIntyre",
-      "MacIntire",
-      "McIntire"
-    ]
-  },
-  {
-    "name": "MacRae",
-    "surnames": [
-      "MacRae",
-      "McRae",
-      "McCrae",
-      "MacRath"
-    ]
-  },
-  {
-    "name": "MacMillan",
-    "surnames": [
-      "MacMillan",
-      "McMillan",
-      "MacMillen",
-      "McMillen"
-    ]
-  },
-  {
-    "name": "Munro",
-    "surnames": [
-      "Munro",
-      "Monro",
-      "Munroe"
-    ]
-  },
-  {
-    "name": "Ross",
-    "surnames": [
-      "Ross",
-      "Ros",
-      "Roos"
-    ]
-  },
-  {
-    "name": "Crawford",
-    "surnames": [
-      "Crawford",
-      "Craufurd"
-    ]
-  },
-  {
-    "name": "Gunn",
-    "surnames": [
-      "Gunn",
-      "Gun",
-      "Guinn"
-    ]
-  },
-  {
-    "name": "MacDuff",
-    "surnames": [
-      "MacDuff",
-      "McDuff",
-      "Duff"
-    ]
-  },
-  {
-    "name": "Burnett",
-    "surnames": [
-      "Burnett",
-      "Burnet"
-    ]
-  },
-  {
-    "name": "Cumming",
-    "surnames": [
-      "Cumming",
-      "Cummings",
-      "Comyn",
-      "Cummins"
-    ]
-  },
-  {
-    "name": "Davidson",
-    "surnames": [
-      "Davidson",
-      "Davison"
-    ]
-  },
-  {
-    "name": "Morrison",
-    "surnames": [
-      "Morrison",
-      "Morison",
-      "Morrieson"
-    ]
-  },
-  {
-    "name": "Mackay",
-    "surnames": [
-      "Mackay",
-      "MacKay",
-      "McKay",
-      "McCay"
-    ]
-  },
-  {
-    "name": "MacLellan",
-    "surnames": [
-      "MacLellan",
-      "McLellan",
-      "MacLelland"
-    ]
-  },
-  {
-    "name": "Ramsay",
-    "surnames": [
-      "Ramsay",
-      "Ramsey"
-    ]
-  },
-  {
-    "name": "Seton",
-    "surnames": [
-      "Seton",
-      "Seaton"
-    ]
-  },
-  {
-    "name": "Urquhart",
-    "surnames": [
-      "Urquhart",
-      "Urchard",
-      "Urquhard"
-    ]
-  },
-  {
-    "name": "Wallace",
-    "surnames": [
-      "Wallace",
-      "Wallis"
-    ]
-  },
-  {
-    "name": "Boyd",
-    "surnames": [
-      "Boyd",
-      "Boid"
-    ]
-  },
-  {
-    "name": "Brodie",
-    "surnames": [
-      "Brodie",
-      "Brody"
-    ]
-  },
-  {
-    "name": "Bruce",
-    "surnames": [
-      "Bruce",
-      "Brus"
-    ]
-  },
-  {
-    "name": "Cochrane",
-    "surnames": [
-      "Cochrane",
-      "Cochran"
-    ]
-  },
-  {
-    "name": "Erskine",
-    "surnames": [
-      "Erskine",
-      "Areskine"
-    ]
-  },
-  {
-    "name": "Hamilton",
-    "surnames": [
-      "Hamilton",
-      "Hammilton"
-    ]
-  },
-  {
-    "name": "Home",
-    "surnames": [
-      "Home",
-      "Hume"
-    ]
-  },
-  {
-    "name": "Innes",
-    "surnames": [
+    ],
+    "region": "Argyll (Mull, Ardgour)",
+    "motto": "E Labore Merces",
+    "tartans": [
+      "Modern",
+      "Ancient",
+      "Hunting",
+      "Dress"
+    ],
+    "septs": [
       "Innes",
-      "Innis"
-    ]
+      "Ennis",
+      "Guinness (affinity)",
+      "Harper"
+    ],
+    "seats": [],
+    "territories": [
+      "macinnes_argyll"
+    ],
+    "crest": "./assets/images/emblems/clan-hearth-emblem.jpg"
   },
   {
-    "name": "Johnstone",
+    "name": "Stewart",
     "surnames": [
-      "Johnstone",
-      "Johnston",
-      "Johnstonne"
-    ]
-  },
-  {
-    "name": "MacAulay",
-    "surnames": [
-      "MacAulay",
-      "McAulay",
-      "MacAuley",
-      "McAuley"
-    ]
-  },
-  {
-    "name": "MacEwan",
-    "surnames": [
-      "MacEwan",
-      "McEwan",
-      "MacEwen",
-      "McEwen"
-    ]
-  },
-  {
-    "name": "MacGillivray",
-    "surnames": [
-      "MacGillivray",
-      "McGillivray"
-    ]
-  },
-  {
-    "name": "Rattray",
-    "surnames": [
-      "Rattray",
-      "Rattrie"
-    ]
-  },
-  {
-    "name": "Robertson",
-    "surnames": [
-      "Robertson",
-      "Robertsone",
-      "MacRobert"
-    ]
-  },
-  {
-    "name": "Scott",
-    "surnames": [
-      "Scott",
-      "Scot"
-    ]
-  },
-  {
-    "name": "Skene",
-    "surnames": [
-      "Skene",
-      "Skeine"
-    ]
-  },
-  {
-    "name": "Stirling",
-    "surnames": [
-      "Stirling",
-      "Sterling"
-    ]
-  },
-  {
-    "name": "Turnbull",
-    "surnames": [
-      "Turnbull",
-      "Trimble"
-    ]
-  },
-  {
-    "name": "Young",
-    "surnames": [
-      "Young",
-      "Younge"
-    ]
+      "Stewart",
+      "Stuart",
+      "Steuart"
+    ],
+    "region": "Argyll / Royal Stewart",
+    "motto": "Virescit vulnere virtus",
+    "tartans": [
+      "Modern",
+      "Ancient",
+      "Hunting",
+      "Dress"
+    ],
+    "septs": [
+      "Mure",
+      "Muir",
+      "Dewar",
+      "Allan",
+      "Boyd"
+    ],
+    "seats": [],
+    "territories": [
+      "stewart_moray_forth"
+    ],
+    "crest": "./assets/images/emblems/clan-hearth-emblem.jpg"
   }
 ]

@@ -1,5 +1,6 @@
+// ===== The Clan Hearth — SPA + Clan Finder + Map highlight =====
 
-// === The Clan Hearth SPA + Clan Finder (robust loader) ===
+// -------- Router (unchanged) --------
 const CANON = ["home","clan-finder","tartan-designer","recipes","myths","map","about"];
 const ALIAS = { "clans":"clan-finder", "legends":"myths" };
 const normalize = (id) => ALIAS[id] || id;
@@ -47,7 +48,7 @@ document.addEventListener("click", (e) => {
   document.querySelector(`[data-section="${id}"]`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
-// Hero + logo autobind (keeps preload warning harmless)
+// -------- Hero/logo safety (keeps preload warning harmless) --------
 document.addEventListener("DOMContentLoaded", () => {
   const hero = document.getElementById("hero");
   if (hero) {
@@ -67,38 +68,84 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Leaflet Map (no change)
+// ===== Data layer =====
+let CLANS = [];                 // from ./clans.json
+let TERRITORIES = [];           // from ./map-data.json (territories + markers)
+let MARKERS = [];               // optional markers (seats)
+let CLAN_TO_LAYERS = {};        // { "Campbell": [leafletLayer,...], ... }
+
+async function loadAllData(){
+  const cacheBust = '?v=' + Date.now();
+  const [clans, map] = await Promise.all([
+    fetch('./clans.json'+cacheBust).then(r=>r.json()).catch(()=>[]),
+    fetch('./map-data.json'+cacheBust).then(r=>r.json()).catch(()=>({}))
+  ]);
+  CLANS = Array.isArray(clans) ? clans : [];
+  TERRITORIES = Array.isArray(map.territories) ? map.territories : (Array.isArray(map.polygons) ? map.polygons : []);
+  MARKERS = Array.isArray(map.markers) ? map.markers : [];
+  console.log(`[Data] Clans: ${CLANS.length}, Territories: ${TERRITORIES.length}, Markers: ${MARKERS.length}`);
+}
+
+// ===== Map (Leaflet) =====
 async function initMap(){
-  if (window.__clanMap) return;
+  if (window.__clanMap) return window.__clanMap;
   const el = document.getElementById("clanMap");
-  if (!el || typeof L === "undefined") return;
+  if (!el || typeof L === "undefined") return null;
+
   const map = L.map(el).setView([56.818, -4.182], 6);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; OpenStreetMap contributors' }).addTo(map);
-  try {
-    const locs = await fetch('./locations.json').then(r=>r.json());
-    (locs||[]).forEach(s => L.marker(s.coords).addTo(map).bindPopup(s.name));
-  } catch(e){}
-  try {
-    const geo = await fetch('./map-data.json').then(r=>r.json());
-    (geo?.polygons||[]).forEach(p => L.polygon(p.coords, { color: p.color || '#92400e' }).addTo(map).bindPopup(p.name || 'Territory'));
-  } catch(e){}
-  window.__clanMap = map;
-}
-document.addEventListener("DOMContentLoaded", () => {
-  const s = document.querySelector('[data-section="map"]');
-  if (s && !s.classList.contains("hidden")) initMap();
-});
-window.addEventListener("hashchange", () => { if ((location.hash||"").replace("#","") === "map") initMap(); });
-document.addEventListener("click", (e) => { if (e.target.closest("[data-nav='map']")) setTimeout(initMap, 0); });
 
-// Tartan Designer (unchanged core)
+  // Build layers from TERRITORIES + MARKERS
+  CLAN_TO_LAYERS = {};
+  const addFor = (clan, layer) => {
+    if (!clan) return;
+    (CLAN_TO_LAYERS[clan] ||= []).push(layer);
+  };
+
+  (TERRITORIES || []).forEach(t => {
+    if (!Array.isArray(t.coords) || !t.coords.length) return;
+    const poly = L.polygon(t.coords, { color: t.color || '#92400e', weight: 2, fillOpacity: 0.15 });
+    poly.addTo(map).bindPopup(t.name || 'Territory');
+    (t.clans || []).forEach(c => addFor(c, poly));
+  });
+
+  (MARKERS || []).forEach(m => {
+    if (!Array.isArray(m.coords)) return;
+    const mk = L.marker(m.coords).addTo(map).bindPopup(m.name || 'Seat');
+    (m.clans || []).forEach(c => addFor(c, mk));
+  });
+
+  window.__clanMap = map;
+  return map;
+}
+
+async function highlightClanOnMap(clanName){
+  const map = await initMap();
+  if (!map) return;
+  const layers = CLAN_TO_LAYERS[clanName] || [];
+  if (!layers.length) {
+    // Fallback: search for any seat coords inside clans.json
+    const c = CLANS.find(x => (x.name||'').toLowerCase() === clanName.toLowerCase());
+    if (c && Array.isArray(c.seats) && c.seats.length && Array.isArray(c.seats[0].coords)) {
+      map.setView(c.seats[0].coords, 9);
+    }
+    return;
+  }
+  const group = L.featureGroup(layers);
+  map.fitBounds(group.getBounds().pad(0.25));
+  // Temporary highlight
+  layers.forEach(l => l.setStyle && l.setStyle({weight: 3, color: '#d97706'}));
+  setTimeout(() => layers.forEach(l => l.setStyle && l.setStyle({weight: 2, color: '#92400e'})), 1500);
+}
+
+// ===== Tartan mini (unchanged core) =====
 let TARTAN = { examples: [], patterns: {} };
 async function loadTartanData(){
   try {
     const d = await fetch('./data.json?v=' + Date.now()).then(r=>r.json());
     TARTAN.examples = d.tartanExamples || [];
     TARTAN.patterns = d.tartanPatterns || {};
-  } catch(e){}
+  } catch (e) {}
 }
 function setPreview(src){
   const img = document.getElementById("tartanPreview"); if (img) img.src = src;
@@ -117,45 +164,8 @@ function applySelectedTartan(){
   const sel = document.getElementById("tartanSelect"); const name = sel?.value; const c = document.getElementById("tartanCanvas"); if (!name || !c) return;
   drawTartanToCanvas(c, name, 8); const url = c.toDataURL("image/png"); const prev = document.getElementById("tartanPreview"); if (prev) prev.src = url; const a = document.getElementById("btnDownloadTartan"); if (a) a.href = url;
 }
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadTartanData();
-  const sel = document.getElementById("tartanSelect");
-  if (sel) sel.innerHTML = Object.keys(TARTAN.patterns).map(n => `<option value="${n}">${n}</option>`).join("");
-  document.getElementById("btnApplyTartan")?.addEventListener("click", applySelectedTartan);
-  const img = document.getElementById("tartanPreview");
-  if (img && (!img.getAttribute("src") || img.getAttribute("src")==="")) setPreview("./assets/images/tartans/tartan-placeholder.png");
-});
 
-// --- Clan Finder: robust loader + logs ---
-let CLANS = [];
-async function getJSONWithFallback(paths){
-  let lastErr = null;
-  for (const p of paths){
-    try {
-      const res = await fetch(p, { cache: "no-store" });
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      return await res.json();
-    } catch (e) {
-      lastErr = e;
-    }
-  }
-  throw lastErr || new Error("All fetch attempts failed");
-}
-async function loadClans() {
-  const candidates = [
-    './clans.json?v=' + Date.now(),
-    '/clans.json?v=' + Date.now(),
-    'clans.json?v=' + Date.now()
-  ];
-  try {
-    CLANS = await getJSONWithFallback(candidates);
-    console.log(`[Clan Finder] Loaded ${CLANS.length} clans from clans.json`);
-  } catch (e) {
-    console.warn("[Clan Finder] Couldn’t load clans.json, using fallback.", e);
-    CLANS = [{"name": "MacDonald", "surnames": ["MacDonald", "McDonald", "MacDonell"]}, {"name": "Campbell", "surnames": ["Campbell", "Caimbeul"]}, {"name": "Fraser", "surnames": ["Fraser", "Frazer"]}, {"name": "MacInnes", "surnames": ["MacInnes", "McInnes", "MacInnis", "McInnis"]}, {"name": "Colquhoun", "surnames": ["Colquhoun", "Calhoun", "Colhoun"]}, {"name": "Stewart", "surnames": ["Stewart", "Stuart"]}];
-  }
-}
-
+// ===== Clan Finder =====
 function searchClans(q) {
   const query = (q || '').trim().toLowerCase();
   if (!query) return [];
@@ -170,36 +180,80 @@ function searchClans(q) {
   return results.sort((a,b)=>a.score-b.score).map(x=>x.clan).slice(0, 12);
 }
 
+function asList(arr, limit = 10){
+  if (!Array.isArray(arr) || !arr.length) return '';
+  const out = arr.slice(0, limit).join(', ');
+  return out + (arr.length > limit ? '…' : '');
+}
+
 function renderClanResults(list) {
   const box = document.getElementById('clanResults');
   if (!box) return;
   if (!list.length) {
-    box.innerHTML = '<p class="text-stone-500">No matches yet. Try “McDonald”, “Campbell”, “Fraser”…</p>';
+    box.innerHTML = '<p class="text-stone-500">No matches yet. Try “MacInnes”, “Campbell”, “Fraser”…</p>';
     return;
   }
   box.innerHTML = list.map(c => `
     <article class="px-3 py-2 border rounded mb-4">
-      <h3 class="font-semibold text-lg">${c.name || ''}</h3>
-      <div class="text-sm text-stone-700">
-        ${c.region ? `<div><strong>Region:</strong> ${c.region}</div>` : ''}
-        ${c.seat ? `<div><strong>Seat:</strong> ${c.seat}</div>` : ''}
-        ${c.motto ? `<div><strong>Motto:</strong> ${c.motto}</div>` : ''}
-        ${c.war_cry ? `<div><strong>War cry:</strong> ${c.war_cry}</div>` : ''}
-        ${Array.isArray(c.septs) && c.septs.length ? `<div><strong>Septs:</strong> ${c.septs.slice(0,8).join(', ')}${c.septs.length>8?'…':''}</div>` : ''}
-        ${Array.isArray(c.surnames) && c.surnames.length ? `<div><strong>Variants:</strong> ${c.surnames.slice(0,12).join(', ')}${c.surnames.length>12?'…':''}</div>` : ''}
+      <div class="flex gap-3 items-start">
+        ${c.crest ? `<img src="${c.crest}" alt="${c.name} crest" style="width:48px;height:48px;object-fit:contain">` : ''}
+        <div class="flex-1">
+          <h3 class="font-semibold text-lg">${c.name || ''}${c.gaelic_name ? ` <span class="text-stone-500 text-sm">(${c.gaelic_name})</span>` : ''}</h3>
+          <div class="text-sm text-stone-700">
+            ${c.region ? `<div><strong>Region:</strong> ${c.region}</div>` : ''}
+            ${Array.isArray(c.seats) && c.seats.length ? `<div><strong>Seat(s):</strong> ${asList(c.seats.map(s=>s.name))}</div>` : ''}
+            ${c.motto ? `<div><strong>Motto:</strong> ${c.motto}</div>` : ''}
+            ${c.war_cry ? `<div><strong>War cry:</strong> ${c.war_cry}</div>` : ''}
+            ${c.chief ? `<div><strong>Chief:</strong> ${c.chief}</div>` : ''}
+            ${c.plant_badge ? `<div><strong>Plant badge:</strong> ${c.plant_badge}</div>` : ''}
+            ${c.animal ? `<div><strong>Animal:</strong> ${c.animal}</div>` : ''}
+            ${Array.isArray(c.septs) && c.septs.length ? `<div><strong>Septs:</strong> ${asList(c.septs, 12)}</div>` : ''}
+            ${Array.isArray(c.surnames) && c.surnames.length ? `<div><strong>Variants:</strong> ${asList(c.surnames, 12)}</div>` : ''}
+            ${Array.isArray(c.tartans) && c.tartans.length ? `<div><strong>Tartans:</strong> ${asList(c.tartans)}</div>` : ''}
+          </div>
+          <div class="mt-2 flex gap-2 text-sm">
+            ${(Array.isArray(c.territories) && c.territories.length) || (Array.isArray(c.seats) && c.seats.length)
+              ? `<button class="px-3 py-1 rounded border btn-view-map" data-clan="${c.name}">View on map</button>` : ''}
+            ${c.source ? `<a href="${c.source}" target="_blank" rel="noopener" class="px-3 py-1 rounded border">Source</a>` : ''}
+          </div>
+        </div>
       </div>
     </article>
   `).join('');
+  // wire buttons (event delegation)
+  box.addEventListener('click', ev => {
+    const btn = ev.target.closest('.btn-view-map'); if (!btn) return;
+    const who = btn.getAttribute('data-clan');
+    history.replaceState(null, '', '#map'); hideAll(); show('map');
+    setTimeout(()=>highlightClanOnMap(who), 0);
+  }, { once: true });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadClans();
+  await Promise.all([loadAllData(), loadTartanData()]);
+  // Tartan init
+  const sel = document.getElementById("tartanSelect");
+  if (sel) sel.innerHTML = Object.keys(TARTAN.patterns).map(n => `<option value="${n}">${n}</option>`).join("");
+  document.getElementById("btnApplyTartan")?.addEventListener("click", () => {
+    const name = document.getElementById("tartanSelect")?.value;
+    const c = document.getElementById("tartanCanvas");
+    if (name && c) { drawTartanToCanvas(c, name, 8); const url = c.toDataURL("image/png"); setPreview(url); }
+  });
+  const img = document.getElementById("tartanPreview");
+  if (img && (!img.getAttribute("src") || img.getAttribute("src")==="")) setPreview("./assets/images/tartans/tartan-placeholder.png");
+
+  // Finder init
   const finder = document.querySelector('#clan-finder input') || document.querySelector('section[id*="clan" i] input');
-  if (!finder) { console.warn("[Clan Finder] No input found."); return; }
-  const resultsBox = document.createElement('div');
-  resultsBox.id = 'clanResults';
-  resultsBox.className = 'mt-3';
-  finder.insertAdjacentElement('afterend', resultsBox);
-  renderClanResults([]);
-  finder.addEventListener('input', e => renderClanResults(searchClans(e.target.value)));
+  if (finder) {
+    const resultsBox = document.createElement('div');
+    resultsBox.id = 'clanResults';
+    resultsBox.className = 'mt-3';
+    finder.insertAdjacentElement('afterend', resultsBox);
+    renderClanResults([]);
+    finder.addEventListener('input', e => renderClanResults(searchClans(e.target.value)));
+  }
+
+  // If user lands on #map first, load map layers once
+  const s = document.querySelector('[data-section="map"]');
+  if (s && !s.classList.contains("hidden")) initMap();
 });
