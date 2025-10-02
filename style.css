@@ -1,6 +1,7 @@
 
-body{font-family: ui-sans-serif,system-ui,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial}
 .pill{background:#fffbeb;border:1px solid #fde68a;padding:.4rem .7rem;border-radius:999px;font-size:.85rem}
+.pill.tab-active{background:#fcd34d;border-color:#f59e0b;color:#111827}
 .active-item{outline:2px solid #ca8a04;background:#fffbeb}
 .content-card{background:#fffdfa;border-color:#fde68a}
-.legend{font-size:.9rem;color:#666}
+#message-box{position:fixed;right:1rem;bottom:1rem;z-index:50;color:#fff;border-radius:.75rem;padding:.75rem 1rem}
+.grid-2 { display:grid; grid-template-columns: 300px 1fr; gap:1rem; }

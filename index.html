@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Clan Hearth — Top 20 Clans</title>
+  <title>The Clan Hearth — Scottish Heritage Platform</title>
+  <meta name="description" content="Discover clans, tartans, legends and routes across Scotland. Build trips, explore lore, and design tartans." />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,36 +12,108 @@
   <script src="https://kit.fontawesome.com/4ec4e4f1df.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-stone-50 text-stone-900 dark:bg-neutral-950 dark:text-neutral-100">
-  <header class="p-3 border-b bg-amber-50/70 dark:bg-neutral-900">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <h1 class="text-xl font-bold">The Clan Hearth — Top 20 Clans</h1>
+  <header class="bg-neutral-900/80 text-neutral-100 sticky top-0 z-40 backdrop-blur border-b border-neutral-800">
+    <div class="max-w-6xl mx-auto flex items-center justify-between p-3">
+      <div class="flex items-center gap-3">
+        <img src="assets/images/hearth-crest.png" alt="The Clan Hearth" width="40" height="40" onerror="this.style.display='none'">
+        <div>
+          <div class="font-bold leading-tight">The Clan Hearth</div>
+          <div class="text-xs text-neutral-400">Troimh theine tha sinn aonaichte</div>
+        </div>
+      </div>
       <nav class="flex gap-2">
+        <button class="nav-link pill" data-target="home">Home</button>
         <button class="nav-link pill" data-target="clans">Clans</button>
         <button class="nav-link pill" data-target="legends">Legends</button>
         <button class="nav-link pill" data-target="tartan-designer">Tartan</button>
+        <button class="nav-link pill" data-target="trip-builder">Trips</button>
+        <button id="cart-button" class="pill"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></button>
       </nav>
     </div>
   </header>
-  <main class="max-w-6xl mx-auto p-3">
-    <section id="clans-section" class="active">
-      <div class="grid-2">
-        <aside>
-          <h3 class="font-semibold mb-2">Clans (Top 20)</h3>
-          <div id="clan-sidebar-list"></div>
-        </aside>
-        <div>
-          <div id="clanMap" class="mb-3" style="width:100%;height:420px;border-radius:.75rem;"></div>
-          <div id="map-info" class="content-card p-4 rounded-xl border border-amber-200/60"></div>
+
+  <section class="relative">
+    <img src="assets/images/castle-hero.jpg" alt="" class="w-full h-[46vh] object-cover opacity-90" onerror="this.style.display='none'">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10"></div>
+    <div class="absolute inset-0 flex items-end">
+      <div class="max-w-6xl mx-auto p-4 md:p-6">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">Through Fire, We Are United</h1>
+        <p class="text-neutral-200 mt-2 max-w-3xl">Explore Scotland’s clans, map their heartlands, discover legends, and craft your own tartan. Start your journey below.</p>
+        <div class="mt-4 flex gap-2">
+          <button class="nav-link pill bg-amber-300 text-black" data-target="clans">Browse Clans</button>
+          <button class="nav-link pill bg-white/90 text-black" data-target="trip-builder">Plan a Trip</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="max-w-6xl mx-auto p-4">
+    <section id="home-section" class="active">
+      <div class="grid md:grid-cols-3 gap-3">
+        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Clans</h3><p>Find your people. Browse an A–Z index, map territories, and explore seats, mottos, and history.</p></div>
+        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Legends</h3><p>From the Brahan Seer to Nessie, dive into the lore that shaped Scotland’s spirit.</p></div>
+        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Tartans</h3><p>Experiment with colours and patterns. Save and share your own sett.</p></div>
+      </div>
+    </section>
+
+    <section id="clans-section">
+      <div class="mb-3 flex items-center justify-between">
+        <div class="flex gap-2">
+          <button id="tab-index" class="pill tab-active">A–Z Index</button>
+          <button id="tab-map" class="pill">Map</button>
+        </div>
+        <div class="flex gap-2">
+          <input id="clan-search" placeholder="Search clans or surnames..." class="border rounded px-3 py-2 w-64" />
+          <select id="filter-region" class="border rounded px-2 py-2">
+            <option value="all">All regions</option>
+            <option>Highlands</option><option>Islands</option><option>Lowlands</option>
+            <option>Borders</option><option>Argyll</option><option>Aberdeenshire</option>
+          </select>
+        </div>
+      </div>
+      <div id="clan-index-view">
+        <div id="clan-index-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        <div id="index-empty" class="hidden text-sm text-neutral-500 p-3">No results. Try another search.</div>
+      </div>
+      <div id="clan-map-view" class="hidden">
+        <div class="grid-2">
+          <aside>
+            <h3 class="font-semibold mb-2">Clans</h3>
+            <div id="clan-sidebar-list"></div>
+          </aside>
+          <div>
+            <div id="clanMap" class="mb-3" style="width:100%;height:420px;border-radius:.75rem;"></div>
+            <div id="map-info" class="content-card p-4 rounded-xl border border-amber-200/60"></div>
+          </div>
         </div>
       </div>
     </section>
+
     <section id="legends-section">
-      <div id="legends-main-content" class="content-card p-6 rounded-2xl border">Legend content placeholder</div>
+      <h3 class="font-semibold mb-3">Myths & Legends of Scotland</h3>
+      <div id="legends-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
     </section>
+
     <section id="tartan-designer-section">
-      <div class="content-card p-6 rounded-2xl border">Tartan designer placeholder</div>
+      <div class="content-card p-6 rounded-2xl border"><h3 class="font-semibold">Tartan Designer</h3><p>Open your designer to start creating a sett. (This section will hook into your existing designer.)</p></div>
+    </section>
+
+    <section id="trip-builder-section">
+      <div class="content-card p-6 rounded-2xl border"><h3 class="font-semibold">Trip Builder</h3><p>Use your existing Trip Builder. This upgrade focuses on A–Z and Hero.</p></div>
     </section>
   </main>
+
+  <div id="message-box" class="hidden"><i id="message-icon" class="mr-2"></i><span id="message-text"></span></div>
+  <div id="generic-modal" class="fixed inset-0 hidden items-center justify-center bg-black/50 p-4">
+    <div class="bg-white dark:bg-neutral-900 rounded-2xl max-w-xl w-full p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 id="modal-title" class="font-semibold">Modal</h3>
+        <button id="close-modal" class="text-stone-600 dark:text-neutral-300"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
   <script src="app.js" defer></script>
 </body>
 </html>
