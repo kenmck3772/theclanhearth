@@ -1,0 +1,57 @@
+[
+  {
+    "id": "brahan",
+    "name": "The Brahan Seer",
+    "summary": "Coinneach Odhar, the prophetic seer of the Highlands."
+  },
+  {
+    "id": "nessie",
+    "name": "Loch Ness Monster",
+    "summary": "The elusive creature said to inhabit Loch Ness."
+  },
+  {
+    "id": "sawney",
+    "name": "Sawney Bean Clan",
+    "summary": "Legendary band of cannibals of Ayrshire."
+  },
+  {
+    "id": "selkie",
+    "name": "Selkies",
+    "summary": "Shape-shifting seal-folk found in island folklore."
+  },
+  {
+    "id": "cailleach",
+    "name": "Cailleach",
+    "summary": "Winter hag and shaper of mountains."
+  },
+  {
+    "id": "kelpie",
+    "name": "Kelpies",
+    "summary": "Water spirits that appear as horses near lochs."
+  },
+  {
+    "id": "bean-nighe",
+    "name": "Bean Nighe",
+    "summary": "Washerwoman spirit who foretells death."
+  },
+  {
+    "id": "redcap",
+    "name": "Redcaps",
+    "summary": "Malevolent goblins said to haunt Border castles."
+  },
+  {
+    "id": "blue-men",
+    "name": "Blue Men of the Minch",
+    "summary": "Sea spirits who challenge sailors with riddles."
+  },
+  {
+    "id": "robert-bruce",
+    "name": "Robert the Bruce & the Spider",
+    "summary": "Perseverance learned from a cave spider."
+  },
+  {
+    "id": "wallace",
+    "name": "William Wallace",
+    "summary": "Guardian of Scotland whose feats became legend."
+  }
+]
