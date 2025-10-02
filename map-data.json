@@ -129,6 +129,604 @@
           -4.3
         ]
       ]
+    },
+    {
+      "id": "macleod_skye",
+      "name": "Clan MacLeod \u2014 Skye (rough)",
+      "clans": [
+        "MacLeod"
+      ],
+      "color": "#0ea5e9",
+      "coords": [
+        [
+          57.6,
+          -6.8
+        ],
+        [
+          57.55,
+          -6.1
+        ],
+        [
+          57.2,
+          -6.1
+        ],
+        [
+          57.25,
+          -6.8
+        ]
+      ]
+    },
+    {
+      "id": "mackenzie_ross",
+      "name": "Clan MacKenzie \u2014 Ross (rough)",
+      "clans": [
+        "MacKenzie"
+      ],
+      "color": "#84cc16",
+      "coords": [
+        [
+          57.8,
+          -5.3
+        ],
+        [
+          57.8,
+          -4.1
+        ],
+        [
+          57.4,
+          -4.1
+        ],
+        [
+          57.4,
+          -5.3
+        ]
+      ]
+    },
+    {
+      "id": "fraser_inverness",
+      "name": "Clan Fraser \u2014 Inverness (rough)",
+      "clans": [
+        "Fraser"
+      ],
+      "color": "#f59e0b",
+      "coords": [
+        [
+          57.6,
+          -4.6
+        ],
+        [
+          57.6,
+          -4.0
+        ],
+        [
+          57.3,
+          -4.0
+        ],
+        [
+          57.3,
+          -4.6
+        ]
+      ]
+    },
+    {
+      "id": "macgregor_perth",
+      "name": "Clan MacGregor \u2014 Perthshire (rough)",
+      "clans": [
+        "MacGregor"
+      ],
+      "color": "#fb7185",
+      "coords": [
+        [
+          56.7,
+          -4.9
+        ],
+        [
+          56.7,
+          -3.9
+        ],
+        [
+          56.2,
+          -3.9
+        ],
+        [
+          56.2,
+          -4.9
+        ]
+      ]
+    },
+    {
+      "id": "cameron_lochaber",
+      "name": "Clan Cameron \u2014 Lochaber (rough)",
+      "clans": [
+        "Cameron"
+      ],
+      "color": "#22c55e",
+      "coords": [
+        [
+          57.05,
+          -5.5
+        ],
+        [
+          57.05,
+          -4.7
+        ],
+        [
+          56.7,
+          -4.7
+        ],
+        [
+          56.7,
+          -5.5
+        ]
+      ]
+    },
+    {
+      "id": "macpherson_badenoch",
+      "name": "Clan MacPherson \u2014 Badenoch (rough)",
+      "clans": [
+        "MacPherson"
+      ],
+      "color": "#a855f7",
+      "coords": [
+        [
+          57.15,
+          -4.4
+        ],
+        [
+          57.15,
+          -3.7
+        ],
+        [
+          56.95,
+          -3.7
+        ],
+        [
+          56.95,
+          -4.4
+        ]
+      ]
+    },
+    {
+      "id": "macintyre_glennoe",
+      "name": "Clan MacIntyre \u2014 Glen Noe (rough)",
+      "clans": [
+        "MacIntyre"
+      ],
+      "color": "#64748b",
+      "coords": [
+        [
+          56.7,
+          -5.4
+        ],
+        [
+          56.7,
+          -4.9
+        ],
+        [
+          56.45,
+          -4.9
+        ],
+        [
+          56.45,
+          -5.4
+        ]
+      ]
+    },
+    {
+      "id": "macrae_kintail",
+      "name": "Clan MacRae \u2014 Kintail (rough)",
+      "clans": [
+        "MacRae"
+      ],
+      "color": "#ef4444",
+      "coords": [
+        [
+          57.4,
+          -5.7
+        ],
+        [
+          57.4,
+          -5.0
+        ],
+        [
+          57.15,
+          -5.0
+        ],
+        [
+          57.15,
+          -5.7
+        ]
+      ]
+    },
+    {
+      "id": "macneil_barra",
+      "name": "Clan MacNeil \u2014 Barra (rough)",
+      "clans": [
+        "MacNeil"
+      ],
+      "color": "#14b8a6",
+      "coords": [
+        [
+          56.98,
+          -7.6
+        ],
+        [
+          56.98,
+          -7.3
+        ],
+        [
+          56.85,
+          -7.3
+        ],
+        [
+          56.85,
+          -7.6
+        ]
+      ]
+    },
+    {
+      "id": "gordon_aberdeen",
+      "name": "Clan Gordon \u2014 Aberdeenshire (rough)",
+      "clans": [
+        "Gordon"
+      ],
+      "color": "#eab308",
+      "coords": [
+        [
+          57.6,
+          -2.9
+        ],
+        [
+          57.6,
+          -2.2
+        ],
+        [
+          57.2,
+          -2.2
+        ],
+        [
+          57.2,
+          -2.9
+        ]
+      ]
+    },
+    {
+      "id": "sinclair_caithness",
+      "name": "Clan Sinclair \u2014 Caithness (rough)",
+      "clans": [
+        "Sinclair"
+      ],
+      "color": "#10b981",
+      "coords": [
+        [
+          58.6,
+          -3.7
+        ],
+        [
+          58.6,
+          -2.8
+        ],
+        [
+          58.3,
+          -2.8
+        ],
+        [
+          58.3,
+          -3.7
+        ]
+      ]
+    },
+    {
+      "id": "sutherland_sutherland",
+      "name": "Clan Sutherland \u2014 Sutherland (rough)",
+      "clans": [
+        "Sutherland"
+      ],
+      "color": "#f97316",
+      "coords": [
+        [
+          58.5,
+          -4.9
+        ],
+        [
+          58.5,
+          -3.5
+        ],
+        [
+          58.05,
+          -3.5
+        ],
+        [
+          58.05,
+          -4.9
+        ]
+      ]
+    },
+    {
+      "id": "macnab_breadalbane",
+      "name": "Clan MacNab \u2014 Breadalbane (rough)",
+      "clans": [
+        "MacNab"
+      ],
+      "color": "#93c5fd",
+      "coords": [
+        [
+          56.65,
+          -4.6
+        ],
+        [
+          56.65,
+          -4.1
+        ],
+        [
+          56.35,
+          -4.1
+        ],
+        [
+          56.35,
+          -4.6
+        ]
+      ]
+    },
+    {
+      "id": "maclean_mull",
+      "name": "Clan MacLean \u2014 Mull (rough)",
+      "clans": [
+        "MacLean"
+      ],
+      "color": "#f472b6",
+      "coords": [
+        [
+          56.65,
+          -6.3
+        ],
+        [
+          56.65,
+          -5.4
+        ],
+        [
+          56.25,
+          -5.4
+        ],
+        [
+          56.25,
+          -6.3
+        ]
+      ]
+    },
+    {
+      "id": "macfarlane_lomond",
+      "name": "Clan MacFarlane \u2014 Loch Lomond (rough)",
+      "clans": [
+        "MacFarlane"
+      ],
+      "color": "#4ade80",
+      "coords": [
+        [
+          56.32,
+          -4.9
+        ],
+        [
+          56.32,
+          -4.4
+        ],
+        [
+          56.12,
+          -4.4
+        ],
+        [
+          56.12,
+          -4.9
+        ]
+      ]
+    },
+    {
+      "id": "maclaren_balquhidder",
+      "name": "Clan MacLaren \u2014 Balquhidder (rough)",
+      "clans": [
+        "MacLaren"
+      ],
+      "color": "#60a5fa",
+      "coords": [
+        [
+          56.5,
+          -4.6
+        ],
+        [
+          56.5,
+          -4.2
+        ],
+        [
+          56.25,
+          -4.2
+        ],
+        [
+          56.25,
+          -4.6
+        ]
+      ]
+    },
+    {
+      "id": "macmillan_knapdale",
+      "name": "Clan MacMillan \u2014 Knapdale (rough)",
+      "clans": [
+        "MacMillan"
+      ],
+      "color": "#65a30d",
+      "coords": [
+        [
+          56.1,
+          -5.8
+        ],
+        [
+          56.1,
+          -5.2
+        ],
+        [
+          55.8,
+          -5.2
+        ],
+        [
+          55.8,
+          -5.8
+        ]
+      ]
+    },
+    {
+      "id": "macintosh_moy",
+      "name": "Clan Macintosh \u2014 Loch Moy (rough)",
+      "clans": [
+        "Macintosh"
+      ],
+      "color": "#e11d48",
+      "coords": [
+        [
+          57.55,
+          -4.2
+        ],
+        [
+          57.55,
+          -3.8
+        ],
+        [
+          57.3,
+          -3.8
+        ],
+        [
+          57.3,
+          -4.2
+        ]
+      ]
+    },
+    {
+      "id": "douglas_lanark",
+      "name": "Clan Douglas \u2014 Lanarkshire (rough)",
+      "clans": [
+        "Douglas"
+      ],
+      "color": "#22d3ee",
+      "coords": [
+        [
+          55.75,
+          -4.1
+        ],
+        [
+          55.75,
+          -3.6
+        ],
+        [
+          55.4,
+          -3.6
+        ],
+        [
+          55.4,
+          -4.1
+        ]
+      ]
+    },
+    {
+      "id": "murray_moray",
+      "name": "Clan Murray \u2014 Moray/Perthshire (rough)",
+      "clans": [
+        "Murray"
+      ],
+      "color": "#a3e635",
+      "coords": [
+        [
+          57.0,
+          -3.8
+        ],
+        [
+          57.0,
+          -3.1
+        ],
+        [
+          56.6,
+          -3.1
+        ],
+        [
+          56.6,
+          -3.8
+        ]
+      ]
+    },
+    {
+      "id": "forbes_strathdon",
+      "name": "Clan Forbes \u2014 Strathdon (rough)",
+      "clans": [
+        "Forbes"
+      ],
+      "color": "#d946ef",
+      "coords": [
+        [
+          57.35,
+          -3.2
+        ],
+        [
+          57.35,
+          -2.6
+        ],
+        [
+          57.05,
+          -2.6
+        ],
+        [
+          57.05,
+          -3.2
+        ]
+      ]
+    },
+    {
+      "id": "ross_easter",
+      "name": "Clan Ross \u2014 Easter Ross (rough)",
+      "clans": [
+        "Ross"
+      ],
+      "color": "#facc15",
+      "coords": [
+        [
+          57.9,
+          -4.3
+        ],
+        [
+          57.9,
+          -3.8
+        ],
+        [
+          57.6,
+          -3.8
+        ],
+        [
+          57.6,
+          -4.3
+        ]
+      ]
+    },
+    {
+      "id": "chisholm_strathglass",
+      "name": "Clan Chisholm \u2014 Strathglass (rough)",
+      "clans": [
+        "Chisholm"
+      ],
+      "color": "#34d399",
+      "coords": [
+        [
+          57.43,
+          -4.85
+        ],
+        [
+          57.43,
+          -4.45
+        ],
+        [
+          57.2,
+          -4.45
+        ],
+        [
+          57.2,
+          -4.85
+        ]
+      ]
     }
   ],
   "markers": [
@@ -160,6 +758,246 @@
       ],
       "clans": [
         "Colquhoun"
+      ]
+    },
+    {
+      "name": "Castle Stalker (Stewart of Appin)",
+      "coords": [
+        56.57,
+        -5.378
+      ],
+      "clans": [
+        "Stewart"
+      ]
+    },
+    {
+      "name": "Dunvegan Castle (MacLeod)",
+      "coords": [
+        57.425,
+        -6.586
+      ],
+      "clans": [
+        "MacLeod"
+      ]
+    },
+    {
+      "name": "Castle Leod (MacKenzie)",
+      "coords": [
+        57.594,
+        -4.555
+      ],
+      "clans": [
+        "MacKenzie"
+      ]
+    },
+    {
+      "name": "Beaufort Castle (Fraser)",
+      "coords": [
+        57.456,
+        -4.462
+      ],
+      "clans": [
+        "Fraser"
+      ]
+    },
+    {
+      "name": "Glenstrae (MacGregor)",
+      "coords": [
+        56.5,
+        -4.6
+      ],
+      "clans": [
+        "MacGregor"
+      ]
+    },
+    {
+      "name": "Achnacarry (Cameron)",
+      "coords": [
+        56.957,
+        -5.048
+      ],
+      "clans": [
+        "Cameron"
+      ]
+    },
+    {
+      "name": "Cluny (Laggan) (MacPherson)",
+      "coords": [
+        57.0,
+        -4.3
+      ],
+      "clans": [
+        "MacPherson"
+      ]
+    },
+    {
+      "name": "Glen Noe (MacIntyre)",
+      "coords": [
+        56.61,
+        -5.23
+      ],
+      "clans": [
+        "MacIntyre"
+      ]
+    },
+    {
+      "name": "Eilean Donan Castle (MacRae)",
+      "coords": [
+        57.274,
+        -5.516
+      ],
+      "clans": [
+        "MacRae"
+      ]
+    },
+    {
+      "name": "Kisimul Castle, Barra (MacNeil)",
+      "coords": [
+        56.951,
+        -7.472
+      ],
+      "clans": [
+        "MacNeil"
+      ]
+    },
+    {
+      "name": "Huntly Castle (Gordon)",
+      "coords": [
+        57.447,
+        -2.788
+      ],
+      "clans": [
+        "Gordon"
+      ]
+    },
+    {
+      "name": "Castle Sinclair Girnigoe (Sinclair)",
+      "coords": [
+        58.479,
+        -3.05
+      ],
+      "clans": [
+        "Sinclair"
+      ]
+    },
+    {
+      "name": "Dunrobin Castle (Sutherland)",
+      "coords": [
+        57.971,
+        -3.949
+      ],
+      "clans": [
+        "Sutherland"
+      ]
+    },
+    {
+      "name": "Kinnell House, Killin (MacNab)",
+      "coords": [
+        56.47,
+        -4.32
+      ],
+      "clans": [
+        "MacNab"
+      ]
+    },
+    {
+      "name": "Duart Castle, Mull (MacLean)",
+      "coords": [
+        56.449,
+        -5.65
+      ],
+      "clans": [
+        "MacLean"
+      ]
+    },
+    {
+      "name": "Tarbet, Loch Lomond (MacFarlane)",
+      "coords": [
+        56.228,
+        -4.714
+      ],
+      "clans": [
+        "MacFarlane"
+      ]
+    },
+    {
+      "name": "Balquhidder (MacLaren)",
+      "coords": [
+        56.377,
+        -4.402
+      ],
+      "clans": [
+        "MacLaren"
+      ]
+    },
+    {
+      "name": "Kilmory Knap Chapel (MacMillan)",
+      "coords": [
+        55.897,
+        -5.625
+      ],
+      "clans": [
+        "MacMillan"
+      ]
+    },
+    {
+      "name": "Moy Hall (Macintosh)",
+      "coords": [
+        57.433,
+        -4.002
+      ],
+      "clans": [
+        "Macintosh"
+      ]
+    },
+    {
+      "name": "Douglas Castle site (Douglas)",
+      "coords": [
+        55.559,
+        -3.845
+      ],
+      "clans": [
+        "Douglas"
+      ]
+    },
+    {
+      "name": "Scone Palace (Murray)",
+      "coords": [
+        56.419,
+        -3.469
+      ],
+      "clans": [
+        "Murray"
+      ]
+    },
+    {
+      "name": "Castle Forbes (Forbes)",
+      "coords": [
+        57.279,
+        -2.547
+      ],
+      "clans": [
+        "Forbes"
+      ]
+    },
+    {
+      "name": "Balnagown Castle (Ross)",
+      "coords": [
+        57.807,
+        -4.167
+      ],
+      "clans": [
+        "Ross"
+      ]
+    },
+    {
+      "name": "Erchless Castle (Chisholm)",
+      "coords": [
+        57.34,
+        -4.671
+      ],
+      "clans": [
+        "Chisholm"
       ]
     }
   ]
