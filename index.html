@@ -3,13 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Clan Hearth — Scottish Heritage Platform</title>
-  <meta name="description" content="Discover clans, tartans, legends and routes across Scotland. Build trips, explore lore, and design tartans." />
+  <title>The Clan Hearth — Trips v2 + Clan Drawer</title>
+  <meta name="description" content="Plan day-by-day itineraries and explore clans with a rich detail drawer." />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous" />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/4ec4e4f1df.js" crossorigin="anonymous"></script>
+  <!-- Optional: jsPDF for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-3f0PjzYpQf8u1f2P9VokxB4mL1gWc7FQm2qkK8QvE5FQFzZ3hQ0zJbW4gXWFS5x0HIfPw3+q9o8a+zJg9tQ7WQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-stone-50 text-stone-900 dark:bg-neutral-950 dark:text-neutral-100">
   <header class="bg-neutral-900/80 text-neutral-100 sticky top-0 z-40 backdrop-blur border-b border-neutral-800">
@@ -18,99 +20,113 @@
         <img src="assets/images/hearth-crest.png" alt="The Clan Hearth" width="40" height="40" onerror="this.style.display='none'">
         <div>
           <div class="font-bold leading-tight">The Clan Hearth</div>
-          <div class="text-xs text-neutral-400">Troimh theine tha sinn aonaichte</div>
+          <div class="text-xs text-neutral-400">Trips v2 · Clan Drawer</div>
         </div>
       </div>
       <nav class="flex gap-2">
-        <button class="nav-link pill" data-target="home">Home</button>
         <button class="nav-link pill" data-target="clans">Clans</button>
-        <button class="nav-link pill" data-target="legends">Legends</button>
-        <button class="nav-link pill" data-target="tartan-designer">Tartan</button>
         <button class="nav-link pill" data-target="trip-builder">Trips</button>
-        <button id="cart-button" class="pill"><i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span></button>
       </nav>
     </div>
   </header>
 
-  <section class="relative">
-    <img src="assets/images/castle-hero.jpg" alt="" class="w-full h-[46vh] object-cover opacity-90" onerror="this.style.display='none'">
-    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-black/10"></div>
-    <div class="absolute inset-0 flex items-end">
-      <div class="max-w-6xl mx-auto p-4 md:p-6">
-        <h1 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg">Through Fire, We Are United</h1>
-        <p class="text-neutral-200 mt-2 max-w-3xl">Explore Scotland’s clans, map their heartlands, discover legends, and craft your own tartan. Start your journey below.</p>
-        <div class="mt-4 flex gap-2">
-          <button class="nav-link pill bg-amber-300 text-black" data-target="clans">Browse Clans</button>
-          <button class="nav-link pill bg-white/90 text-black" data-target="trip-builder">Plan a Trip</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <main class="max-w-6xl mx-auto p-4">
-    <section id="home-section" class="active">
-      <div class="grid md:grid-cols-3 gap-3">
-        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Clans</h3><p>Find your people. Browse an A–Z index, map territories, and explore seats, mottos, and history.</p></div>
-        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Legends</h3><p>From the Brahan Seer to Nessie, dive into the lore that shaped Scotland’s spirit.</p></div>
-        <div class="content-card p-4 rounded-2xl border"><h3 class="font-semibold">Tartans</h3><p>Experiment with colours and patterns. Save and share your own sett.</p></div>
+    <!-- CLANS with Map + Drawer -->
+    <section id="clans-section" class="active">
+      <div class="grid-2">
+        <aside>
+          <h3 class="font-semibold mb-2">Clans</h3>
+          <div id="clan-sidebar-list"></div>
+        </aside>
+        <div>
+          <div id="clanMap" class="mb-3 mapbox"></div>
+          <div id="map-info" class="content-card p-4 rounded-xl border border-amber-200/60"></div>
+        </div>
       </div>
     </section>
 
-    <section id="clans-section">
-      <div class="mb-3 flex items-center justify-between">
-        <div class="flex gap-2">
-          <button id="tab-index" class="pill tab-active">A–Z Index</button>
-          <button id="tab-map" class="pill">Map</button>
+    <!-- Trip Builder v2 -->
+    <section id="trip-builder-section">
+      <div class="flex items-start gap-3 flex-wrap">
+        <div class="grow min-w-[320px]">
+          <div class="rounded-xl border p-3 bg-white/70 dark:bg-neutral-900">
+            <div class="grid md:grid-cols-3 gap-3">
+              <div>
+                <label class="block text-sm mb-1">Trip type</label>
+                <select id="trip-type" class="w-full border rounded p-2">
+                  <option value="heritage">Heritage</option>
+                  <option value="whisky">Whisky</option>
+                  <option value="golf">Golf</option>
+                  <option value="luxury">Luxury</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm mb-1">Days</label>
+                <select id="trip-days" class="w-full border rounded p-2">
+                  <option>3</option><option selected>5</option><option>7</option><option>10</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm mb-1">Group size</label>
+                <select id="group-size" class="w-full border rounded p-2">
+                  <option>2</option><option selected>4</option><option>6</option><option>8</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button id="create-itinerary-btn" class="btn-primary rounded-lg px-4 py-2"><i class="fas fa-calendar-plus mr-1"></i>Create itinerary</button>
+              <button id="export-pdf-btn" class="rounded-lg px-4 py-2 border"><i class="fas fa-file-pdf mr-1"></i>Export PDF</button>
+              <button id="email-itinerary-btn" class="rounded-lg px-4 py-2 border"><i class="fas fa-envelope mr-1"></i>Email plan</button>
+            </div>
+            <div class="mt-2 text-sm">Price estimate: £<span id="price-estimate">0</span> • Total distance: <span id="total-distance">0</span> km • Total drive: <span id="total-drive">0</span> h</div>
+          </div>
+
+          <div id="itinerary" class="mt-3 grid md:grid-cols-2 gap-3"></div>
         </div>
-        <div class="flex gap-2">
-          <input id="clan-search" placeholder="Search clans or surnames..." class="border rounded px-3 py-2 w-64" />
-          <select id="filter-region" class="border rounded px-2 py-2">
-            <option value="all">All regions</option>
-            <option>Highlands</option><option>Islands</option><option>Lowlands</option>
-            <option>Borders</option><option>Argyll</option><option>Aberdeenshire</option>
-          </select>
-        </div>
-      </div>
-      <div id="clan-index-view">
-        <div id="clan-index-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-        <div id="index-empty" class="hidden text-sm text-neutral-500 p-3">No results. Try another search.</div>
-      </div>
-      <div id="clan-map-view" class="hidden">
-        <div class="grid-2">
-          <aside>
-            <h3 class="font-semibold mb-2">Clans</h3>
-            <div id="clan-sidebar-list"></div>
-          </aside>
-          <div>
-            <div id="clanMap" class="mb-3" style="width:100%;height:420px;border-radius:.75rem;"></div>
-            <div id="map-info" class="content-card p-4 rounded-xl border border-amber-200/60"></div>
+        <div class="basis-[380px] grow">
+          <div id="tripBuilderMap" class="mapbox mb-3"></div>
+          <div class="content-card p-3 rounded-xl border">
+            <h4 class="font-semibold mb-2">Add from suggestions</h4>
+            <div id="poi-suggestions" class="grid grid-cols-1 gap-2"></div>
           </div>
         </div>
       </div>
     </section>
-
-    <section id="legends-section">
-      <h3 class="font-semibold mb-3">Myths & Legends of Scotland</h3>
-      <div id="legends-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-    </section>
-
-    <section id="tartan-designer-section">
-      <div class="content-card p-6 rounded-2xl border"><h3 class="font-semibold">Tartan Designer</h3><p>Open your designer to start creating a sett. (This section will hook into your existing designer.)</p></div>
-    </section>
-
-    <section id="trip-builder-section">
-      <div class="content-card p-6 rounded-2xl border"><h3 class="font-semibold">Trip Builder</h3><p>Use your existing Trip Builder. This upgrade focuses on A–Z and Hero.</p></div>
-    </section>
   </main>
 
-  <div id="message-box" class="hidden"><i id="message-icon" class="mr-2"></i><span id="message-text"></span></div>
-  <div id="generic-modal" class="fixed inset-0 hidden items-center justify-center bg-black/50 p-4">
-    <div class="bg-white dark:bg-neutral-900 rounded-2xl max-w-xl w-full p-4">
-      <div class="flex items-center justify-between mb-2">
-        <h3 id="modal-title" class="font-semibold">Modal</h3>
-        <button id="close-modal" class="text-stone-600 dark:text-neutral-300"><i class="fas fa-times"></i></button>
+  <!-- Drawer -->
+  <aside id="clan-drawer" class="drawer hidden" aria-hidden="true">
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="flex items-center gap-3">
+          <img id="drawer-crest" src="" alt="" width="56" height="56" onerror="this.style.display='none'">
+          <div>
+            <h3 id="drawer-title" class="text-xl font-semibold">Clan</h3>
+            <div id="drawer-motto" class="text-xs text-neutral-500"></div>
+          </div>
+        </div>
+        <button id="close-drawer" class="text-neutral-500"><i class="fas fa-times"></i></button>
       </div>
-      <div id="modal-body"></div>
+      <div id="drawer-body" class="drawer-body"></div>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div id="message-box" class="hidden"><i id="message-icon" class="mr-2"></i><span id="message-text"></span></div>
+
+  <!-- Simple email handoff modal (Formspree-ready) -->
+  <div id="email-modal" class="fixed inset-0 hidden items-center justify-center bg-black/50 p-4">
+    <div class="bg-white dark:bg-neutral-900 rounded-2xl max-w-md w-full p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">Send itinerary to email</h3>
+        <button id="close-email-modal" class="text-stone-600 dark:text-neutral-300"><i class="fas fa-times"></i></button>
+      </div>
+      <form id="email-form" method="POST" action="https://formspree.io/f/your-endpoint">
+        <input type="email" name="email" required placeholder="Your email" class="border rounded p-2 w-full mb-2" />
+        <textarea name="itinerary" id="email-itinerary-text" class="border rounded p-2 w-full h-40" readonly></textarea>
+        <button class="btn-primary rounded-lg px-4 py-2 mt-2" type="submit">Send</button>
+      </form>
+      <p class="text-xs text-neutral-500 mt-2">Replace the Formspree endpoint with your own in <code>index.html</code>.</p>
     </div>
   </div>
 
