@@ -1,0 +1,1 @@
+export const tartanPatterns = { 'Royal Stewart': { palette:{R:'#B00000',K:'#101010',W:'#FFFFFF',Y:'#F2C94C',G:'#1E5F2A',B:'#0E2A57'}, sett:[['R',24],['K',4],['W',2],['K',4],['Y',2],['R',8],['G',8],['R',8],['K',6],['B',8],['K',6],['R',24]] } };
