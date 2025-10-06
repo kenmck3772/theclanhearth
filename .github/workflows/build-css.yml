@@ -1,28 +1,42 @@
-name: Build Tailwind CSS
+name: Build & Deploy (Tailwind + GitHub Pages)
+
 on:
   push:
     branches: [ main ]
-    paths:
-      - "css/tw-input.css"
-      - "js/**"
-      - "index.html"
-      - "tailwind.config.js"
-      - "package.json"
-      - "postcss.config.js"
+  workflow_dispatch: {}
+
+# Avoid overlapping runs
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+permissions:
+  contents: write        # for committing built css/style.css to main
+  pages: write           # for deploying to GitHub Pages
+  id-token: write        # required by actions/deploy-pages
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: "18"
-      - run: npm ci
-      - run: npm run build
+          cache: "npm"
+
+      - name: Install deps
+        run: npm install
+
+      - name: Build Tailwind
+        run: npm run build
+
+      # Commit compiled css back to main (skips if no changes)
       - name: Commit built CSS
+        if: ${{ github.actor != 'github-actions[bot]' }}
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
@@ -31,3 +45,29 @@ jobs:
             git commit -m "Build Tailwind CSS"
             git push
           fi
+
+      # Prepare a clean dist/ for Pages (exclude node_modules and .git)
+      - name: Create dist
+        run: |
+          mkdir -p dist
+          rsync -av \
+            --exclude '.git' \
+            --exclude 'node_modules' \
+            --exclude '.github' \
+            ./ dist/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
