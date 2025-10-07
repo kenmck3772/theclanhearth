@@ -22,9 +22,8 @@ jobs:
         uses: actions/checkout@v4
 
       -- name: Setup Node
-  uses: actions/setup-node@v4
-  with:
-    node-version: "18"
+         uses: actions/setup-node@v4
+        with: node-version: "18"
 
 
       - name: Install deps
