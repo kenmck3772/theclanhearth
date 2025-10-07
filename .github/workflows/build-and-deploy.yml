@@ -1,4 +1,4 @@
-name: Build & Deploy (Tailwind + Cache Bust + Sitemap + Preload)
+name: Build & Deploy (Tailwind + Cache Bust + Preload + Sitemap)
 
 on:
   push:
@@ -21,10 +21,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      -- name: Setup Node
-         uses: actions/setup-node@v4
-        with: node-version: "18"
-
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
 
       - name: Install deps
         run: npm install
@@ -60,7 +60,6 @@ jobs:
           if [ -f "dist/css/style.css" ]; then
             echo "file=dist/css/style.css" >> "$GITHUB_OUTPUT"
           elif [ -f "dist/CSS/style.css" ]; then
-            echo "Found dist/CSS/style.css; normalizing to dist/css/style.css"
             mkdir -p dist/css
             mv dist/CSS/style.css dist/css/style.css
             rm -rf dist/CSS || true
@@ -81,15 +80,12 @@ jobs:
           NEW="style.${HASH}.css"
           DIR="$(dirname "$CSS_FILE")"
           mv "$CSS_FILE" "${DIR}/${NEW}"
-
           # Replace stylesheet references in HTML
           find dist -type f -name "*.html" -print0 | xargs -0 sed -i 's|css/style\.css|css/'"$NEW"'|g'
-
-          # Inject <link rel="preload"> before the stylesheet link (safe with perl)
+          # Inject preload link before stylesheet link (safe with perl)
           find dist -type f -name "*.html" -print0 | while IFS= read -r -d '' f; do
             perl -0777 -pe 's|<link rel="stylesheet" href="css/'"$NEW"'"|<link rel="preload" href="css/'"$NEW"'" as="style">\n    <link rel="stylesheet" href="css/'"$NEW"'"|g' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
           done
-
           echo "Hashed + preloaded CSS => ${NEW}"
 
       - name: Generate sitemap + robots
@@ -101,9 +97,7 @@ jobs:
           else
             BASE="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
           fi
-
           TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-
           printf '%s\n' '<?xml version="1.0" encoding="UTF-8"?>' \
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' \
             '  <url>' \
@@ -119,7 +113,6 @@ jobs:
             '    <priority>0.9</priority>' \
             '  </url>' \
             '</urlset>' > dist/sitemap.xml
-
           printf '%s\n' 'User-agent: *' 'Allow: /' "Sitemap: ${BASE}/sitemap.xml" > dist/robots.txt
 
       - name: Upload Pages artifact
@@ -128,11 +121,11 @@ jobs:
           path: dist
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
