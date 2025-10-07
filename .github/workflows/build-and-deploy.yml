@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: "pages"
+  group: pages
   cancel-in-progress: true
 
 permissions:
@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
+          cache: npm
 
       - name: Install deps
         run: npm install
@@ -33,7 +33,6 @@ jobs:
       - name: Build Tailwind
         run: npm run build
 
-      # Commit css/style.css back to main so repo always has compiled CSS
       - name: Commit built CSS back to main
         if: ${{ github.actor != 'github-actions[bot]' }}
         run: |
@@ -49,28 +48,28 @@ jobs:
         run: |
           mkdir -p dist
           rsync -av \
-            --exclude '.git' \
-            --exclude '.github' \
-            --exclude 'node_modules' \
+            --exclude ".git" \
+            --exclude ".github" \
+            --exclude "node_modules" \
             ./ dist/
 
-      # Be resilient to accidental 'CSS' folder casing
-      - name: Locate built CSS file in dist
+      - name: Locate built CSS (normalize case)
         id: findcss
         shell: bash
         run: |
           set -e
           if [ -f "dist/css/style.css" ]; then
-            echo "file=dist/css/style.css" >> $GITHUB_OUTPUT
+            echo "file=dist/css/style.css" >> "$GITHUB_OUTPUT"
           elif [ -f "dist/CSS/style.css" ]; then
-            echo "Found dist/CSS/style.css; normalizing..."
+            echo "Found dist/CSS/style.css; normalizing to dist/css/style.css"
             mkdir -p dist/css
             mv dist/CSS/style.css dist/css/style.css
             rm -rf dist/CSS || true
-            echo "file=dist/css/style.css" >> $GITHUB_OUTPUT
+            echo "file=dist/css/style.css" >> "$GITHUB_OUTPUT"
           else
-            echo "dist tree:"; ls -R dist || true
-            echo "ERROR: style.css not found in dist"; exit 1
+            echo "ERROR: dist/css/style.css not found"
+            ls -R dist || true
+            exit 1
           fi
 
       - name: Cache-bust + preload CSS in dist
@@ -79,18 +78,18 @@ jobs:
           CSS_FILE: ${{ steps.findcss.outputs.file }}
         run: |
           set -e
-          HASH=$(sha256sum "$CSS_FILE" | cut -c1-10)
+          HASH="$(sha256sum "$CSS_FILE" | cut -c1-10)"
           NEW="style.${HASH}.css"
-          CSS_DIR=$(dirname "$CSS_FILE")
-          mv "$CSS_FILE" "${CSS_DIR}/${NEW}"
+          DIR="$(dirname "$CSS_FILE")"
+          mv "$CSS_FILE" "${DIR}/${NEW}"
 
-          # Swap references in all HTML files
-          grep -rl --include="*.html" "css/style.css" dist | xargs -r sed -i "s|css/style.css|css/${NEW}|g"
+          # Replace stylesheet references in HTML
+          find dist -type f -name "*.html" -print0 | xargs -0 sed -i 's|css/style\.css|css/'"$NEW"'|g'
 
-          # Inject preload before the stylesheet link
-          while IFS= read -r -d '' f; do
-            sed -i "s|<link rel=\"stylesheet\" href=\"css/${NEW}\"|<link rel=\"preload\" href=\"css/${NEW}\" as=\"style\">\n    <link rel=\"stylesheet\" href=\"css/${NEW}\"|g" "$f"
-          done < <(grep -rlZ --include="*.html" "href=\"css/${NEW}\"" dist)
+          # Inject <link rel="preload"> before the stylesheet link (safe with perl)
+          find dist -type f -name "*.html" -print0 | while IFS= read -r -d '' f; do
+            perl -0777 -pe 's|<link rel="stylesheet" href="css/'"$NEW"'"|<link rel="preload" href="css/'"$NEW"'" as="style">\n    <link rel="stylesheet" href="css/'"$NEW"'"|g' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+          done
 
           echo "Hashed + preloaded CSS => ${NEW}"
 
@@ -101,35 +100,28 @@ jobs:
           if [ -f CNAME ]; then
             BASE="https://$(cat CNAME)"
           else
-            REPO="${{ github.event.repository.name }}"
-            OWNER="${{ github.repository_owner }}"
-            BASE="https://${OWNER}.github.io/${REPO}"
+            BASE="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
           fi
 
-          TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          cat > dist/sitemap.xml <<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${BASE}/</loc>
-    <lastmod>${TS}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${BASE}/index.html</loc>
-    <lastmod>${TS}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-</urlset>
-EOF
+          TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-          cat > dist/robots.txt <<EOF
-User-agent: *
-Allow: /
-Sitemap: ${BASE}/sitemap.xml
-EOF
+          printf '%s\n' '<?xml version="1.0" encoding="UTF-8"?>' \
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' \
+            '  <url>' \
+            "    <loc>${BASE}/</loc>" \
+            "    <lastmod>${TS}</lastmod>" \
+            '    <changefreq>weekly</changefreq>' \
+            '    <priority>1.0</priority>' \
+            '  </url>' \
+            '  <url>' \
+            "    <loc>${BASE}/index.html</loc>" \
+            "    <lastmod>${TS}</lastmod>" \
+            '    <changefreq>weekly</changefreq>' \
+            '    <priority>0.9</priority>' \
+            '  </url>' \
+            '</urlset>' > dist/sitemap.xml
+
+          printf '%s\n' 'User-agent: *' 'Allow: /' "Sitemap: ${BASE}/sitemap.xml" > dist/robots.txt
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
