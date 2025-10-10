@@ -1,11 +1,11 @@
-// Planner functionality
+// Planner Module
 function initPlanner() {
-    console.log('Initializing planner...');
+    console.log('Initializing planner module...');
     // Add your planner-specific code here
+    // This will be called when planner view is activated
 }
 
-// Export for use in main.js
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { initPlanner };
+// Make it globally available
+if (typeof window !== 'undefined') {
+    window.initPlanner = initPlanner;
 }
-
