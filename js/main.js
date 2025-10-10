@@ -71,22 +71,22 @@ document.addEventListener('DOMContentLoaded', function() {
     function initializeView(viewName) {
         switch(viewName) {
             case 'planner':
-                initPlanner();
+                if (typeof initPlanner === 'function') initPlanner();
                 break;
             case 'clans':
-                initClans();
+                if (typeof initClans === 'function') initClans();
                 break;
             case 'finder':
-                initFinder();
+                if (typeof initFinder === 'function') initFinder();
                 break;
             case 'tartan-designer':
-                initTartanDesigner();
+                if (typeof initTartanDesigner === 'function') initTartanDesigner();
                 break;
             case 'recipes':
-                initRecipes();
+                if (typeof initRecipes === 'function') initRecipes();
                 break;
             case 'legends':
-                initLegends();
+                if (typeof initLegends === 'function') initLegends();
                 break;
         }
     }
@@ -197,37 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
-    }
-    
-    // View initialization functions (to be implemented in separate files)
-    function initPlanner() {
-        // Planner initialization code
-        console.log('Initializing planner...');
-    }
-    
-    function initClans() {
-        // Clans initialization code
-        console.log('Initializing clans...');
-    }
-    
-    function initFinder() {
-        // Finder initialization code
-        console.log('Initializing finder...');
-    }
-    
-    function initTartanDesigner() {
-        // Tartan designer initialization code
-        console.log('Initializing tartan designer...');
-    }
-    
-    function initRecipes() {
-        // Recipes initialization code
-        console.log('Initializing recipes...');
-    }
-    
-    function initLegends() {
-        // Legends initialization code
-        console.log('Initializing legends...');
     }
     
     // Initialize the app
