@@ -32,3 +32,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Ignore specific files
+index-single-file.html
