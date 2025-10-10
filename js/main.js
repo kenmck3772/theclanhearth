@@ -63,9 +63,41 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.add('active');
         });
         
-        // Initialize view-specific functionality
-        initializeView(viewName);
+// Initialize view-specific functionality
+function initializeView(viewName) {
+    switch(viewName) {
+        case 'planner':
+            if (typeof window.initPlanner === 'function') {
+                window.initPlanner();
+            }
+            break;
+        case 'clans':
+            if (typeof window.initClans === 'function') {
+                window.initClans();
+            }
+            break;
+        case 'finder':
+            if (typeof window.initFinder === 'function') {
+                window.initFinder();
+            }
+            break;
+        case 'tartan-designer':
+            if (typeof window.initTartanDesigner === 'function') {
+                window.initTartanDesigner();
+            }
+            break;
+        case 'recipes':
+            if (typeof window.initRecipes === 'function') {
+                window.initRecipes();
+            }
+            break;
+        case 'legends':
+            if (typeof window.initLegends === 'function') {
+                window.initLegends();
+            }
+            break;
     }
+}
     
     // Initialize view-specific functionality
     function initializeView(viewName) {
