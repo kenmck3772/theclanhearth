@@ -1,10 +1,10 @@
-// Tartan Designer functionality
-function initTartanDesigner() {
-    console.log('Initializing tartan designer...');
-    // Add your tartan designer-specific code here
+// Legends Module
+function initLegends() {
+    console.log('Initializing legends module...');
+    // Add your legends-specific code here
 }
 
-// Export for use in main.js
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { initTartanDesigner };
+// Make it globally available
+if (typeof window !== 'undefined') {
+    window.initLegends = initLegends;
 }
