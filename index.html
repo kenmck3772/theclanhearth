@@ -211,6 +211,38 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
+        /* Clan Visualization Styles */
+        .clan-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .clan-card:hover {
+            transform: translateY(-5px);
+            border-color: #a16207;
+            box-shadow: 0 10px 25px rgba(161, 98, 7, 0.2);
+        }
+        .clan-emblem {
+            width: 100px;
+            height: 100px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin: 0 auto 1rem;
+        }
+        .tartan-preview {
+            height: 80px;
+            background-size: 50px 50px;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .clan-map-preview {
+            height: 120px;
+            border-radius: 0.5rem;
+            background-size: cover;
+            background-position: center;
+            margin: 1rem 0;
+        }
+
         /* Family Tree Styles */
         .family-tree-container {
             background: white;
@@ -390,6 +422,25 @@
                 <p class="text-lg text-stone-600 mb-8 max-w-3xl mx-auto italic">Troimh theine tha sinn aonaichte (Through fire, we are united)</p>
                 <p class="text-lg md:text-xl text-stone-700 max-w-3xl mx-auto">Your digital gateway to Scottish heritage. Explore detailed clan histories, plan authentic Scottish journeys, design personal tartans, and discover the legends that shaped Scotland. Your heritage journey starts here.</p>
             </div>
+            
+            <!-- Quick Access Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white/80 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="navigateTo('clans')">
+                    <div class="text-4xl mb-4 text-center">🛡️</div>
+                    <h3 class="text-xl font-bold font-title text-stone-800 mb-2 text-center">Clan Histories</h3>
+                    <p class="text-stone-600 text-center">Explore detailed clan territories, emblems, and traditions</p>
+                </div>
+                <div class="bg-white/80 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="navigateTo('tartan-designer')">
+                    <div class="text-4xl mb-4 text-center">🧵</div>
+                    <h3 class="text-xl font-bold font-title text-stone-800 mb-2 text-center">Tartan Designer</h3>
+                    <p class="text-stone-600 text-center">Create your own unique clan tartan patterns</p>
+                </div>
+                <div class="bg-white/80 rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow cursor-pointer" onclick="navigateTo('tourism')">
+                    <div class="text-4xl mb-4 text-center">🗺️</div>
+                    <h3 class="text-xl font-bold font-title text-stone-800 mb-2 text-center">Trip Planner</h3>
+                    <p class="text-stone-600 text-center">Plan authentic Scottish heritage journeys</p>
+                </div>
+            </div>
         </section>
 
         <!-- Tourism Map Section -->
@@ -479,6 +530,31 @@
                             <h3 class="text-xl font-bold mb-4 font-title">Clan Details</h3>
                             <div id="map-info" class="space-y-4">
                                 <p class="text-stone-500">Select a clan from the list to see their territory and details.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Clan Visualization Grid -->
+                    <div class="mt-10">
+                        <h3 class="text-2xl font-bold font-title text-stone-800 mb-6">Featured Clans</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="clan-card bg-white rounded-xl shadow-lg p-6 border border-stone-200">
+                                <div class="clan-emblem" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Coat_of_arms_of_the_Duke_of_Argyll.svg/220px-Coat_of_arms_of_the_Duke_of_Argyll.svg.png')"></div>
+                                <h4 class="text-xl font-bold font-title text-center mb-2">Clan Campbell</h4>
+                                <div class="tartan-preview" style="background-image: url('https://www.tartanregister.gov.uk/tpsimages/2000/2000.png')"></div>
+                                <p class="text-stone-600 text-sm text-center">"Ne Obliviscaris"</p>
+                            </div>
+                            <div class="clan-card bg-white rounded-xl shadow-lg p-6 border border-stone-200">
+                                <div class="clan-emblem" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Coat_of_arms_of_the_MacDonald_clan.svg/220px-Coat_of_arms_of_the_MacDonald_clan.svg.png')"></div>
+                                <h4 class="text-xl font-bold font-title text-center mb-2">Clan MacDonald</h4>
+                                <div class="tartan-preview" style="background-image: url('https://www.tartanregister.gov.uk/tpsimages/1000/1000.png')"></div>
+                                <p class="text-stone-600 text-sm text-center">"Per Mare Per Terras"</p>
+                            </div>
+                            <div class="clan-card bg-white rounded-xl shadow-lg p-6 border border-stone-200">
+                                <div class="clan-emblem" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Coat_of_arms_of_the_MacKenzie_clan.svg/220px-Coat_of_arms_of_the_MacKenzie_clan.svg.png')"></div>
+                                <h4 class="text-xl font-bold font-title text-center mb-2">Clan MacKenzie</h4>
+                                <div class="tartan-preview" style="background-image: url('https://www.tartanregister.gov.uk/tpsimages/1400/1400.png')"></div>
+                                <p class="text-stone-600 text-sm text-center">"Luceo non uro"</p>
                             </div>
                         </div>
                     </div>
@@ -759,7 +835,26 @@
                         </div>
                         <div class="mt-6">
                             <h3 class="text-lg font-semibold text-center mb-4">Or, start with a famous tartan:</h3>
-                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+                            <div id="tartan-examples-grid" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white p-4 rounded-lg shadow border cursor-pointer hover:shadow-lg transition-shadow" data-example="royal-stewart">
+                                    <div class="h-20 mb-2 rounded border overflow-hidden">
+                                        <img src="https://www.tartanregister.gov.uk/tpsimages/3000/3000.png" alt="Royal Stewart Tartan" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="text-center font-semibold text-sm">Royal Stewart</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow border cursor-pointer hover:shadow-lg transition-shadow" data-example="black-watch">
+                                    <div class="h-20 mb-2 rounded border overflow-hidden">
+                                        <img src="https://www.tartanregister.gov.uk/tpsimages/2000/2000.png" alt="Black Watch Tartan" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="text-center font-semibold text-sm">Black Watch</p>
+                                </div>
+                                <div class="bg-white p-4 rounded-lg shadow border cursor-pointer hover:shadow-lg transition-shadow" data-example="macleod">
+                                    <div class="h-20 mb-2 rounded border overflow-hidden">
+                                        <img src="https://www.tartanregister.gov.uk/tpsimages/1400/1400.png" alt="MacLeod Tartan" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="text-center font-semibold text-sm">MacLeod</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -815,7 +910,8 @@
                 mottoLore: "This defiant motto perfectly captures the spirit of a clan that survived for centuries in the violent frontier of the Borders, facing down both English invaders and Scottish royal authority.",
                 tartan: {
                     description: "The Armstrong tartan features deep green, navy blue, and black strokes on a white background, with thin red and yellow accent lines.",
-                    colors: ["#004225", "#1a2d57", "#000000"]
+                    colors: ["#004225", "#1a2d57", "#000000"],
+                    image: "https://www.tartanregister.gov.uk/tpsimages/1000/1000.png"
                 },
                 famousNames: [
                     { name: "Johnnie Armstrong of Gilnockie (d. 1530)", desc: "The legendary Border Reiver whose execution became a symbol of royal treachery." },
@@ -837,7 +933,8 @@
                     stone: "ruby",
                     element: "fire",
                     values: "courage, independence, and fierce loyalty"
-                }
+                },
+                emblem: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Coat_of_arms_of_the_MacDonald_clan.svg/220px-Coat_of_arms_of_the_MacDonald_clan.svg.png"
             },
             {
                 id: "campbell",
@@ -860,7 +957,8 @@
                 mottoLore: "This powerful motto serves as both a reminder to remember past wrongs and a warning to enemies that no injury will be forgotten.",
                 tartan: {
                     description: "The Campbell tartan forms the basis of the Black Watch military tartan, featuring dark green crossed with navy blue and black lines.",
-                    colors: ["#004225", "#1a2d57", "#000000"]
+                    colors: ["#004225", "#1a2d57", "#000000"],
+                    image: "https://www.tartanregister.gov.uk/tpsimages/2000/2000.png"
                 },
                 famousNames: [
                     { name: "Cailean Mór Campbell (d. 1296)", desc: "Known as 'Colin the Great,' the clan's legendary progenitor." },
@@ -882,7 +980,8 @@
                     stone: "sapphire",
                     element: "water",
                     values: "wisdom, strategic thinking, and adaptability"
-                }
+                },
+                emblem: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Coat_of_arms_of_the_Duke_of_Argyll.svg/220px-Coat_of_arms_of_the_Duke_of_Argyll.svg.png"
             },
             {
                 id: "mackenzie",
@@ -907,7 +1006,8 @@
                 mottoLore: "This elegant motto reflects the clan's philosophy of measured strength and wisdom over destructive force. Unlike the blazing fire that consumes, the MacKenzies preferred to shine with steady light.",
                 tartan: {
                     description: "The MacKenzie tartan is a striking pattern of red and green with blue and black accents, symbolizing the clan's connection to both Highland landscapes and royal heritage.",
-                    colors: ["#C41E3A", "#004225", "#1a2d57"]
+                    colors: ["#C41E3A", "#004225", "#1a2d57"],
+                    image: "https://www.tartanregister.gov.uk/tpsimages/1400/1400.png"
                 },
                 famousNames: [
                     { name: "Kenneth MacKenzie, 3rd Earl of Seaforth (1635-1678)", desc: "Known as 'Coinneach Mór,' a powerful chief who expanded MacKenzie influence." },
@@ -931,7 +1031,8 @@
                     stone: "emerald",
                     element: "earth",
                     values: "wisdom, prophecy, and connection to the land"
-                }
+                },
+                emblem: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Coat_of_arms_of_the_MacKenzie_clan.svg/220px-Coat_of_arms_of_the_MacKenzie_clan.svg.png"
             },
             {
                 id: "macdonald",
@@ -955,7 +1056,8 @@
                 mottoLore: "This motto perfectly captures the MacDonald mastery of both maritime and terrestrial domains, reflecting their unique position as sea-kings of the Highlands.",
                 tartan: {
                     description: "The MacDonald tartan features a bold red background with green and blue stripes, symbolizing the blood, land, and sea that defined their realm.",
-                    colors: ["#C41E3A", "#004225", "#1a2d57"]
+                    colors: ["#C41E3A", "#004225", "#1a2d57"],
+                    image: "https://www.tartanregister.gov.uk/tpsimages/1000/1000.png"
                 },
                 famousNames: [
                     { name: "John MacDonald, 1st Lord of the Isles (c. 1306-1386)", desc: "Founder of the MacDonald maritime empire." },
@@ -978,7 +1080,8 @@
                     stone: "sapphire",
                     element: "water",
                     values: "maritime mastery, independence, and noble pride"
-                }
+                },
+                emblem: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Coat_of_arms_of_the_MacDonald_clan.svg/220px-Coat_of_arms_of_the_MacDonald_clan.svg.png"
             },
             {
                 id: "stewart",
@@ -1001,7 +1104,8 @@
                 mottoLore: "This noble motto reflects the Stewart ability to emerge stronger from adversity, a trait that served them through centuries of political turmoil.",
                 tartan: {
                     description: "The Royal Stewart tartan is perhaps the most famous tartan in the world, featuring a bold red background with green and blue stripes.",
-                    colors: ["#C41E3A", "#004225", "#1a2d57"]
+                    colors: ["#C41E3A", "#004225", "#1a2d57"],
+                    image: "https://www.tartanregister.gov.uk/tpsimages/3000/3000.png"
                 },
                 famousNames: [
                     { name: "Mary Queen of Scots (1542-1587)", desc: "The tragic queen whose life epitomized Stewart romance and tragedy." },
@@ -1024,7 +1128,8 @@
                     stone: "ruby",
                     element: "fire",
                     values: "royal destiny, passion, and resilience"
-                }
+                },
+                emblem: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Royal_Arms_of_Scotland.svg/220px-Royal_Arms_of_Scotland.svg.png"
             }
         ];
 
@@ -1222,25 +1327,25 @@
         // Tourism Map Data
         const tourismData = {
             clans: [
-                { id: 'inveraray', lat: 56.2345, lng: -5.0654, name: 'Inveraray Castle', desc: 'Seat of Clan Campbell, the Dukes of Argyll.' },
-                { id: 'eilean_donan', lat: 57.2736, lng: -5.5165, name: 'Eilean Donan Castle', desc: 'Historic seat of Clan MacKenzie.' }
+                { id: 'inveraray', lat: 56.2345, lng: -5.0654, name: 'Inveraray Castle', desc: 'Seat of Clan Campbell, the Dukes of Argyll.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Inveraray_Castle%2C_Argyll_and_Bute%2C_Scotland.jpg/320px-Inveraray_Castle%2C_Argyll_and_Bute%2C_Scotland.jpg' },
+                { id: 'eilean_donan', lat: 57.2736, lng: -5.5165, name: 'Eilean Donan Castle', desc: 'Historic seat of Clan MacKenzie.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Eilean_Donan_Castle%2C_Kyle%2C_Highland%2C_Scotland.jpg/320px-Eilean_Donan_Castle%2C_Kyle%2C_Highland%2C_Scotland.jpg' }
             ],
             distilleries: [
-                { id: 'talisker', lat: 57.3019, lng: -6.3582, name: 'Talisker Distillery', desc: 'Oldest distillery on the Isle of Skye.' },
-                { id: 'lagavulin', lat: 55.6355, lng: -6.1268, name: 'Lagavulin Distillery', desc: 'Famous Islay single malt whisky.' }
+                { id: 'talisker', lat: 57.3019, lng: -6.3582, name: 'Talisker Distillery', desc: 'Oldest distillery on the Isle of Skye.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Talisker_distillery.jpg/320px-Talisker_distillery.jpg' },
+                { id: 'lagavulin', lat: 55.6355, lng: -6.1268, name: 'Lagavulin Distillery', desc: 'Famous Islay single malt whisky.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Lagavulin_Distillery%2C_Islay.jpg/320px-Lagavulin_Distillery%2C_Islay.jpg' }
             ],
             attractions: [
-                { id: 'stirling', lat: 56.1234, lng: -3.9482, name: 'Stirling Castle', desc: 'One of Scotland\'s grandest castles.' },
-                { id: 'edinburgh', lat: 55.9486, lng: -3.1999, name: 'Edinburgh Castle', desc: 'Scotland\'s most famous fortress.' }
+                { id: 'stirling', lat: 56.1234, lng: -3.9482, name: 'Stirling Castle', desc: 'One of Scotland\'s grandest castles.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Stirling_Castle%2C_Scotland.jpg/320px-Stirling_Castle%2C_Scotland.jpg' },
+                { id: 'edinburgh', lat: 55.9486, lng: -3.1999, name: 'Edinburgh Castle', desc: 'Scotland\'s most famous fortress.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Edinburgh_Castle_from_Princes_Street_Gardens.jpg/320px-Edinburgh_Castle_from_Princes_Street_Gardens.jpg' }
             ],
             myths: [
-                { id: 'fairy_pools', lat: 57.2500, lng: -6.2580, name: 'Fairy Pools', desc: 'Magical blue pools on Skye, gateway to the fairy world.' }
+                { id: 'fairy_pools', lat: 57.2500, lng: -6.2580, name: 'Fairy Pools', desc: 'Magical blue pools on Skye, gateway to the fairy world.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Fairy_Pools%2C_Skye.jpg/320px-Fairy_Pools%2C_Skye.jpg' }
             ],
             golf: [
-                { id: 'st_andrews', lat: 56.3490, lng: -2.8010, name: 'St Andrews Old Course', desc: 'The Home of Golf.' }
+                { id: 'st_andrews', lat: 56.3490, lng: -2.8010, name: 'St Andrews Old Course', desc: 'The Home of Golf.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/St_Andrews_Old_Course.jpg/320px-St_Andrews_Old_Course.jpg' }
             ],
             film: [
-                { id: 'doune_castle', lat: 56.1850, lng: -4.0550, name: 'Doune Castle', desc: 'Famous as Castle Leoch in Outlander.' }
+                { id: 'doune_castle', lat: 56.1850, lng: -4.0550, name: 'Doune Castle', desc: 'Famous as Castle Leoch in Outlander.', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Doune_Castle%2C_Scotland.jpg/320px-Doune_Castle%2C_Scotland.jpg' }
             ]
         };
 
@@ -1308,6 +1413,23 @@
             document.getElementById('home-section').classList.add('active');
         }
 
+        // Quick navigation function
+        window.navigateTo = function(section) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(section + '-section').classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`.nav-link[data-target="${section}"]`).classList.add('active');
+            
+            // Initialize maps when needed
+            if (section === 'tourism') {
+                setTimeout(initTourismMap, 100);
+            } else if (section === 'clans') {
+                setTimeout(initClansMap, 100);
+            } else if (section === 'spiritual') {
+                setTimeout(initSpiritualFinder, 100);
+            }
+        };
+
         // Tourism Map
         function initTourismMap() {
             if (maps.tourism) return; // Already initialized
@@ -1355,9 +1477,15 @@
                     tourismData[category].forEach(item => {
                         const marker = L.marker([item.lat, item.lng], { icon: iconMap[category] })
                             .bindPopup(`
-${item.name}</h3><p>${item.desc}
+                                <div class="text-center">
+                                    <h3 class="font-bold">${item.name}
+                                    
 
-Add to Trip`);
+${item.desc}</p>
+                                    <img src="${item.image}" alt="${item.name}" class="w-full h-24 object-cover rounded mt-2">
+                                    <button class="add-to-trip-btn mt-2 bg-yellow-700 text-white px-3 py-1 rounded text-sm" onclick="addToTrip('${item.id}', '${item.name}', ${item.lat}, ${item.lng})">Add to Trip</button>
+                                </div>
+                            `);
                         marker.addTo(layers[category]);
                     });
                 }
@@ -1400,10 +1528,15 @@ Add to Trip`);
                 tripCount.textContent = trip.length;
                 
                 if (trip.length === 0) {
-                    tripList.innerHTML = '<li class="text-gray-500">Your journey is empty. Add locations from the map!</li>';
+                    tripList.innerHTML = '
+
+Your journey is empty. Add locations from the map!
+';
                 } else {
                     tripList.innerHTML = trip.map((item, index) => 
-                        `<li>${index + 1}. ${item.name}</li>`
+                        `
+${index + 1}. ${item.name}
+`
                     ).join('');
                 }
             }
@@ -1471,7 +1604,7 @@ Add to Trip`);
                     fillOpacity: 0.4,
                     weight: 2
                 });
-                polygon.bindPopup(`<b>${territory.name}`);
+                polygon.bindPopup(`${territory.name}</b>`);
                 polygon.addTo(maps.clans);
             });
 
@@ -1479,12 +1612,22 @@ Add to Trip`);
             const sidebar = document.getElementById('clan-sidebar-list');
             if (sidebar) {
                 sidebar.innerHTML = clanData.map(clan => 
-                    `${clan.name}`
+                    `<button class="block w-full text-left px-4 py-2 rounded-md text-stone-600 hover:bg-stone-200 transition-colors flex items-center" data-clan="${clan.id}">
+                        
+
+                            
+
+                        
+
+                        ${clan.name}
+                    </button>`
                 ).join('');
 
                 sidebar.addEventListener('click', (e) => {
                     if (e.target.dataset.clan) {
                         showClanDetails(e.target.dataset.clan);
+                    } else if (e.target.closest('[data-clan]')) {
+                        showClanDetails(e.target.closest('[data-clan]').dataset.clan);
                     }
                 });
             }
@@ -1497,262 +1640,29 @@ Add to Trip`);
             const infoBox = document.getElementById('map-info');
             if (infoBox) {
                 infoBox.innerHTML = `
-                    
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <div class="w-16 h-16 rounded-full mr-4 overflow-hidden">
+                                <img src="${clan.emblem}" alt="${clan.name} emblem" class="w-full h-full object-contain">
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold">${clan.name}
+                                
 
-                        
-${clan.name}</h3>
-                        <p class="text-sm text-stone-600">${clan.gaelicName}
-
-
-                        
-
-${clan.motto}</p>
-                        <p>${clan.lore.substring(0, 200)}...
-
-
-                        
-                            View Full Details
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        window.openClanModal = (clanId) => {
-            const clan = clanData.find(c => c.id === clanId);
-            if (!clan) return;
-            openGenericModal(clan);
-        };
-
-        // Clan Finder Quiz
-        function initClanFinder() {
-            const quizContainer = document.getElementById('quiz-container');
-            const resultContainer = document.getElementById('quiz-result');
-            if (!quizContainer) return;
-
-            const quizQuestions = [
-                {
-                    question: "When facing a challenge, you rely on:",
-                    options: {
-                        "A": { text: "Strategic planning and alliances", clan: "campbell" },
-                        "B": { text: "Fierce loyalty and determination", clan: "macdonald" },
-                        "C": { text: "Ancient wisdom and tradition", clan: "mackenzie" },
-                        "D": { text: "Bold action and courage", clan: "stewart" }
-                    }
-                },
-                {
-                    question: "Your ideal home would be:",
-                    options: {
-                        "A": { text: "A grand castle with political influence", clan: "campbell" },
-                        "B": { text: "An island fortress with sea views", clan: "macdonald" },
-                        "C": { text: "A Highland stronghold rich in lore", clan: "mackenzie" },
-                        "D": { text: "A royal residence with history", clan: "stewart" }
-                    }
-                },
-                {
-                    question: "In conflict, your approach is:",
-                    options: {
-                        "A": { text: "Diplomatic but prepared for war", clan: "campbell" },
-                        "B": { text: "Defend your territory fiercely", clan: "macdonald" },
-                        "C": { text: "Use wisdom to predict outcomes", clan: "mackenzie" },
-                        "D": { text: "Lead from the front with honor", clan: "stewart" }
-                    }
-                }
-            ];
-
-            let currentQuestion = 0;
-            let scores = {};
-
-            function showQuestion(index) {
-                const q = quizQuestions[index];
-                quizContainer.innerHTML = `
-                    <div class="quiz-question active animate-fade-in">
-                        <h3 class="text-2xl font-semibold text-center mb-6">${q.question}
-
-                        
-
-                            ${Object.keys(q.options).map(key => `
-                                <button class="quiz-option block w-full text-left p-4 border-2 border-stone-200 rounded-lg hover:bg-stone-100" data-clan="%%%LATEX_BLOCK_11%%%{key}.</span> %%%LATEX_BLOCK_12%%%{resultClan.name}</h2>
-                            <p class="text-lg text-stone-700">%%%LATEX_BLOCK_13%%%{legend.name}">
-                    %%%LATEX_BLOCK_14%%%{legend.name}</h1>
-                        <p class="text-lg text-stone-500 mt-1">%%%LATEX_BLOCK_15%%%{legend.lore.split('\n\n').map(paragraph => `<p class="mb-4">${paragraph}
-
-`).join('')}
-                    
-
-                    
-                    ${legend.recipe ? `
-                        <div class="border-t pt-6">
-                            <h3 class="text-2xl font-semibold text-stone-800 mb-4 font-title">%%%LATEX_BLOCK_17%%%{legend.recipe.link}</p>
-                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                <div>
-                                    <h4 class="font-semibold text-stone-700 mb-3 text-lg">Ingredients</h4>
-                                    <ul class="list-disc list-inside space-y-2 text-stone-600">
-                                        %%%LATEX_BLOCK_18%%%{ingredient}</li>`).join('')}
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-stone-700 mb-3 text-lg">Method</h4>
-                                    <ol class="list-decimal list-inside space-y-3 text-stone-600">
-                                        ${legend.recipe.method.map(step => `
-${step}</li>`).join('')}
-                                    </ol>
-                                </div>
+${clan.gaelicName}</p>
                             </div>
                         </div>
-                    ` : ''}
-                </div>
-            `;
-        }
+                        <p class="font-semibold">${clan.motto}
 
-        // Tartan Designer
-        function initTartanDesigner() {
-            const canvas = document.getElementById('tartan-canvas');
-            if (!canvas) return;
-            
-            const ctx = canvas.getContext('2d');
-            const colorPalette = document.getElementById('color-palette');
-            const threadCountInput = document.getElementById('thread-count');
-            const addStripeBtn = document.getElementById('add-stripe-btn');
-            const clearPatternBtn = document.getElementById('clear-pattern-btn');
-            const patternList = document.getElementById('pattern-list');
-            const tartanNameInput = document.getElementById('tartan-name');
-            const saveBtn = document.getElementById('save-btn');
-            const shareBtn = document.getElementById('share-btn');
-            const examplesGrid = document.getElementById('tartan-examples-grid');
 
-            const TARTAN_COLORS = [
-                { name: 'Hunter Green', hex: '#004225' },
-                { name: 'Royal Red', hex: '#C41E3A' },
-                { name: 'Azure Blue', hex: '#0072B2' },
-                { name: 'Charcoal', hex: '#36454F' },
-                { name: 'Gold', hex: '#FFD700' },
-                { name: 'White', hex: '#FFFFFF' },
-            ];
+                        
 
-            let selectedColor = TARTAN_COLORS[0].hex;
-            let sett = [];
+                            
 
-            const exampleTartans = {
-                "Royal Stewart": [
-                    { color: '#C41E3A', threads: 72 }, { color: '#0072B2', threads: 12 },
-                    { color: '#FFFFFF', threads: 4 }, { color: '#FFD700', threads: 12 },
-                    { color: '#004225', threads: 18 }, { color: '#36454F', threads: 4 }
-                ],
-                "Black Watch": [
-                    { color: '#1a2d57', threads: 48 }, { color: '#004225', threads: 48 },
-                    { color: '#36454F', threads: 24 }
-                ],
-                "MacLeod": [
-                    { color: '#FFD700', threads: 24 }, { color: '#36454F', threads: 12 },
-                    { color: '#C41E3A', threads: 4 }
-                ]
-            };
-
-            function setup() {
-                setupColorPalette();
-                populateTartanExamples();
-                resizeCanvas();
-                drawTartan();
-
-                addStripeBtn.addEventListener('click', addStripe);
-                clearPatternBtn.addEventListener('click', clearPattern);
-                saveBtn.addEventListener('click', saveTartan);
-                shareBtn.addEventListener('click', shareTartan);
-                threadCountInput.addEventListener('input', previewTartan);
-
-                window.addEventListener('resize', () => {
-                    if (currentSection === 'tartan-designer') {
-                        resizeCanvas();
-                        drawTartan();
-                    }
-                });
-            }
-
-            function setupColorPalette() {
-                if (!colorPalette) return;
-                colorPalette.innerHTML = TARTAN_COLORS.map((color, index) => `
-                    <div class="w-10 h-10 rounded-full cursor-pointer border-2 border-stone-200 color-box ${index === 0 ? 'selected' : ''}" 
-                         style="background-color: ${color.hex}" 
-                         data-color="${color.hex}" 
-                         title="${color.name}">
-                    </div>
-                `).join('');
-
-                colorPalette.addEventListener('click', (e) => {
-                    if (e.target.dataset.color) {
-                        selectedColor = e.target.dataset.color;
-                        colorPalette.querySelectorAll('.color-box').forEach(box => box.classList.remove('selected'));
-                        e.target.classList.add('selected');
-                        previewTartan();
-                    }
-                });
-            }
-
-            function populateTartanExamples() {
-                if (!examplesGrid) return;
-                examplesGrid.innerHTML = Object.keys(exampleTartans).map(name => `
-                    <div class="bg-white p-4 rounded-lg shadow border cursor-pointer hover:shadow-lg transition-shadow" data-example="${name}">
                         
 
                         
 
-${name}</p>
-                    </div>
-                `).join('');
-
-                examplesGrid.addEventListener('click', (e) => {
-                    const exampleName = e.target.closest('[data-example]')?.dataset.example;
-                    if (exampleName && exampleTartans[exampleName]) {
-                        sett = JSON.parse(JSON.stringify(exampleTartans[exampleName]));
-                        if (tartanNameInput) tartanNameInput.value = exampleName;
-                        updatePatternList();
-                        drawTartan();
-                    }
-                });
-            }
-
-            function addStripe() {
-                const threads = parseInt(threadCountInput.value);
-                if (!threads || threads < 2) {
-                    showMessage('Please enter a thread count of 2 or more.', true);
-                    return;
-                }
-                sett.push({ color: selectedColor, threads });
-                if (threadCountInput) threadCountInput.value = '';
-                updatePatternList();
-                drawTartan();
-            }
-
-            function previewTartan() {
-                const threads = parseInt(threadCountInput.value);
-                if (!threads || threads < 2) {
-                    drawTartan();
-                    return;
-                }
-                const previewSett = [...sett, { color: selectedColor, threads: threads }];
-                drawTartan(previewSett);
-            }
-
-            function clearPattern() {
-                sett = [];
-                if (tartanNameInput) tartanNameInput.value = '';
-                updatePatternList();
-                drawTartan();
-            }
-
-            function updatePatternList() {
-                if (!patternList) return;
-                if (sett.length === 0) {
-                    patternList.innerHTML = '<p class="text-stone-500 text-center">Your stripes will appear here...</p>';
-                    return;
-                }
-                patternList.innerHTML = sett.map((stripe, index) => `
-                    <div class="flex items-center justify-between p-2 rounded-lg mb-2 bg-white border">
-                        <div class="flex items-center gap-3">
-                            <div class="w-5 h-5 rounded-full border" style="background-color: ${stripe.color};">
-
-
-                            ${stripe.threads} threads</span>
-                        </div>
-                        <button class="text-red-500 hover:text-red-700 font-bold text-lg" onclick="removeStripe(${index})">×
+${clan.lore.substring(0, 200)}...</p>
+                        <button class="bg-yellow-800 text-white px-4 py-2 rounded-lg text-sm" onclick="openClanModal('${clan.id}')">
+                            View Full Details
