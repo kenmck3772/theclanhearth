@@ -1,10 +1,10 @@
-// Finder functionality
+// Finder Module
 function initFinder() {
-    console.log('Initializing finder...');
+    console.log('Initializing finder module...');
     // Add your finder-specific code here
 }
 
-// Export for use in main.js
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { initFinder };
+// Make it globally available
+if (typeof window !== 'undefined') {
+    window.initFinder = initFinder;
 }
