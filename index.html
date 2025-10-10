@@ -122,6 +122,132 @@
             border-color: #a16207;
         }
 
+        /* Family Tree Styles */
+        .family-tree-container {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .family-tree {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding: 2rem 0;
+        }
+        .tree-node {
+            position: relative;
+            padding: 1rem;
+            border: 2px solid #d4a017;
+            border-radius: 0.5rem;
+            background: #fef9e7;
+            min-width: 180px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .tree-node.root {
+            background: #fdf2e9;
+            border-color: #a16207;
+            font-weight: bold;
+        }
+        .tree-node.clan-connected {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+        .node-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .node-dates {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        .node-clan {
+            font-size: 0.875rem;
+            color: #2e7d32;
+            margin-top: 0.25rem;
+            font-weight: 500;
+        }
+        .node-connection {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #a16207;
+        }
+        .tree-children {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            position: relative;
+        }
+        .tree-children::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #a16207;
+        }
+        .tree-child {
+            position: relative;
+            margin: 0 1rem;
+        }
+        .tree-child::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 20px;
+            background: #a16207;
+        }
+        .add-person-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: #a16207;
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .add-person-btn:hover {
+            background: #8a5506;
+        }
+        .tree-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .tree-btn {
+            padding: 0.5rem 1rem;
+            background: #e8d5b7;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .tree-btn:hover {
+            background: #d4c0a1;
+        }
+        .tree-btn.primary {
+            background: #a16207;
+            color: white;
+        }
+        .tree-btn.primary:hover {
+            background: #8a5506;
+        }
+
         /* PDF Export Optimization */
         @media print {
             .page-section { display: block !important; page-break-inside: avoid; }
@@ -147,6 +273,7 @@
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="legends">Legends</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tartan-designer">Tartan Designer</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="recipes">Recipes</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="family-tree">Family Tree</button>
             </nav>
             <button id="mobile-menu-btn" class="md:hidden text-stone-700">
                 <i class="fas fa-bars text-xl"></i>
@@ -160,6 +287,7 @@
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="legends">Legends</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">Tartan Designer</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">Recipes</button>
+            <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="family-tree">Family Tree</button>
         </div>
     </header>
 
@@ -374,11 +502,147 @@
             <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
+        <!-- Family Tree Section -->
+        <section id="family-tree-section" class="page-section">
+            <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">Scottish Family Tree Builder</h2>
+                    <p class="text-lg text-stone-600 mt-2">Map your Scottish ancestry and connect with your clan heritage</p>
+                </div>
+                
+                <div class="family-tree-container">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold font-title text-stone-800">Your Scottish Heritage Tree</h3>
+                        <div class="flex gap-2">
+                            <button id="add-root-btn" class="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-900 transition">
+                                <i class="fas fa-plus mr-2"></i>Add Person
+                            </button>
+                            <button id="export-tree-btn" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition">
+                                <i class="fas fa-download mr-2"></i>Export
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="family-tree">
+                        <div id="tree-root" class="tree-node root">
+                            <div class="node-name">Your Heritage</div>
+                            <div class="node-dates">Start your journey</div>
+                            <button class="add-person-btn" onclick="addChild('root')">
+                                <i class="fas fa-plus mr-1"></i>Add Ancestor
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tree-controls">
+                        <button id="save-tree-btn" class="tree-btn primary">
+                            <i class="fas fa-save mr-2"></i>Save Tree
+                        </button>
+                        <button id="clear-tree-btn" class="tree-btn">
+                            <i class="fas fa-trash mr-2"></i>Clear All
+                        </button>
+                        <button id="connect-clan-btn" class="tree-btn">
+                            <i class="fas fa-link mr-2"></i>Find Clan Connections
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
+                        <h3 class="text-xl font-bold font-title text-stone-800 mb-4">How to Build Your Tree</h3>
+                        <ul class="space-y-3 text-stone-700">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                <span>Start with yourself as the root person</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                <span>Add ancestors by clicking "Add Ancestor" buttons</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                <span>Enter names, birth/death dates, and clan connections</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
+                                <span>Use "Find Clan Connections" to discover your heritage</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
+                        <h3 class="text-xl font-bold font-title text-stone-800 mb-4">Clan Connection Finder</h3>
+                        <p class="text-stone-700 mb-4">Enter a surname to discover potential clan connections:</p>
+                        <div class="flex gap-2">
+                            <input type="text" id="clan-search-input" class="flex-1 p-2 border border-stone-300 rounded-lg" placeholder="Enter surname">
+                            <button id="search-clan-btn" class="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-900 transition">
+                                Search
+                            </button>
+                        </div>
+                        <div id="clan-search-results" class="mt-4 min-h-20">
+                            <p class="text-stone-500 text-center">Enter a surname to search for clan connections</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- Generic Modal -->
     <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
         <div id="modal-content" class="bg-[#FBF6E8] rounded-lg shadow-2xl max-w-4xl w-full max-h-90vh overflow-y-auto"></div>
+    </div>
+
+    <!-- Person Form Modal -->
+    <div id="person-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold font-title text-stone-900">Add Person</h3>
+                <button id="close-person-modal" class="text-2xl text-stone-500 hover:text-stone-800">&times;</button>
+            </div>
+            <form id="person-form">
+                <input type="hidden" id="person-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
+                        <input type="text" id="person-name" class="w-full p-2 border border-stone-300 rounded-lg" required>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Birth Date</label>
+                            <input type="date" id="person-birth" class="w-full p-2 border border-stone-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Death Date</label>
+                            <input type="date" id="person-death" class="w-full p-2 border border-stone-300 rounded-lg">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Clan Connection</label>
+                        <select id="person-clan" class="w-full p-2 border border-stone-300 rounded-lg">
+                            <option value="">Select Clan</option>
+                            <option value="campbell">Campbell</option>
+                            <option value="macdonald">MacDonald</option>
+                            <option value="mackenzie">MacKenzie</option>
+                            <option value="stewart">Stewart</option>
+                            <option value="armstrong">Armstrong</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-stone-700 mb-1">Notes</label>
+                        <textarea id="person-notes" class="w-full p-2 border border-stone-300 rounded-lg" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="flex justify-end gap-2 mt-6">
+                    <button type="button" id="cancel-person" class="px-4 py-2 border border-stone-300 rounded-lg text-stone-700 hover:bg-stone-100">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-yellow-800 text-white rounded-lg hover:bg-yellow-900">
+                        Save Person
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Message Box -->
@@ -842,6 +1106,8 @@
                         setTimeout(initTourismMap, 100);
                     } else if (targetId === 'clans-section') {
                         setTimeout(initClansMap, 100);
+                    } else if (targetId === 'family-tree-section') {
+                        setTimeout(initFamilyTree, 100);
                     }
                     
                     mobileMenu.classList.add('hidden');
