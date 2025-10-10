@@ -122,6 +122,95 @@
             border-color: #a16207;
         }
 
+        /* Spiritual Clan Finder Styles */
+        .spiritual-journey {
+            background: linear-gradient(135deg, #fef9e7 0%, #fdf2e9 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(161, 98, 7, 0.1);
+            margin-bottom: 2rem;
+        }
+        .mystical-stone {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .mystical-stone:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .stone-selected {
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(161, 98, 7, 0.5);
+            border: 3px solid #a16207;
+        }
+        .element-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .element-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .element-card.selected {
+            border-color: #a16207;
+            background: #fef9e7;
+        }
+        .ritual-step {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .ritual-step::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #a16207;
+        }
+        .ritual-step h4 {
+            font-weight: 600;
+            color: #333;
+        }
+        .ritual-step p {
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        .mystical-glow {
+            animation: mysticalGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes mysticalGlow {
+            from { box-shadow: 0 0 10px rgba(161, 98, 7, 0.3); }
+            to { box-shadow: 0 0 25px rgba(161, 98, 7, 0.6); }
+        }
+        .clan-symbol {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .spiritual-result {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
         /* Family Tree Styles */
         .family-tree-container {
             background: white;
@@ -270,10 +359,10 @@
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tourism">Trip Planner</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="clans">Clans</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="finder">Clan Finder</button>
+                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="spiritual">Spiritual Clan</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="legends">Legends</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="tartan-designer">Tartan Designer</button>
                 <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="recipes">Recipes</button>
-                <button class="nav-link font-semibold text-stone-600 hover:text-yellow-800 px-3 py-2" data-target="family-tree">Family Tree</button>
             </nav>
             <button id="mobile-menu-btn" class="md:hidden text-stone-700">
                 <i class="fas fa-bars text-xl"></i>
@@ -284,10 +373,10 @@
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tourism">Trip Planner</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="clans">Clans</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="finder">Clan Finder</button>
+            <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="spiritual">Spiritual Clan</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="legends">Legends</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="tartan-designer">Tartan Designer</button>
             <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="recipes">Recipes</button>
-            <button class="block w-full text-left nav-link font-semibold text-stone-600 hover:text-yellow-800 p-4 border-t" data-target="family-tree">Family Tree</button>
         </div>
     </header>
 
@@ -413,6 +502,194 @@
             </div>
         </section>
 
+        <!-- Spiritual Clan Finder Section -->
+        <section id="spiritual-section" class="page-section">
+            <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">The Spiritual Clan Finder</h2>
+                    <p class="text-lg text-stone-600 mt-2">Connect with your ancestral spirit through ancient Scottish traditions and mysticism</p>
+                </div>
+                
+                <div class="spiritual-journey">
+                    <div id="spiritual-welcome" class="text-center">
+                        <div class="clan-symbol">🔮</div>
+                        <h3 class="text-2xl font-bold font-title text-stone-800 mb-4">The Ancient Ritual of Connection</h3>
+                        <p class="text-stone-700 mb-6 max-w-2xl mx-auto">
+                            In the old ways of Scotland, our ancestors believed that every person carried the spirit of a clan within them. 
+                            Through sacred stones, elemental connections, and ancient wisdom, you can discover which clan's spirit calls to you.
+                        </p>
+                        <button id="start-spiritual-journey" class="bg-yellow-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-900 transition shadow-lg">
+                            Begin the Mystical Journey
+                        </button>
+                    </div>
+                    
+                    <div id="spiritual-steps" class="hidden">
+                        <!-- Step 1: Sacred Stones -->
+                        <div id="stone-step" class="step active">
+                            <h3 class="text-xl font-bold font-title text-stone-800 mb-6 text-center">The Sacred Stones of Scotland</h3>
+                            <p class="text-stone-700 text-center mb-8">
+                                Our ancestors believed that certain stones held the essence of clan spirits. 
+                                Choose the stone that resonates with your inner being:
+                            </p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                                <div class="mystical-stone bg-gradient-to-br from-amber-200 to-amber-400" data-stone="amber">
+                                    <span title="Amber">琥</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-blue-300 to-blue-500" data-stone="sapphire">
+                                    <span title="Sapphire">🔹</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-emerald-300 to-emerald-500" data-stone="emerald">
+                                    <span title="Emerald">💚</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-red-400 to-red-600" data-stone="ruby">
+                                    <span title="Ruby">❤️</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-purple-300 to-purple-500" data-stone="amethyst">
+                                    <span title="Amethyst">💜</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-gray-300 to-gray-500" data-stone="onyx">
+                                    <span title="Onyx">⚫</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-yellow-200 to-yellow-400" data-stone="topaz">
+                                    <span title="Topaz">💛</span>
+                                </div>
+                                <div class="mystical-stone bg-gradient-to-br from-green-400 to-green-600" data-stone="jade">
+                                    <span title="Jade">🍀</span>
+                                </div>
+                            </div>
+                            <div class="text-center mt-8">
+                                <p id="stone-description" class="text-stone-600 mb-4">Select a stone to reveal its ancient meaning</p>
+                                <button id="next-to-elements" class="bg-yellow-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-900 transition hidden">
+                                    Continue to Elemental Connection
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Elemental Connection -->
+                        <div id="element-step" class="step hidden">
+                            <h3 class="text-xl font-bold font-title text-stone-800 mb-6 text-center">The Elements of the Highlands</h3>
+                            <p class="text-stone-700 text-center mb-8">
+                                The ancient Celts believed that each clan was connected to one of the four sacred elements. 
+                                Which element calls to your spirit?
+                            </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                                <div class="element-card" data-element="earth">
+                                    <div class="text-4xl mb-3">🏔️</div>
+                                    <h4 class="font-bold text-lg mb-2">Earth - The Mountains</h4>
+                                    <p class="text-stone-600">Stability, strength, and deep roots. Connected to the land and its ancient wisdom.</p>
+                                </div>
+                                <div class="element-card" data-element="water">
+                                    <div class="text-4xl mb-3">🌊</div>
+                                    <h4 class="font-bold text-lg mb-2">Water - The Lochs</h4>
+                                    <p class="text-stone-600">Flow, intuition, and emotional depth. Connected to the mystical waters of Scotland.</p>
+                                </div>
+                                <div class="element-card" data-element="fire">
+                                    <div class="text-4xl mb-3">🔥</div>
+                                    <h4 class="font-bold text-lg mb-2">Fire - The Hearth</h4>
+                                    <p class="text-stone-600">Passion, courage, and transformation. Connected to the sacred hearth fires.</p>
+                                </div>
+                                <div class="element-card" data-element="air">
+                                    <div class="text-4xl mb-3">💨</div>
+                                    <h4 class="font-bold text-lg mb-2">Air - The Winds</h4>
+                                    <p class="text-stone-600">Freedom, communication, and inspiration. Connected to the Highland winds.</p>
+                                </div>
+                            </div>
+                            <div class="text-center mt-8">
+                                <button id="next-to-ritual" class="bg-yellow-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-900 transition hidden">
+                                    Proceed to the Sacred Ritual
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Sacred Ritual -->
+                        <div id="ritual-step" class="step hidden">
+                            <h3 class="text-xl font-bold font-title text-stone-800 mb-6 text-center">The Sacred Connection Ritual</h3>
+                            <p class="text-stone-700 text-center mb-8">
+                                Perform this ancient ritual to awaken your spiritual connection to your clan:
+                            </p>
+                            <div class="max-w-2xl mx-auto bg-amber-50 rounded-lg p-6 border border-amber-200">
+                                <div class="ritual-step">
+                                    <h4>1. Center Yourself</h4>
+                                    <p>Close your eyes and take three deep breaths. Feel the connection to the ancient lands of Scotland.</p>
+                                </div>
+                                <div class="ritual-step">
+                                    <h4>2. Honor Your Stone</h4>
+                                    <p>Hold your chosen stone (or imagine it) and feel its energy connecting you to the earth.</p>
+                                </div>
+                                <div class="ritual-step">
+                                    <h4>3. Invoke Your Element</h4>
+                                    <p>Visualize your chosen element surrounding you with its protective and empowering energy.</p>
+                                </div>
+                                <div class="ritual-step">
+                                    <h4>4. Speak the Ancient Words</h4>
+                                    <p>Say aloud: "Through stone and element, I claim my ancestral spirit. Show me my clan."</p>
+                                </div>
+                            </div>
+                            <div class="text-center mt-8">
+                                <button id="reveal-clan" class="bg-yellow-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-900 transition shadow-lg mystical-glow">
+                                    Reveal My Spiritual Clan
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Result -->
+                        <div id="spiritual-result" class="step hidden">
+                            <div class="spiritual-result">
+                                <div class="clan-symbol" id="result-symbol">🛡️</div>
+                                <h3 class="text-3xl font-bold font-title text-stone-900 mb-2" id="result-clan-name">Your Clan</h3>
+                                <p class="text-yellow-800 font-semibold mb-4" id="result-motto">Motto</p>
+                                <p class="text-stone-700 mb-6 max-w-2xl mx-auto" id="result-description">
+                                    Through the ancient wisdom of stones and elements, you have been connected to this clan's spirit.
+                                </p>
+                                <div class="bg-amber-50 rounded-lg p-6 mb-6">
+                                    <h4 class="font-bold text-stone-800 mb-3">Your Spiritual Connection Ritual</h4>
+                                    <p class="text-stone-700 mb-4" id="result-ritual">
+                                        You chose the <span id="chosen-stone" class="font-semibold"></span> stone and connected with the element of <span id="chosen-element" class="font-semibold"></span>.
+                                    </p>
+                                    <p class="text-stone-700">
+                                        This combination resonates with the spirit of <span id="clan-name-full" class="font-semibold"></span>, 
+                                        whose values of <span id="clan-values" class="font-semibold"></span> align with your inner nature.
+                                    </p>
+                                </div>
+                                <button id="restart-spiritual" class="bg-yellow-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-yellow-900 transition">
+                                    Begin a New Journey
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10 bg-stone-50 rounded-xl p-6 border border-stone-200">
+                    <h3 class="text-xl font-bold font-title text-stone-800 mb-4">The Ancient Wisdom</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">💎</div>
+                            <h4 class="font-bold text-stone-800 mb-2">Sacred Stones</h4>
+                            <p class="text-stone-600 text-sm">
+                                In Celtic tradition, stones were believed to hold the memories and spirits of ancestors, 
+                                serving as conduits to the Otherworld.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">⚡</div>
+                            <h4 class="font-bold text-stone-800 mb-2">Elemental Wisdom</h4>
+                            <p class="text-stone-600 text-sm">
+                                The Celts saw the world through the lens of four elements, each representing different aspects 
+                                of human nature and spiritual connection.
+                            </p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl mb-3">🪄</div>
+                            <h4 class="font-bold text-stone-800 mb-2">Ritual Power</h4>
+                            <p class="text-stone-600 text-sm">
+                                Sacred rituals were used to connect with ancestral spirits and receive guidance from the clan ancestors.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Legends Section -->
         <section id="legends-section" class="page-section">
             <div class="flex flex-col md:flex-row min-h-96 bg-white/80 rounded-2xl shadow-xl overflow-hidden">
@@ -502,147 +779,11 @@
             <div id="recipe-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
         </section>
 
-        <!-- Family Tree Section -->
-        <section id="family-tree-section" class="page-section">
-            <div class="bg-white/90 rounded-2xl shadow-xl p-6 md:p-8">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl md:text-4xl font-title font-bold text-stone-900">Scottish Family Tree Builder</h2>
-                    <p class="text-lg text-stone-600 mt-2">Map your Scottish ancestry and connect with your clan heritage</p>
-                </div>
-                
-                <div class="family-tree-container">
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold font-title text-stone-800">Your Scottish Heritage Tree</h3>
-                        <div class="flex gap-2">
-                            <button id="add-root-btn" class="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-900 transition">
-                                <i class="fas fa-plus mr-2"></i>Add Person
-                            </button>
-                            <button id="export-tree-btn" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition">
-                                <i class="fas fa-download mr-2"></i>Export
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="family-tree">
-                        <div id="tree-root" class="tree-node root">
-                            <div class="node-name">Your Heritage</div>
-                            <div class="node-dates">Start your journey</div>
-                            <button class="add-person-btn" onclick="addChild('root')">
-                                <i class="fas fa-plus mr-1"></i>Add Ancestor
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="tree-controls">
-                        <button id="save-tree-btn" class="tree-btn primary">
-                            <i class="fas fa-save mr-2"></i>Save Tree
-                        </button>
-                        <button id="clear-tree-btn" class="tree-btn">
-                            <i class="fas fa-trash mr-2"></i>Clear All
-                        </button>
-                        <button id="connect-clan-btn" class="tree-btn">
-                            <i class="fas fa-link mr-2"></i>Find Clan Connections
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
-                        <h3 class="text-xl font-bold font-title text-stone-800 mb-4">How to Build Your Tree</h3>
-                        <ul class="space-y-3 text-stone-700">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
-                                <span>Start with yourself as the root person</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
-                                <span>Add ancestors by clicking "Add Ancestor" buttons</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
-                                <span>Enter names, birth/death dates, and clan connections</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-green-600 mt-1 mr-3"></i>
-                                <span>Use "Find Clan Connections" to discover your heritage</span>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-stone-50 p-6 rounded-xl border border-stone-200">
-                        <h3 class="text-xl font-bold font-title text-stone-800 mb-4">Clan Connection Finder</h3>
-                        <p class="text-stone-700 mb-4">Enter a surname to discover potential clan connections:</p>
-                        <div class="flex gap-2">
-                            <input type="text" id="clan-search-input" class="flex-1 p-2 border border-stone-300 rounded-lg" placeholder="Enter surname">
-                            <button id="search-clan-btn" class="bg-yellow-800 text-white px-4 py-2 rounded-lg hover:bg-yellow-900 transition">
-                                Search
-                            </button>
-                        </div>
-                        <div id="clan-search-results" class="mt-4 min-h-20">
-                            <p class="text-stone-500 text-center">Enter a surname to search for clan connections</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <!-- Generic Modal -->
     <div id="generic-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
         <div id="modal-content" class="bg-[#FBF6E8] rounded-lg shadow-2xl max-w-4xl w-full max-h-90vh overflow-y-auto"></div>
-    </div>
-
-    <!-- Person Form Modal -->
-    <div id="person-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal">
-        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold font-title text-stone-900">Add Person</h3>
-                <button id="close-person-modal" class="text-2xl text-stone-500 hover:text-stone-800">&times;</button>
-            </div>
-            <form id="person-form">
-                <input type="hidden" id="person-id">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1">Full Name</label>
-                        <input type="text" id="person-name" class="w-full p-2 border border-stone-300 rounded-lg" required>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Birth Date</label>
-                            <input type="date" id="person-birth" class="w-full p-2 border border-stone-300 rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-stone-700 mb-1">Death Date</label>
-                            <input type="date" id="person-death" class="w-full p-2 border border-stone-300 rounded-lg">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1">Clan Connection</label>
-                        <select id="person-clan" class="w-full p-2 border border-stone-300 rounded-lg">
-                            <option value="">Select Clan</option>
-                            <option value="campbell">Campbell</option>
-                            <option value="macdonald">MacDonald</option>
-                            <option value="mackenzie">MacKenzie</option>
-                            <option value="stewart">Stewart</option>
-                            <option value="armstrong">Armstrong</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-stone-700 mb-1">Notes</label>
-                        <textarea id="person-notes" class="w-full p-2 border border-stone-300 rounded-lg" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="flex justify-end gap-2 mt-6">
-                    <button type="button" id="cancel-person" class="px-4 py-2 border border-stone-300 rounded-lg text-stone-700 hover:bg-stone-100">
-                        Cancel
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-yellow-800 text-white rounded-lg hover:bg-yellow-900">
-                        Save Person
-                    </button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <!-- Message Box -->
@@ -691,6 +832,11 @@
                         "Cover and bake for 2 hours, then uncover for 30 minutes to brown.",
                         "Serve hot with crusty bread."
                     ]
+                },
+                spiritual: {
+                    stone: "ruby",
+                    element: "fire",
+                    values: "courage, independence, and fierce loyalty"
                 }
             },
             {
@@ -731,6 +877,11 @@
                         "Pour in stock, cover tightly and cook slowly for 1.5-2 hours.",
                         "Serve hot garnished with fresh parsley."
                     ]
+                },
+                spiritual: {
+                    stone: "sapphire",
+                    element: "water",
+                    values: "wisdom, strategic thinking, and adaptability"
                 }
             },
             {
@@ -775,6 +926,11 @@
                         "Return venison to pan, add stock, and simmer gently for 20 minutes.",
                         "Serve with neeps and tatties, garnished with fresh herbs."
                     ]
+                },
+                spiritual: {
+                    stone: "emerald",
+                    element: "earth",
+                    values: "wisdom, prophecy, and connection to the land"
                 }
             },
             {
@@ -817,6 +973,11 @@
                         "Sprinkle chopped dulse over salmon and squeeze lemon juice.",
                         "Serve immediately with oatcakes and island butter."
                     ]
+                },
+                spiritual: {
+                    stone: "sapphire",
+                    element: "water",
+                    values: "maritime mastery, independence, and noble pride"
                 }
             },
             {
@@ -858,10 +1019,34 @@
                         "Fold cream into oat mixture gently.",
                         "Serve in glasses, garnished with a drizzle of honey."
                     ]
+                },
+                spiritual: {
+                    stone: "ruby",
+                    element: "fire",
+                    values: "royal destiny, passion, and resilience"
                 }
             }
-            // Additional clans would continue here...
         ];
+
+        // Stone meanings
+        const stoneMeanings = {
+            amber: "Amber represents warmth, protection, and the life force. Those drawn to amber are often nurturing and protective.",
+            sapphire: "Sapphire embodies wisdom, truth, and spiritual insight. It connects you to higher knowledge and intuition.",
+            emerald: "Emerald symbolizes growth, healing, and connection to nature. It brings harmony and balance to your spirit.",
+            ruby: "Ruby represents passion, courage, and strength. It ignites the fire of determination within you.",
+            amethyst: "Amethyst embodies spiritual wisdom, peace, and transformation. It opens your mind to ancient knowledge.",
+            onyx: "Onyx represents grounding, strength, and protection. It connects you to the earth's ancient power.",
+            topaz: "Topaz symbolizes clarity, joy, and manifestation. It helps you see your true path clearly.",
+            jade: "Jade represents harmony, wisdom, and good fortune. It brings balance between mind, body, and spirit."
+        };
+
+        // Element meanings
+        const elementMeanings = {
+            earth: "Earth represents stability, grounding, and connection to the land. You value tradition and deep roots.",
+            water: "Water embodies emotion, intuition, and adaptability. You flow with life's changes and trust your inner wisdom.",
+            fire: "Fire symbolizes passion, courage, and transformation. You have strong will and the drive to overcome obstacles.",
+            air: "Air represents intellect, communication, and freedom. You value knowledge and seek to understand the world."
+        };
 
         // Comprehensive Legends Data including The Brahan Seer
         const legendsData = [
@@ -1106,8 +1291,8 @@
                         setTimeout(initTourismMap, 100);
                     } else if (targetId === 'clans-section') {
                         setTimeout(initClansMap, 100);
-                    } else if (targetId === 'family-tree-section') {
-                        setTimeout(initFamilyTree, 100);
+                    } else if (targetId === 'spiritual-section') {
+                        setTimeout(initSpiritualFinder, 100);
                     }
                     
                     mobileMenu.classList.add('hidden');
